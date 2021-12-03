@@ -7,7 +7,7 @@ CFLAGS=-Wall
 LDFLAGS=-lglut -lGLU -lGL -lm
 
 TARGET=main
-OBJS=main.o draw_function.o cat_matrix.o
+OBJS=main.o draw_function.o cat_matrix.o tex.o
 
 .c.o:
 	${CC} -c ${CFLAGS} $<

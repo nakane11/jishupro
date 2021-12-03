@@ -6,6 +6,7 @@
 
 #include "draw_function.h"
 #include "cat_matrix.h"
+#include "tex.h"
 
 //-----------------------------------------------------------------------------------
 // グローバル変数
@@ -24,6 +25,7 @@ GLint mouse_x = 0, mouse_y = 0;
 void init(void)
 {
   initMat(6);
+  myinit();
   
   // クリアの値の設定
   glClearColor (0.0, 0.0, 0.0, 0.0);
@@ -53,6 +55,7 @@ void display(void)
   //初期位置
   glPushMatrix();
   {
+    mydisplay(0.5, 0.4);
     for(int i=1;i<=n;i++){
       DrawCat(getMat(i, 0), getMat(i, 1), getMat(i, 2),
               getMat(i, 3), getMat(i, 4),

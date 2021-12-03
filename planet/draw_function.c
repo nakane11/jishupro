@@ -3,19 +3,6 @@
 
 const float DEG2RAD = 3.14159/180;
 
-// GLubyte faceImage[16][checkImageHeight][3];
-// void makeCheckImage(void){
-//   int i, j, c;
-//   for (i = 0; i < checkImageWidth; i++) {
-//   for (j = 0; j < checkImageHeight; j++) {
-//   c = ((((i&0x8)==0)^((j&0x8)==0)))*255;
-//   checkImage[i][j][0] = (GLubyte) c;
-//   checkImage[i][j][1] = (GLubyte) c;
-//   checkImage[i][j][2] = (GLubyte) c;
-//   }
-//   }
-// }
-
 void drowCuboid(double a, double b, double c){
   GLdouble vertex[][3] = {
       { -a/2.0, -b/2.0, -c/2.0 },
@@ -59,7 +46,7 @@ void drowCuboid(double a, double b, double c){
 void DrawCat(double x, double y, double z, double theta, double size, double r, double g, double b)//中心(x,y,z)
 {
   glColor3d(r, g, b);
-  
+
   glPushMatrix();
   {
     glTranslated( x, y, z);
@@ -70,6 +57,7 @@ void DrawCat(double x, double y, double z, double theta, double size, double r, 
     glPushMatrix();
       glTranslated(0*size, 1.3*size, 1.4*size); //頭
       drowCuboid(2.0*size,  1.6*size,1.4*size);
+
 
       glPushMatrix();
         glTranslated(-0.7*size, 0.8*size, 0.0); //左耳
