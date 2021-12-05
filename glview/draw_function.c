@@ -1,6 +1,8 @@
 #include <GL/glut.h>
 #include <math.h>
 
+#include "tex.h"
+
 const float DEG2RAD = 3.14159/180;
 
 void drowCuboid(double a, double b, double c){
@@ -56,6 +58,7 @@ void DrawCat(double x, double y, double z, double theta, double size, double r, 
 
     glPushMatrix();
       glTranslated(0*size, 1.3*size, 1.4*size); //頭
+      facedisplay(1.0*size, 0.8*size,0.7*size);
       drowCuboid(2.0*size,  1.6*size,1.4*size);
 
 

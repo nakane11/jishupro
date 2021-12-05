@@ -10,11 +10,11 @@ void initMat(int num)
 {
     matrix =(double *)malloc(sizeof(double) * N * m);
     for (int i=0; i<=num; i++) {
-        matrix[i * m + 0]=(rand()%40-20)/10.0;
+        matrix[i * m + 0]=(rand()%40-20); 
         matrix[i * m + 1]= 0.0;
-        matrix[i * m + 2]=(rand()%40-20)/10.0;
+        matrix[i * m + 2]=(rand()%20); 
         matrix[i * m + 3]=rand()%360-180.0;
-        matrix[i * m + 4]=0.2;
+        matrix[i * m + 4]=1.0;
         matrix[i * m + 5]=(rand()%10)/10.0;
         matrix[i * m + 6]=(rand()%10)/10.0;
         matrix[i * m + 7]=(rand()%10)/10.0;

@@ -13,11 +13,15 @@
 //-----------------------------------------------------------------------------------
 
 // 視点情報
-static double distance = 5.0, pitch = 0.0, yaw = 0.0;
+static double dz = 5.0, dx = 0.0, dy = 0.0, rx = 0.0;
 
 // マウス入力情報
 GLint mouse_button = -1;
 GLint mouse_x = 0, mouse_y = 0;
+
+static const GLfloat light_position[] = { 0.0, 0.0, 0.0, 1.0 };
+static const GLfloat light_ambient[] = {1.0, 1.0, 1.0, 1.0};
+static const GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};
 
 //-----------------------------------------------------------------------------------
 // 初期化
@@ -25,16 +29,23 @@ GLint mouse_x = 0, mouse_y = 0;
 void init(void)
 {
   initMat(6);
-  myinit();
+  //myinit();
   
   // クリアの値の設定
-  glClearColor (0.0, 0.0, 0.0, 0.0);
+  glClearColor (1.0, 1.0, 1.0, 1.0);
   glClearDepth( 1.0 );
 
   // デプステストを行う
   glEnable( GL_DEPTH_TEST );
   glDepthFunc( GL_LESS );
   glShadeModel (GL_SMOOTH);
+
+  // デフォルトライト
+  glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+  glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, light_ambient);
+  //glEnable(GL_LIGHTING);
+  glEnable(GL_LIGHT0);
 
 }
 
@@ -46,16 +57,26 @@ void display(void)
 
   // フレームバッファのクリア
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  gluLookAt(0, 8, -10, 0, 1, 2, 0, 1, 0);
+
 
   // 視点の設定
+  // gluLookAt(
+  //  0.0, 0.0, -50.0, // 視点の位置x,y,z;
+  //  0.0, 0.0, 0.0,   // 視界の中心位置の参照点座標x,y,z
+  //  0.0, 1.0, 0.0);  //視界の上方向のベクトルx,y,z
+
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
+  
   // マウス入力で視点を移動
-  glTranslatef( -yaw, pitch, -distance );
+  glTranslatef( -dx, dy, -dz );
+  rx=rx-(int)(rx/360)*360;
+  glRotated(rx, 0.0, 1.0, 0.0);
   //初期位置
   glPushMatrix();
   {
-    mydisplay(0.5, 0.4);
+    //mydisplay(0.5, 0.4);
     for(int i=1;i<=n;i++){
       DrawCat(getMat(i, 0), getMat(i, 1), getMat(i, 2),
               getMat(i, 3), getMat(i, 4),
@@ -77,7 +98,7 @@ void reshape (int w, int h)
 
   glMatrixMode (GL_PROJECTION);
   glLoadIdentity ();
-  gluPerspective(45.0, (GLfloat) w/(GLfloat) h, 1.0, 20.0);
+  gluPerspective(45.0, (GLfloat) w/(GLfloat) h, 1.0*2, 20.0*2);
 }
 
 //-----------------------------------------------------------------------------------
@@ -86,65 +107,83 @@ void reshape (int w, int h)
 void keyboard (unsigned char key, int x, int y)
 {
   switch (key) {
-  case 27:
-    freeMat();
-    exit(0);
-    break;
+    case 'a':
+      dx += (GLfloat) 0.2;
+      break;
+    case 'd':
+      dx -= (GLfloat) 0.2;
+      break;
+    case 's':
+      dz -= 0.2;
+      break;
+    case 'w':
+      dz += 0.2;
+      break;
+    case 'z':
+      rx -= (GLfloat) 1;
+      break;
+    case 'x':
+      rx += (GLfloat) 1;
+      break;
+    case 27:
+      freeMat();
+      exit(0);
+      break;
   }
 }
 
 //-----------------------------------------------------------------------------------
 // マウスクリックのコールバック関数
 //-----------------------------------------------------------------------------------
-void mouse(int button, int state, int x, int y)
-{
-  mouse_button = button;
-  mouse_x = x;	mouse_y = y;
+// void mouse(int button, int state, int x, int y)
+// {
+//   mouse_button = button;
+//   mouse_x = x;	mouse_y = y;
 
-  if(state == GLUT_UP){
-    mouse_button = -1;
-  }
+//   if(state == GLUT_UP){
+//     mouse_button = -1;
+//   }
 
-  glutPostRedisplay();
-}
+//   glutPostRedisplay();
+// }
 
 //-----------------------------------------------------------------------------------
 // マウス移動のコールバック関数
 //-----------------------------------------------------------------------------------
-void motion(int x, int y)
-{
-  switch(mouse_button){
-  case GLUT_LEFT_BUTTON:
+// void motion(int x, int y)
+// {
+//   switch(mouse_button){
+//   case GLUT_LEFT_BUTTON:
 
-    if( x == mouse_x && y == mouse_y )
-      return;
+//     if( x == mouse_x && y == mouse_y )
+//       return;
 
-    yaw -= (GLfloat) (x - mouse_x) / 100.0;
-    pitch -= (GLfloat) (y - mouse_y) / 100.0;
+//     yaw -= (GLfloat) (x - mouse_x) / 100.0;
+//     pitch -= (GLfloat) (y - mouse_y) / 100.0;
 
-    break;
+//     break;
 
-  case GLUT_RIGHT_BUTTON:
+//   case GLUT_RIGHT_BUTTON:
 
-    if( y == mouse_y )
-      return;
+//     if( y == mouse_y )
+//       return;
 
-    if( y < mouse_y )
-      distance += (GLfloat) (mouse_y - y)/50.0;
-    else
-      distance -= (GLfloat) (y-mouse_y)/50.0;
+//     if( y < mouse_y )
+//       distance += (GLfloat) (mouse_y - y)/50.0;
+//     else
+//       distance -= (GLfloat) (y-mouse_y)/50.0;
 
-    if( distance < 1.0 ) distance = 1.0;
-    if( distance > 10.0 ) distance = 10.0;
+//     if( distance < 1.0 ) distance = 1.0;
+//     if( distance > 10.0 ) distance = 10.0;
 
-    break;
-  }
+//     break;
+//   }
 
-  mouse_x = x;
-  mouse_y = y;
+//   mouse_x = x;
+//   mouse_y = y;
 
-  glutPostRedisplay();
-}
+//   glutPostRedisplay();
+// }
 
 //-----------------------------------------------------------------------------------
 // アイドル時のコールバック関数
@@ -172,8 +211,8 @@ int main(int argc, char** argv)
   glutReshapeFunc(reshape);
   glutKeyboardFunc(keyboard);
   glutIdleFunc(idle);
-  glutMouseFunc(mouse);
-  glutMotionFunc(motion);
+  // glutMouseFunc(mouse);
+  // glutMotionFunc(motion);
 
   glutMainLoop();
 

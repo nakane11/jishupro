@@ -7,7 +7,7 @@ extern "C" {
 
 void makeCheckImage(void);
 void myinit(void);
-void mydisplay(float a, float b);
+void facedisplay(float a, float b, float c);
   
 #ifdef __cplusplus
 }

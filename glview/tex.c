@@ -23,18 +23,18 @@ checkImageHeight, 0, GL_RGB, GL_UNSIGNED_BYTE,
 &checkImage[0][0][0]);
 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 glEnable(GL_TEXTURE_2D);
 glShadeModel(GL_FLAT);
 }
 
-void mydisplay(float a, float b){
+void facedisplay(float a, float b, float c){
 glBegin(GL_QUADS);
-glTexCoord2f(0.0, 0.0); glVertex3f(-a, -b, 0.0);
-glTexCoord2f(0.0, 1.0); glVertex3f(-a, b, 0.0);
-glTexCoord2f(1.0, 1.0); glVertex3f(a, b, 0.0);
-glTexCoord2f(1.0, 0.0); glVertex3f(a, -b, 0.0);
+glTexCoord2f(0.0, 0.0); glVertex3f(-a, -b, c);
+glTexCoord2f(0.0, 1.0); glVertex3f(-a, b, c);
+glTexCoord2f(1.0, 1.0); glVertex3f(a, b, c);
+glTexCoord2f(1.0, 0.0); glVertex3f(a, -b, c);
 glEnd();
 }
