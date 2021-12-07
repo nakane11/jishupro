@@ -1,0 +1,7 @@
+# jishupro
+
+# Usage
+```
+$ make
+$ ./main
+```
