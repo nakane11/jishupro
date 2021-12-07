@@ -2,6 +2,7 @@
 #include <math.h>
 
 #include "tex.h"
+#include "cat_matrix.h"
 
 const float DEG2RAD = 3.14159/180;
 
@@ -45,8 +46,12 @@ void drowCuboid(double a, double b, double c){
     glPopMatrix();
 }
 
-void DrawCat(double x, double y, double z, double theta, double size, double r, double g, double b)
+void drawCat(int i)
 {
+  double x = getMat(i, 0); double y= getMat(i, 1); double z = getMat(i, 2);
+  double theta = getMat(i, 3); double size = getMat(i, 4);
+  double r = getMat(i, 5);  double g = getMat(i, 6); double b = getMat(i, 7);
+
   glColor3d(r, g, b);
 
   glPushMatrix();

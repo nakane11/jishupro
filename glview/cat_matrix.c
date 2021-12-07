@@ -1,9 +1,14 @@
 #include <stdlib.h>
 
-static int N=30; //出現数の上限
-int n=0; //現在の出現数
-const int m=8;
+static int N=50; //出現数の上限
+int n=0; //現在のねこの出現数
+const int m=10;
 static double *matrix;
+//m列の情報
+// 0: X    1: Y    2: Z
+// 3: THETA    4: SIZE     
+// 5: R    6: G    7: B  
+// 8: STATE    9: ACTION
 
 //初期化
 void initMat(int num)

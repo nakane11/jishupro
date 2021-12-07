@@ -28,11 +28,11 @@ static const GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};
 //-----------------------------------------------------------------------------------
 void init(void)
 {
-  initMat(6);
-  //myinit();
+  initMat(20);
+  texinit();
   
   // クリアの値の設定
-  glClearColor (1.0, 1.0, 1.0, 1.0);
+  glClearColor (0.0, 0.0, 0.0, 0.0);
   glClearDepth( 1.0 );
 
   // デプステストを行う
@@ -60,12 +60,6 @@ void display(void)
   gluLookAt(0, 8, -10, 0, 1, 2, 0, 1, 0);
 
 
-  // 視点の設定
-  // gluLookAt(
-  //  0.0, 0.0, -50.0, // 視点の位置x,y,z;
-  //  0.0, 0.0, 0.0,   // 視界の中心位置の参照点座標x,y,z
-  //  0.0, 1.0, 0.0);  //視界の上方向のベクトルx,y,z
-
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   
@@ -78,9 +72,7 @@ void display(void)
   {
     //mydisplay(0.5, 0.4);
     for(int i=1;i<=n;i++){
-      DrawCat(getMat(i, 0), getMat(i, 1), getMat(i, 2),
-              getMat(i, 3), getMat(i, 4),
-              getMat(i, 5), getMat(i, 6), getMat(i, 7));
+      drawCat(i);
     }
   }
   glPopMatrix();

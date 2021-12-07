@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 void makeCheckImage(void);
-void myinit(void);
+void texinit(void);
 void facedisplay(float a, float b, float c);
   
 #ifdef __cplusplus

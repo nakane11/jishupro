@@ -5,8 +5,7 @@
 extern "C" {
 #endif
 
-void DrawPlanet(double radius );
-void DrawCat(double x, double y, double z, double theta, double size, double r, double g, double b);
+void drawCat(int i);
   
 #ifdef __cplusplus
 }
