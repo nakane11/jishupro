@@ -89,8 +89,6 @@ void drawCat(int i)
   glPushMatrix();
   {
     glMultMatrixf( m );
-    // glTranslated( x, y, z);
-    // glRotated (theta, 0.0, 1.0, 0.0);
 
     
     drowCuboid(2.0*size, 1.0*size, 3.0*size); //胴体

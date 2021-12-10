@@ -10,7 +10,9 @@
 enum state {
     ASLEEP,
     MOVE,
-    STAY
+    STAY,
+    LTURN,
+    RTURN
 };
 
 enum action {
@@ -32,14 +34,32 @@ void nextState(int i) {
             break;
         case MOVE:
         //確率0.3でSTAY
-            if (p<30){
+            if (p<35){
                 setMat(i, 8,(double)STAY);
+            }else if(p<41){
+                setMat(i, 8,(double)LTURN);
+            }else if(p<47){
+                setMat(i, 8,(double)RTURN);
             }
             break;
         case STAY:
         //確率0.2でASLEEP 0.3でMOVE
             if (p<20){
                 setMat(i, 8,(double)ASLEEP);
+            }else if(p<70){
+                setMat(i, 8,(double)MOVE);
+            }
+            break;
+        case LTURN:
+            if (p<50){
+                setMat(i, 8,(double)STAY);
+            }else if(p<60){
+                setMat(i, 8,(double)MOVE);
+            }
+            break;
+        case RTURN:
+            if (p<50){
+                setMat(i, 8,(double)STAY);
             }else if(p<60){
                 setMat(i, 8,(double)MOVE);
             }
@@ -91,15 +111,9 @@ void nextAction0(int i, double* a,double* b) {
         case ASLEEP: 
             break;
         case MOVE:
-            if (p<94){
+            if (p<90){
                 //直進
                 *a = 0.02;
-            }else if(p<96){
-                //左折
-                *b = -20.0;
-            }else if(p<98){
-                //右折
-                *b = 20.0;
             }else{
                 //後退
                 *a = -0.01;
@@ -107,6 +121,10 @@ void nextAction0(int i, double* a,double* b) {
             break;
         case STAY:
             break;
+        case LTURN:
+            *b = -1.0;
+        case RTURN:
+            *b = 1.0;
         default:
             printf("nextAction %d default\n",i);
     }
