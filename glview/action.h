@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 void nextState(int i);
-int nextAction(int i);
+double nextAction(int i);
   
 #ifdef __cplusplus
 }

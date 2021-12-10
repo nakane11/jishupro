@@ -50,12 +50,14 @@ void drowCuboid(double a, double b, double c){
 
 void drawCat(int i)
 {
-  int a = nextAction(i);
+  double a = nextAction(i);
   GLfloat *m = htm+16*i;
   //printf("%f %f %f %f\n",m[0],m[1],m[2],m[3]);
-  //if(a){m=makeMat(m,i,0,0,a,0)}
-  GLfloat *l;
-  l=makeMat(m,i,0,0,a,0);
+ 
+  if(a!=0.0){
+    htm_dot(m, htm_makeMat(0,0,a,0));
+    //htm_setMat(htm, m,i);
+  }
 
   double x = getMat(i, 0); double y= getMat(i, 1); double z = getMat(i, 2);
   double theta = getMat(i, 3); double size = getMat(i, 4);

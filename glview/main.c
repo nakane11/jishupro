@@ -84,9 +84,9 @@ void display(void)
 void timer(int value){
   for(int i=1;i<=n;i++){
       nextState(i);
-      //printf("%d",(int)getMat(i,8));
+      printf("%d",(int)getMat(i,8));
   }
-  //printf("\n");
+  printf("\n");
   glutTimerFunc(1000,timer,0);
 }
 
