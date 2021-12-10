@@ -3,6 +3,7 @@
 
 #include "tex.h"
 #include "cat_matrix.h"
+#include "action.h"
 
 const float DEG2RAD = 3.14159/180;
 
@@ -48,6 +49,8 @@ void drowCuboid(double a, double b, double c){
 
 void drawCat(int i)
 {
+  int a = nextAction(i);
+  
   double x = getMat(i, 0); double y= getMat(i, 1); double z = getMat(i, 2);
   double theta = getMat(i, 3); double size = getMat(i, 4);
   double r = getMat(i, 5);  double g = getMat(i, 6); double b = getMat(i, 7);

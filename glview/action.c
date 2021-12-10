@@ -1,64 +1,75 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#include <GL/glut.h>
+
 #include "cat_matrix.h"
 
 enum state {
     ASLEEP,
     MOVE,
     STAY
-}
+};
 
 enum action {
     SLEEP,
     WALK,
     RUN,
     SIT, 
-}
+};
 
-//nextActionより周期長くする
+
 void nextState(int i) {
     //stateに応じて次のstateを決める
+    int p = rand()%100;
     switch((int)getMat(i, 8)) {
-        case ASLEEP:
-        //確率0.15でSTAY
-            // setMat(i, 8)=;
-            // setMat(i, 9)=;
-
+        case ASLEEP: //確率0.15でSTAY
+            if (p<15){
+                setMat(i, 8,(double)STAY);
+            }
             break;
         case MOVE:
         //確率0.3でSTAY
+            if (p<30){
+                setMat(i, 8,(double)STAY);
+            }
             break;
         case STAY:
-        //確率0.2でASLEEP 0.3で
+        //確率0.2でASLEEP 0.3でMOVE
+            if (p<20){
+                setMat(i, 8,(double)ASLEEP);
+            }else if(p<50){
+                setMat(i, 8,(double)MOVE);
+            }
             break;
         default:
-            printf("nextAction %d default\n",i);
+            printf("nextState %d default\n",i);
     }
-
 }
 
-void nextAction(int i) {
-    
-
-    //stateに応じて次のactionを決める
-    switch((int)getMat(i, 8)) {
-        case ASLEEP:
-        //確率0.15でSTAY
-            // setMat(i, 8)=;
-            // setMat(i, 9)=;
-
+int nextAction(int i) {
+    int p = rand()%100;
+    switch((int)getMat(i, 8)){
+        case ASLEEP: 
             break;
         case MOVE:
-        //確率0.3でSTAY
+            if (p<79){
+                //直進
+                setMat(i, 2, getMat(i, 2)+0.1);
+                return 0.2;
+            }else if(p<87){
+                //左折
+            }else if(p<95){
+                //右折
+            }else{
+                //後退
+            }
             break;
         case STAY:
-        //確率0.2でASLEEP 0.3で
             break;
         default:
             printf("nextAction %d default\n",i);
     }
-    //決まったactionに応じて次の位置を決める
-
-
-    
-
+    return 0;
 }
 

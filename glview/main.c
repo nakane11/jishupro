@@ -29,7 +29,7 @@ static const GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};
 void init(void)
 {
   initMat(20);
-  texinit();
+  //texinit();
   
   // クリアの値の設定
   glClearColor (0.0, 0.0, 0.0, 0.0);
@@ -78,6 +78,15 @@ void display(void)
   glPopMatrix();
   
   glutSwapBuffers();
+}
+
+void timer(int value){
+  for(int i=1;i<=n;i++){
+      nextState(i);
+      //printf("%d",(int)getMat(i,8));
+  }
+  //printf("\n");
+  glutTimerFunc(1000,timer,0);
 }
 
 
@@ -203,6 +212,7 @@ int main(int argc, char** argv)
   glutReshapeFunc(reshape);
   glutKeyboardFunc(keyboard);
   glutIdleFunc(idle);
+  glutTimerFunc(1000,timer,0);
   // glutMouseFunc(mouse);
   // glutMotionFunc(motion);
 
