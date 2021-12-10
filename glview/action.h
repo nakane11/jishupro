@@ -1,5 +1,5 @@
-#ifndef __TEX_H__
-#define __TEX_H__
+#ifndef __ACTION_H__
+#define __ACTION_H__
 
 //double nextAction(int i);
 
