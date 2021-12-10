@@ -49,6 +49,7 @@ GLfloat* htm_makeMat(double x, double y, double z, double theta) {
   double rad = theta * PI / 180.0;
   GLfloat *t;
   t=(float *)malloc(sizeof(float) * 16);
+  //rad=1.0;
   t[0] = cos(rad);
   t[1] = 0;
   t[2] = -sin(rad);
@@ -94,6 +95,7 @@ void htm_setMat(GLfloat* s, GLfloat* t, int i){
   s[16*i+13] = t[13];
   s[16*i+14] = t[14];
   s[16*i+15] = t[15];
+  free(t);
 }
 
 void htm_dot(GLfloat* s, GLfloat* b){

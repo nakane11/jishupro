@@ -48,16 +48,37 @@ void drowCuboid(double a, double b, double c){
     glPopMatrix();
 }
 
+// double nextActionHoge(int i) {
+//   int p = rand()%100;
+//   return 0.0;
+// }
+
 void drawCat(int i)
 {
-  double a = nextAction(i);
+  double e = 0.0;
+  double f=0.0;
+  nextAction0(i, &e, &f);
+
+  // static int count = 0;
+  // double a = 0;
+  // a = nextAction(1);
+  // double a2 = 0.1;
+  // nextAction2(i, &a2);
+  //printf("%d action:%lf hoge:%lf\n", count, nextAction(1), nextActionHoge(1));
+  //double a = 0.01;
+  // if(count % 100 == 0 && i == 0){
+  //   printf("%d a:%lf b:%lf func:%lf  action:%lf hoge:%lf\n", count, a, a2, nextAction(1), nextAction(1), nextActionHoge(1));
+  // }
+  //printf("%d %d %lf\n", count, i, a);
+  // ++count;
   GLfloat *m = htm+16*i;
   //printf("%f %f %f %f\n",m[0],m[1],m[2],m[3]);
  
-  if(a!=0.0){
-    htm_dot(m, htm_makeMat(0,0,a,0));
-    //htm_setMat(htm, m,i);
-  }
+  // if(e!=0.0){
+  //   htm_dot(m, htm_makeMat(0,0,e,f));
+  //   //htm_setMat(htm, m,i);
+  // }
+  htm_dot(m, htm_makeMat(0,0,e,f));
 
   double x = getMat(i, 0); double y= getMat(i, 1); double z = getMat(i, 2);
   double theta = getMat(i, 3); double size = getMat(i, 4);

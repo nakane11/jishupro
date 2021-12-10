@@ -29,7 +29,7 @@ static const GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};
 void init(void)
 {
   initMat(20);
-  //texinit();
+  texinit();
   
   // クリアの値の設定
   glClearColor (0.0, 0.0, 0.0, 0.0);
@@ -72,7 +72,7 @@ void display(void)
   glPushMatrix();
   {
     //mydisplay(0.5, 0.4);
-    for(int i=1;i<=n;i++){
+    for(int i=0;i<n;i++){
       drawCat(i);
     }
   }
@@ -82,11 +82,11 @@ void display(void)
 }
 
 void timer(int value){
-  for(int i=1;i<=n;i++){
+  for(int i=0;i<n;i++){
       nextState(i);
-      printf("%d",(int)getMat(i,8));
+      //printf("%d",(int)getMat(i,8));
   }
-  printf("\n");
+  //printf("\n");
   glutTimerFunc(1000,timer,0);
 }
 

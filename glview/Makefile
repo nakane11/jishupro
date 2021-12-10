@@ -9,11 +9,13 @@ LDFLAGS=-lglut -lGLU -lGL -lm
 TARGET=main
 OBJS=main.o draw_function.o cat_matrix.o tex.o action.o
 
+sanitizer=-g -fsanitize=address
+
 .c.o:
-	${CC} -c ${CFLAGS} $<
+	${CC} ${sanitizer} -c ${CFLAGS} $<
 
 TARGET: ${OBJS}
-	${CC} -o ${TARGET} ${OBJS} ${LDFLAGS}
+	${CC} ${sanitizer} -o ${TARGET} ${OBJS} ${LDFLAGS}
 
 clean:
 	${RM} ${TARGET} *.o *~
