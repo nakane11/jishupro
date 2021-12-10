@@ -67,6 +67,7 @@ void display(void)
   glTranslatef( -dx, dy, -dz );
   rx=rx-(int)(rx/360)*360;
   glRotated(rx, 0.0, 1.0, 0.0);
+  
   //初期位置
   glPushMatrix();
   {

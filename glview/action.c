@@ -55,7 +55,7 @@ int nextAction(int i) {
         case MOVE:
             if (p<79){
                 //直進
-                setMat(i, 2, getMat(i, 2)+0.1);
+                //setMat(i, 2, getMat(i, 2)+0.1);
                 return 0.2;
             }else if(p<87){
                 //左折

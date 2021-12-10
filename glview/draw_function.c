@@ -1,11 +1,12 @@
 #include <GL/glut.h>
 #include <math.h>
+#include <stdio.h>
 
 #include "tex.h"
 #include "cat_matrix.h"
 #include "action.h"
 
-const float DEG2RAD = 3.14159/180;
+//const float DEG2RAD = 3.14159/180;
 
 void drowCuboid(double a, double b, double c){
   GLdouble vertex[][3] = {
@@ -50,7 +51,12 @@ void drowCuboid(double a, double b, double c){
 void drawCat(int i)
 {
   int a = nextAction(i);
-  
+  GLfloat *m = htm+16*i;
+  //printf("%f %f %f %f\n",m[0],m[1],m[2],m[3]);
+  //if(a){m=makeMat(m,i,0,0,a,0)}
+  GLfloat *l;
+  l=makeMat(m,i,0,0,a,0);
+
   double x = getMat(i, 0); double y= getMat(i, 1); double z = getMat(i, 2);
   double theta = getMat(i, 3); double size = getMat(i, 4);
   double r = getMat(i, 5);  double g = getMat(i, 6); double b = getMat(i, 7);
@@ -59,8 +65,11 @@ void drawCat(int i)
 
   glPushMatrix();
   {
-    glTranslated( x, y, z);
-    glRotated (theta, 0.0, 1.0, 0.0);
+    glMultMatrixf( m );
+    // glTranslated( x, y, z);
+    // glRotated (theta, 0.0, 1.0, 0.0);
+
+    
     drowCuboid(2.0*size, 1.0*size, 3.0*size); //胴体
     
 
