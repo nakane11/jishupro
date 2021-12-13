@@ -11,6 +11,7 @@ int n=0; //現在のねこの出現数
 const int m=10;
 static double *trait;
 GLfloat *htm;
+
 //m列の情報
 // 0: X    1: Y    2: Z
 // 3: THETA    4: SIZE     
