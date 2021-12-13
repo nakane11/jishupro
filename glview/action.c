@@ -26,6 +26,9 @@ enum action {
 void nextState(int i) {
     //stateに応じて次のstateを決める
     int p = rand()%100;
+    if(p<5){
+        setMat(i,10,rand()%45-15);
+    }
     switch((int)getMat(i, 8)) {
         case ASLEEP: //確率0.15でSTAY
             if (p<15){

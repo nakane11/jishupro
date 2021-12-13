@@ -29,7 +29,7 @@ static const GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};
 void init(void)
 {
   initMat(20);
-  texinit();
+  //texinit();
   
   // クリアの値の設定
   glClearColor (0.0, 0.0, 0.0, 0.0);

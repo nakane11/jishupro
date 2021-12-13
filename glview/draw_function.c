@@ -96,6 +96,7 @@ void drawCat(int i)
 
     glPushMatrix();
       glTranslated(0*size, 1.3*size, 1.4*size); //頭
+      glRotated(getMat(i,10), 1 , 0, 0);
       facedisplay(1.0*size, 0.8*size,0.7*size);
       drowCuboid(2.0*size,  1.6*size,1.4*size);
 

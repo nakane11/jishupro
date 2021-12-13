@@ -143,6 +143,7 @@ void initMat(int num)
         trait[i * m + 5]=(rand()%10)/10.0;
         trait[i * m + 6]=(rand()%10)/10.0;
         trait[i * m + 7]=(rand()%10)/10.0;
+        trait[i * m + 10]=rand()%45-15;
 
         htm_setMat(htm,htm_makeMat(trait[i * m + 0],trait[i * m + 1],trait[i * m + 2],trait[i * m + 3]),i);
 
