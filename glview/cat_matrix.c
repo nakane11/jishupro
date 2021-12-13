@@ -6,11 +6,19 @@
 
 #define PI 3.141592653589793
 
-static int N=50; //出現数の上限
+#define N 50 //出現数の上限
 int n=0; //現在のねこの出現数
 const int m=10;
 static double *trait;
 GLfloat *htm;
+
+typedef struct cat {
+    double size, r, g, b;
+    int state, action, face, count;
+    GLfloat matrix[16];
+} cat;
+
+cat cats[N];
 
 //m列の情報
 // 0: X    1: Y    2: Z
@@ -19,31 +27,31 @@ GLfloat *htm;
 // 8: STATE    9: ACTION
 
 //i番目のネコを(x,y,z)平行移動後にy軸周りにrad回転
-// GLfloat* makeMat(GLfloat* t,int i, double x, double y, double z, double theta) {
-//   double rad = theta * PI / 180.0;
-//   t[16*i+0] = cos(rad);
-//   t[16*i+1] = 0;
-//   t[16*i+2] = -sin(rad);
-//   t[16*i+3] = 0;
+GLfloat* makeMat(GLfloat* t,int i, double x, double y, double z, double theta) {
+  double rad = theta * PI / 180.0;
+  t[16*i+0] = cos(rad);
+  t[16*i+1] = 0;
+  t[16*i+2] = -sin(rad);
+  t[16*i+3] = 0;
 
-//   t[16*i+4] = 0;
-//   t[16*i+5] = 1;
-//   t[16*i+6] = 0;
-//   t[16*i+7] = 0;
+  t[16*i+4] = 0;
+  t[16*i+5] = 1;
+  t[16*i+6] = 0;
+  t[16*i+7] = 0;
 
-//   t[16*i+8] = sin(rad);
-//   t[16*i+9] = 0;
-//   t[16*i+10] = cos(rad);
-//   t[16*i+11] = 0;
+  t[16*i+8] = sin(rad);
+  t[16*i+9] = 0;
+  t[16*i+10] = cos(rad);
+  t[16*i+11] = 0;
 
-//   t[16*i+12] = x*cos(rad)+z*sin(rad);
-//   t[16*i+13] = y;
-//   t[16*i+14] = -x*sin(rad)+z*cos(rad);
-//   t[16*i+15] = 1;
+  t[16*i+12] = x*cos(rad)+z*sin(rad);
+  t[16*i+13] = y;
+  t[16*i+14] = -x*sin(rad)+z*cos(rad);
+  t[16*i+15] = 1;
 
-//   return t;
+  return t;
 
-// }
+}
 
 //ネコを(x,y,z)平行移動後にy軸周りにrad回転する行列を返す
 GLfloat* htm_makeMat(double x, double y, double z, double theta) {
@@ -133,6 +141,13 @@ void htm_dot(GLfloat* s, GLfloat* b){
 void initMat(int num)
 {
     srand((unsigned int)time(NULL));
+    for (int i = 0; i < 20; ++i) {
+        cats[i].size=1.0; 
+        cats[i].r=rand()%40-20; cats[i].g=rand()%40-20; cats[i].b=rand()%40-20;
+        makeMat(cats[i].matrix, i, 1, 0, 1, 0);
+        printf("%f, %f, %f",cats[i].matrix[0],cats[i].matrix[1],cats[i].matrix[2]);
+    }
+
     trait =(double *)malloc(sizeof(double) * N * m);
     htm =(float *)malloc(sizeof(float) * N * 16);
     for (int i=0; i<=num; i++) {
