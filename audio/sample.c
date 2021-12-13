@@ -33,6 +33,26 @@ typedef struct {
     char        ID[4];  // Chunk ID
     uint32_t    Size;   // Chunk size;
 } CHUNK;
+
+/* 出力デバイス */
+char *device = "default";
+    /* ソフトSRC有効無効設定 */
+unsigned int soft_resample = 1;
+    /* ALSAのバッファ時間[msec] */
+const static unsigned int latency = 50000;
+
+ /* PCM 情報 */
+WAVEFORMATEX wf = { WAVE_FORMAT_PCM,   // PCM
+                    DEF_CHANNEL,
+                    DEF_FS,
+                    DEF_FS * DEF_CHANNEL * (DEF_BITPERSAMPLE/8),
+                    (DEF_BITPERSAMPLE/8) * DEF_CHANNEL,
+                    DEF_BITPERSAMPLE,
+                    0};
+
+/* 符号付き16bit */
+static snd_pcm_format_t format = SND_PCM_FORMAT_S16;
+ 
  
 /* WAVE ファイルのヘッダ部分を解析、必要な情報を構造体に入れる
  *  ・fp は DATA の先頭位置にポイントされる
@@ -48,14 +68,14 @@ static int readWavHeader(FILE *fp, WAVEFORMATEX *wf)
     /* Read RIFF Chunk*/
     if((fread(&Chunk, sizeof(Chunk), 1, fp) != 1) ||
        (strncmp(Chunk.ID, ID_RIFF, 4) != 0)) {
-        printf("file is not RIFF Format ¥n");
+        printf("file is not RIFF Format \n");
         goto RET;
     }
  
     /* Read Wave */
     if((fread(FormatTag, 1, 4, fp) != 4) ||
        (strncmp(FormatTag, ID_WAVE, 4) != 0)){
-        printf("file is not Wave file¥n");
+        printf("file is not Wave file\n");
         goto RET;
     }
              
@@ -66,7 +86,7 @@ static int readWavHeader(FILE *fp, WAVEFORMATEX *wf)
             reSize = (sizeof(WAVEFORMATEX) < Chunk.Size) ? sizeof(WAVEFORMATEX) : Chunk.Size;
             fread(wf, reSize, 1, fp);
             if(wf->wFormatTag != WAVE_FORMAT_PCM) {
-                printf("Input file is not PCM¥n");
+                printf("Input file is not PCM\n");
                 goto RET;
             }
         }
@@ -88,35 +108,15 @@ RET:
  
 int play()
 {
-    /* 出力デバイス */
-    char *device = "default";
-     /* ソフトSRC有効無効設定 */
-    unsigned int soft_resample = 1;
-     /* ALSAのバッファ時間[msec] */
-    const static unsigned int latency = 50000;
-     /* PCM 情報 */
-    WAVEFORMATEX wf = { WAVE_FORMAT_PCM,   // PCM
-                        DEF_CHANNEL,
-                        DEF_FS,
-                        DEF_FS * DEF_CHANNEL * (DEF_BITPERSAMPLE/8),
-                        (DEF_BITPERSAMPLE/8) * DEF_CHANNEL,
-                        DEF_BITPERSAMPLE,
-                        0};
-    /* 符号付き16bit */
-    static snd_pcm_format_t format = SND_PCM_FORMAT_S16;
- 
     int16_t *buffer = NULL;
     int dSize, reSize, ret, n;
     FILE *fp = NULL;
     snd_pcm_t *hndl = NULL;
 
-     
- 
-    
     /* WAVファイルを開く*/
     fp = fopen("cat.wav","rb");
     if (fp == NULL) {
-        printf("Open error:¥n");
+        printf("Open error:\n");
         goto End;
     }
  
@@ -127,13 +127,13 @@ int play()
     }
      
     /* PCMフォーマットの確認と情報出力を行う */
-    printf("format : PCM, nChannels = %d, SamplePerSec = %d, BitsPerSample = %d¥n",
+    printf("format : PCM, nChannels = %d, SamplePerSec = %d, BitsPerSample = %d\n",
             wf.nChannels, wf.nSamplesPerSec, wf.wBitsPerSample);
  
     /* バッファの用意 */
     buffer = malloc(BUF_SAMPLES * wf.nBlockAlign);
     if(buffer == NULL) {
-        printf("malloc error¥n");
+        printf("malloc error\n");
         goto End;
     }
  
@@ -148,11 +148,25 @@ int play()
     ret = snd_pcm_set_params( hndl, format, SND_PCM_ACCESS_RW_INTERLEAVED, wf.nChannels,
                               wf.nSamplesPerSec, soft_resample, latency);
     if(ret != 0) {
-        printf( "Unable to set format¥n" );
+        printf( "Unable to set format\n" );
         goto End;
     }
 
-    //snd_pcm_chmap_name(6);
+    snd_pcm_chmap_t *map;
+    const char *mapstr = snd_pcm_chmap_name(9);
+    map = snd_pcm_chmap_parse_string(mapstr);
+    // char tmp[128];
+	// if (snd_pcm_chmap_print(map, sizeof(tmp), tmp) > 0)
+	// 	printf("  %s\n", tmp);
+
+    ret = snd_pcm_set_chmap(hndl, map);
+    printf("%d\n",ret);
+    if(ret != 0) {
+        printf( "Unable to set channel map\n" );
+        goto End;
+    }
+    free(map);
+
  
     for (n = 0; n < dSize; n += BUF_SAMPLES * wf.nBlockAlign) {
         /* PCMの読み込み */
@@ -170,8 +184,6 @@ int play()
         }
     }
 
-    
-    
     /* データ出力が終わったため、たまっているPCMを出力する。 */
     snd_pcm_drain(hndl);
  
@@ -195,3 +207,8 @@ End:
     return 0;
 }
 
+int main(){
+    play();
+    //play();
+    return 0;
+}
