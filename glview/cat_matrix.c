@@ -13,7 +13,7 @@ static double *trait;
 GLfloat *htm;
 
 typedef struct cat {
-    double size, r, g, b;
+    double scale, r, g, b;
     int state, action, face, count;
     GLfloat matrix[16];
 } cat;
@@ -142,10 +142,8 @@ void initMat(int num)
 {
     srand((unsigned int)time(NULL));
     for (int i = 0; i < 20; ++i) {
-        cats[i].size=1.0; 
-        cats[i].r=rand()%40-20; cats[i].g=rand()%40-20; cats[i].b=rand()%40-20;
-        makeMat(cats[i].matrix, i, 1, 0, 1, 0);
-        printf("%f, %f, %f",cats[i].matrix[0],cats[i].matrix[1],cats[i].matrix[2]);
+        cats[i].scale=1.0; 
+        cats[i].r=rand()%40-20; cats[i].g=(rand()%10)/10.0; cats[i].b=(rand()%10)/10.0;
     }
 
     trait =(double *)malloc(sizeof(double) * N * m);
