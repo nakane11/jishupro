@@ -81,25 +81,33 @@ void drawCat(int i)
   // }
   htm_dot(m, htm_makeMat(0,0,e,f));
 
-  double x = getMat(i, 0); double y= getMat(i, 1); double z = getMat(i, 2);
-  double theta = getMat(i, 3); double size = getMat(i, 4);
+  // double x = getMat(i, 0); double y= getMat(i, 1); double z = getMat(i, 2);
+  // double theta = getMat(i, 3); 
+  double size = getMat(i, 4);
   double r = getMat(i, 5);  double g = getMat(i, 6); double b = getMat(i, 7);
 
-  glColor3d(r, g, b);
+
 
   glPushMatrix();
   {
+    //色の設定
+    GLfloat color[] = {r, g, b, 1.0};
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color);
+
     glMultMatrixf( m );
 
-    
     drowCuboid(2.0*size, 1.0*size, 3.0*size); //胴体
     
-
     glPushMatrix();
       glTranslated(0*size, 1.3*size, 1.4*size); //頭
       glRotated(getMat(i,10), 1 , 0, 0);
+
+      //テクスチャマッピング
+      texinit();
       facedisplay(1.0*size, 0.8*size,0.7*size);
+
       drowCuboid(2.0*size,  1.6*size,1.4*size);
+      
 
 
       glPushMatrix();
@@ -118,4 +126,6 @@ void drawCat(int i)
     
   }
   glPopMatrix();
+
+  glFlush();
 }
