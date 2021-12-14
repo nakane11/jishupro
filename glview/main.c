@@ -5,8 +5,9 @@
 #include <unistd.h>
 
 #include "draw_function.h"
-#include "cat_matrix.h"
+//#include "cat_matrix.h"
 #include "tex.h"
+#include "matrix_function.h"
 
 //-----------------------------------------------------------------------------------
 // グローバル変数
@@ -22,14 +23,14 @@ GLint mouse_x = 0, mouse_y = 0;
 static const GLfloat light_position[] = { 0.0, 0.0, 0.0, 1.0 };
 static const GLfloat light_ambient[] = {1.0, 1.0, 1.0, 1.0};
 static const GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};
+static const GLfloat light_specular[]={1.0,1.0,1.0,1.0};
 
 //-----------------------------------------------------------------------------------
 // 初期化
 //-----------------------------------------------------------------------------------
 void init(void)
 {
-  initMat(20);
-  //texinit();
+  initCat(2); //ねこの生成
   
   // クリアの値の設定
   glClearColor (0.0, 0.0, 0.0, 0.0);
@@ -41,10 +42,12 @@ void init(void)
   glShadeModel (GL_SMOOTH);
 
   // デフォルトライト
+  
   glLightfv(GL_LIGHT0, GL_POSITION, light_position);
   glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-  glLightfv(GL_LIGHT0, GL_DIFFUSE, light_ambient);
-  //glEnable(GL_LIGHTING);
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+  glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+  glEnable(GL_LIGHTING);
   glEnable(GL_LIGHT0);
 
 }
@@ -71,7 +74,6 @@ void display(void)
   //初期位置
   glPushMatrix();
   {
-    //mydisplay(0.5, 0.4);
     for(int i=0;i<n;i++){
       drawCat(i);
     }
@@ -82,10 +84,10 @@ void display(void)
 }
 
 void timer(int value){
-  for(int i=0;i<n;i++){
-      nextState(i);
-      //printf("%d",(int)getMat(i,8));
-  }
+  // for(int i=0;i<n;i++){
+  //     nextState(i);
+  //     //printf("%d",(int)getMat(i,8));
+  // }
   //printf("\n");
   glutTimerFunc(1000,timer,0);
 }
@@ -128,7 +130,7 @@ void keyboard (unsigned char key, int x, int y)
       rx += (GLfloat) 1;
       break;
     case 27:
-      freeMat();
+      //freeMat();
       exit(0);
       break;
   }

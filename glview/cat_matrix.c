@@ -12,14 +12,6 @@ const int m=10;
 static double *trait;
 GLfloat *htm;
 
-typedef struct cat {
-    double scale, r, g, b;
-    int state, action, face, count;
-    GLfloat matrix[16];
-} cat;
-
-cat cats[N];
-
 //m列の情報
 // 0: X    1: Y    2: Z
 // 3: THETA    4: SIZE     
@@ -141,10 +133,6 @@ void htm_dot(GLfloat* s, GLfloat* b){
 void initMat(int num)
 {
     srand((unsigned int)time(NULL));
-    for (int i = 0; i < 20; ++i) {
-        cats[i].scale=1.0; 
-        cats[i].r=rand()%40-20; cats[i].g=(rand()%10)/10.0; cats[i].b=(rand()%10)/10.0;
-    }
 
     trait =(double *)malloc(sizeof(double) * N * m);
     htm =(float *)malloc(sizeof(float) * N * 16);

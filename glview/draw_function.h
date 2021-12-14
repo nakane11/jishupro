@@ -4,7 +4,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-void drowCuboid(double a, double b, double c);
+
 void drawCat(int i);
   
 #ifdef __cplusplus
