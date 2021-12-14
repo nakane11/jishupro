@@ -106,24 +106,32 @@ void initCat (int num){
         // cats[i].task = ;
         // cats[i].face = ;
         // cats[i].task_count = ;
+        MatArray array0 = {{1, 0, 0, 0,
+                            0, 1, 0, 0,
+                            0, 0, 1, 0,
+                            0, 0, 0, 1}};
+        *cats[i].matrix = *array0.matrix;
+
         MatArray array1, array2;
         array1 = tlMat(cats[i].x, cats[i].y, cats[i].z);
         array2 = y_rtMat(angle);
         dotMat(array2.matrix, array1.matrix);
         dotMat( array1.matrix, cats[i].matrix);
+        //printf("%f %f %f %f\n",cats[i].matrix[0],cats[i].matrix[1],cats[i].matrix[2],cats[i].matrix[3]);
         
     }
     n = num;
-
-    MatArray tarray1, tarray2;
-    tarray1 = tlMat(cats[0].x, cats[0].y, cats[0].z);
-    tarray2 = y_rtMat(90);
-    printf("x=%lf, y=%lf, z=%lf, angle=%lf\n",cats[0].x,cats[0].y,cats[0].z,angle);
-    for(int i=0;i<16;i++){
-        printf("%lf, \n",tarray1.matrix[i]);
-    }
-    dotMat(tarray2.matrix, tarray1.matrix);
-    for(int i=0;i<16;i++){
-        printf("%lf, \n",tarray2.matrix[i]);
-    }
+    
+    //関数のテスト用
+    // MatArray tarray1, tarray2;
+    // tarray1 = tlMat(cats[0].x, cats[0].y, cats[0].z);
+    // tarray2 = y_rtMat(90);
+    // printf("x=%lf, y=%lf, z=%lf, angle=%lf\n",cats[0].x,cats[0].y,cats[0].z,angle);
+    // for(int i=0;i<16;i++){
+    //     printf("%lf, \n",tarray1.matrix[i]);
+    // }
+    // dotMat(tarray2.matrix, tarray1.matrix);
+    // for(int i=0;i<16;i++){
+    //     printf("%lf, \n",tarray2.matrix[i]);
+    // }
 }

@@ -87,6 +87,10 @@ void drawCat(int i)
   // double size = getMat(i, 4);
   // double r = getMat(i, 5);  double g = getMat(i, 6); double b = getMat(i, 7);
   double size = cats[i].scale;
+  //printf("%lf\n",size);
+ 
+  //printf("%f %f %f %f\n",cats[i].matrix[0],cats[i].matrix[1],cats[i].matrix[2],cats[i].matrix[3]);
+  GLfloat *m = cats[i].matrix;
 
   glPushMatrix();
   {
@@ -94,7 +98,7 @@ void drawCat(int i)
     GLfloat color[] = {cats[i].r, cats[i].g, cats[i].b, 1.0};
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color);
 
-    //glMultMatrixf( cats[i].matrix );
+    glMultMatrixf( m );
 
     drowCuboid(2.0*size, 1.0*size, 3.0*size); //胴体
     
