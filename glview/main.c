@@ -30,7 +30,7 @@ static const GLfloat light_specular[]={1.0,1.0,1.0,1.0};
 //-----------------------------------------------------------------------------------
 void init(void)
 {
-  initCat(5); //ねこの生成
+  initCat(10); //ねこの生成
   
   // クリアの値の設定
   glClearColor (0.0, 0.0, 0.0, 0.0);
@@ -112,16 +112,16 @@ void keyboard (unsigned char key, int x, int y)
 {
   switch (key) {
     case 'a':
-      dx += (GLfloat) 0.2;
+      dx += (GLfloat) 0.4;
       break;
     case 'd':
-      dx -= (GLfloat) 0.2;
+      dx -= (GLfloat) 0.4;
       break;
     case 's':
-      dz -= 0.2;
+      dz -= 0.4;
       break;
     case 'w':
-      dz += 0.2;
+      dz += 0.4;
       break;
     case 'z':
       rx -= (GLfloat) 1;
