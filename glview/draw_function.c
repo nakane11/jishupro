@@ -3,10 +3,8 @@
 #include <stdio.h>
 
 #include "tex.h"
-#include "cat_matrix.h"
-#include "action.h"
-
-//const float DEG2RAD = 3.14159/180;
+//#include "action.h"
+#include "matrix_function.h"
 
 void drowCuboid(double a, double b, double c){
   GLdouble vertex[][3] = {
@@ -56,9 +54,9 @@ void drowCuboid(double a, double b, double c){
 
 void drawCat(int i)
 {
-  double e = 0.0;
-  double f=0.0;
-  nextAction0(i, &e, &f);
+  // double e = 1.0;
+  // double f=1.0;
+  //nextAction0(i, &e, &f);
 
   // static int count = 0;
   // double a = 0;
@@ -72,34 +70,38 @@ void drawCat(int i)
   // }
   //printf("%d %d %lf\n", count, i, a);
   // ++count;
-  GLfloat *m = htm+16*i;
-  //printf("%f %f %f %f\n",m[0],m[1],m[2],m[3]);
  
   // if(e!=0.0){
   //   htm_dot(m, htm_makeMat(0,0,e,f));
   //   //htm_setMat(htm, m,i);
   // }
-  htm_dot(m, htm_makeMat(0,0,e,f));
+  /////////////////////htm_dot(m, htm_makeMat(0,0,e,f));
 
-  double x = getMat(i, 0); double y= getMat(i, 1); double z = getMat(i, 2);
-  double theta = getMat(i, 3); double size = getMat(i, 4);
-  double r = getMat(i, 5);  double g = getMat(i, 6); double b = getMat(i, 7);
+  double size = cats[i].scale;
+ 
+  //printf("%f %f %f %f\n",cats[i].matrix[0],cats[i].matrix[1],cats[i].matrix[2],cats[i].matrix[3]);
 
-  glColor3d(r, g, b);
 
   glPushMatrix();
   {
-    glMultMatrixf( m );
+    //色の設定
+    GLfloat color[] = {cats[i].r, cats[i].g, cats[i].b, 1.0};
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color);
 
-    
+    glMultMatrixf( cats[i].matrix );
+
     drowCuboid(2.0*size, 1.0*size, 3.0*size); //胴体
     
-
     glPushMatrix();
       glTranslated(0*size, 1.3*size, 1.4*size); //頭
-      glRotated(getMat(i,10), 1 , 0, 0);
+      //glRotated(cats[i].neck_angle, 1 , 0, 0);
+
+      //テクスチャマッピング
+      texinit();
       facedisplay(1.0*size, 0.8*size,0.7*size);
+
       drowCuboid(2.0*size,  1.6*size,1.4*size);
+      
 
 
       glPushMatrix();
@@ -118,4 +120,6 @@ void drawCat(int i)
     
   }
   glPopMatrix();
+
+  glFlush();
 }
