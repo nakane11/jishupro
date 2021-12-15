@@ -5,7 +5,6 @@
 #include <unistd.h>
 
 #include "draw_function.h"
-//#include "cat_matrix.h"
 #include "tex.h"
 #include "matrix_function.h"
 
