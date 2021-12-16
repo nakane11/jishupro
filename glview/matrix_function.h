@@ -12,7 +12,6 @@ typedef struct {
 } Cat;
 typedef struct { GLfloat matrix[16]; } MatArray;
 
-const int N;//出現数の上限
 extern int n; //現在のねこの出現数
 extern Cat cats[];
 

@@ -46,7 +46,7 @@ void dotMat (GLfloat *a, GLfloat *b){
 
 }
 
-//回転
+//y軸回転
 MatArray y_rtMat(double angle){
     double rad = angle * PI / 180.0;
     MatArray m = {{cos(rad), 0, -sin(rad), 0,
@@ -99,11 +99,11 @@ void initCat (int num){
         dotMat(array2.matrix, array1.matrix);
         //printf("%f %f %f %f\n",array1.matrix[12],array1.matrix[13],array1.matrix[14],array1.matrix[15]);
         dotMat( array1.matrix, cats[i].matrix);
-        printf("%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n\n",
-        cats[i].matrix[0],cats[i].matrix[1],cats[i].matrix[2],cats[i].matrix[3],
-        cats[i].matrix[4],cats[i].matrix[5],cats[i].matrix[6],cats[i].matrix[7],
-        cats[i].matrix[8],cats[i].matrix[9],cats[i].matrix[10],cats[i].matrix[11],
-        cats[i].matrix[12],cats[i].matrix[13],cats[i].matrix[14],cats[i].matrix[15]);
+        // printf("%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n\n",
+        // cats[i].matrix[0],cats[i].matrix[1],cats[i].matrix[2],cats[i].matrix[3],
+        // cats[i].matrix[4],cats[i].matrix[5],cats[i].matrix[6],cats[i].matrix[7],
+        // cats[i].matrix[8],cats[i].matrix[9],cats[i].matrix[10],cats[i].matrix[11],
+        // cats[i].matrix[12],cats[i].matrix[13],cats[i].matrix[14],cats[i].matrix[15]);
         
     }
     n = num;
