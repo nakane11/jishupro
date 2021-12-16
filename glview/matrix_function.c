@@ -4,11 +4,14 @@
 #include <math.h>
 #include <GL/glut.h>
 
+#include "tex.h"
+
 #define PI 3.141592653589793
 
 typedef struct {
     double x, y, z, scale, r, g, b;
-    int neck_angle, state, task, face, task_count;
+    int neck_angle, state, task, task_count;
+    face face;
     GLfloat matrix[16];
 } Cat;
 
@@ -76,10 +79,10 @@ void initCat (int num){
         cats[i].g = (rand()%100)/100.0;
         cats[i].b = (rand()%100)/100.0;
         cats[i].neck_angle = 0.0;
+        cats[i].face = ANGRY;
         
         // cats[i].state = ;
         // cats[i].task = ;
-        // cats[i].face = ;
         // cats[i].task_count = ;
 
         for (int k = 0; k<16; k++){
@@ -108,6 +111,7 @@ void initCat (int num){
     }
     n = num;
     
+    
     //関数のテスト用
     // MatArray tarray1, tarray2;
     // tarray1 = tlMat(cats[0].x, cats[0].y, cats[0].z);
@@ -120,4 +124,5 @@ void initCat (int num){
     // for(int i=0;i<16;i++){
     //     printf("%lf, \n",tarray2.matrix[i]);
     // }
+    
 }

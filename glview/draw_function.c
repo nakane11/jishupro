@@ -97,8 +97,7 @@ void drawCat(int i)
       //glRotated(cats[i].neck_angle, 1 , 0, 0);
 
       //テクスチャマッピング
-      texinit();
-      facedisplay(1.0*size, 0.8*size,0.7*size);
+      facedisplay(cats[i].face, 1.0*size, 0.8*size,0.7*size);
 
       drowCuboid(2.0*size,  1.6*size,1.4*size);
       

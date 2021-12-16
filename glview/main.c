@@ -30,6 +30,7 @@ static const GLfloat light_specular[]={1.0,1.0,1.0,1.0};
 void init(void)
 {
   initCat(10); //ねこの生成
+  texinit();
   
   // クリアの値の設定
   glClearColor (0.0, 0.0, 0.0, 0.0);
@@ -209,7 +210,7 @@ int main(int argc, char** argv)
   glutCreateWindow ("planet");
 
   init();
-
+  
   glutDisplayFunc(display);
   glutReshapeFunc(reshape);
   glutKeyboardFunc(keyboard);

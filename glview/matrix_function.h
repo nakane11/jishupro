@@ -7,7 +7,8 @@ extern "C" {
 
 typedef struct {
     double x, y, z, scale, r, g, b;
-    int neck_angle, state, task, face, task_count;
+    int neck_angle, state, task, task_count;
+    face face;
     GLfloat matrix[16];
 } Cat;
 typedef struct { GLfloat matrix[16]; } MatArray;
