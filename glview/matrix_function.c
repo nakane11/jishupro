@@ -10,7 +10,7 @@
 
 typedef struct {
     double x, y, z, scale, r, g, b;
-    int neck_angle, state, task, task_count;
+    int neck_angle, state, task, duration;
     face face;
     GLfloat matrix[16];
 } Cat;
@@ -81,10 +81,7 @@ void initCat (int num){
         cats[i].neck_angle = 0.0;
         cats[i].face = ANGRY;
         
-        // cats[i].state = ;
-        // cats[i].task = ;
-        // cats[i].task_count = ;
-
+    
         for (int k = 0; k<16; k++){
             cats[i].matrix[k] = 0;
         }
