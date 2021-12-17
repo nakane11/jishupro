@@ -21,30 +21,32 @@ int n=0; //現在のねこの出現数
 Cat cats[50];
 
 //内積
-void dotMat (GLfloat *a, GLfloat *b){
-    GLfloat tmp[16];
-    for(int i = 0; i<16; i++){
-        tmp[i] = b[i];
+void dotMat (GLfloat *s, GLfloat *b){
+    GLfloat a[16];
+    for(int i = 0; i < 16; i++) {
+        a[i] = s[i];
     }
-    b[0] = a[0]*tmp[0] + a[4]*tmp[1] + a[8]*tmp[2] + a[12]*tmp[3];
-    b[1] = a[1]*tmp[0] + a[5]*tmp[1] + a[9]*tmp[2] + a[13]*tmp[3];
-    b[2] = a[2]*tmp[0] + a[6]*tmp[1] + a[10]*tmp[2] + a[14]*tmp[3];
-    b[3] = a[3]*tmp[0] + a[7]*tmp[1] + a[11]*tmp[2] + a[15]*tmp[3];
+    
+    s[0]=a[0]*b[0]+a[4]*b[1]+a[8]*b[2]+a[12]*b[3];
+    s[1]=a[1]*b[0]+a[5]*b[1]+a[9]*b[2]+a[13]*b[3];
+    s[2]=a[2]*b[0]+a[6]*b[1]+a[10]*b[2]+a[14]*b[3];
+    s[3]=a[3]*b[0]+a[7]*b[1]+a[11]*b[2]+a[15]*b[3];
 
-    b[4]=a[0]*tmp[4]+a[4]*tmp[5]+a[8]*tmp[6]+a[12]*tmp[7];
-    b[5]=a[1]*tmp[4]+a[5]*tmp[5]+a[9]*tmp[6]+a[13]*tmp[7];
-    b[6]=a[2]*tmp[4]+a[6]*tmp[5]+a[10]*tmp[6]+a[14]*tmp[7];
-    b[7]=a[3]*tmp[4]+a[7]*tmp[5]+a[11]*tmp[6]+a[15]*tmp[7];
+    s[4]=a[0]*b[4]+a[4]*b[5]+a[8]*b[6]+a[12]*b[7];
+    s[5]=a[1]*b[4]+a[5]*b[5]+a[9]*b[6]+a[13]*b[7];
+    s[6]=a[2]*b[4]+a[6]*b[5]+a[10]*b[6]+a[14]*b[7];
+    s[7]=a[3]*b[4]+a[7]*b[5]+a[11]*b[6]+a[15]*b[7];
 
-    b[8]=a[0]*tmp[8]+a[4]*tmp[9]+a[8]*tmp[10]+a[12]*tmp[11];
-    b[9]=a[1]*tmp[8]+a[5]*tmp[9]+a[9]*tmp[10]+a[13]*tmp[11];
-    b[10]=a[2]*tmp[8]+a[6]*tmp[9]+a[10]*tmp[10]+a[14]*tmp[11];
-    b[11]=a[3]*tmp[8]+a[7]*tmp[9]+a[11]*tmp[10]+a[15]*tmp[11];
+    s[8]=a[0]*b[8]+a[4]*b[9]+a[8]*b[10]+a[12]*b[11];
+    s[9]=a[1]*b[8]+a[5]*b[9]+a[9]*b[10]+a[13]*b[11];
+    s[10]=a[2]*b[8]+a[6]*b[9]+a[10]*b[10]+a[14]*b[11];
+    s[11]=a[3]*b[8]+a[7]*b[9]+a[11]*b[10]+a[15]*b[11];
 
-    b[12]=a[0]*tmp[12]+a[4]*tmp[13]+a[8]*tmp[14]+a[12]*tmp[15];
-    b[13]=a[1]*tmp[12]+a[5]*tmp[13]+a[9]*tmp[14]+a[13]*tmp[15];
-    b[14]=a[2]*tmp[12]+a[6]*tmp[13]+a[10]*tmp[14]+a[14]*tmp[15];
-    b[15]=a[3]*tmp[12]+a[7]*tmp[13]+a[11]*tmp[14]+a[15]*tmp[15];
+    s[12]=a[0]*b[12]+a[4]*b[13]+a[8]*b[14]+a[12]*b[15];
+    s[13]=a[1]*b[12]+a[5]*b[13]+a[9]*b[14]+a[13]*b[15];
+    s[14]=a[2]*b[12]+a[6]*b[13]+a[10]*b[14]+a[14]*b[15];
+    s[15]=a[3]*b[12]+a[7]*b[13]+a[11]*b[14]+a[15]*b[15];
+
 
 }
 
@@ -92,7 +94,7 @@ void initCat (int num){
         cats[i].b = (rand()%100)/100.0;
         cats[i].neck_angle = 0.0;
         cats[i].face = 2;
-        cats[i].task = EAT;
+        cats[i].task = WALK;
         cats[i].duration = 0;
         
     
@@ -112,7 +114,7 @@ void initCat (int num){
         array2 = y_rtMat(180+rand()%300-150.0);
         dotMat(array2.matrix, array1.matrix);
         //printf("%f %f %f %f\n",array1.matrix[12],array1.matrix[13],array1.matrix[14],array1.matrix[15]);
-        dotMat( array1.matrix, cats[i].matrix);
+        dotMat( cats[i].matrix,array2.matrix);
         // printf("%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n\n",
         // cats[i].matrix[0],cats[i].matrix[1],cats[i].matrix[2],cats[i].matrix[3],
         // cats[i].matrix[4],cats[i].matrix[5],cats[i].matrix[6],cats[i].matrix[7],
