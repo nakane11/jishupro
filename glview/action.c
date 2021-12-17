@@ -14,6 +14,7 @@ typedef enum {
     TURN
 } task;
 
+double param = 0;
 
 double catsDistance (int a, int b){
     return (cats[a].x - cats[b].x)*(cats[a].x - cats[b].x) 
@@ -22,44 +23,46 @@ double catsDistance (int a, int b){
 }
 
 void updateFunc(void){
-    int i, j, d;
+    int i, j;
+    MatArray array;
     for (i = 0; i<n; i++){
         switch (cats[i].task){
         case EAT:
             if (cats[i].duration == 0){
                 cats[i].duration = 60*(rand()%4+1);
-                d = 1;
+                param = 1;
                 
             }else if(cats[i].duration %60 > 30){
-                d = 1;
+                param = 1;
             }else{
-                d = -1;
+                param = -1;
             }
             if (cats[i].duration == 1){
                 cats[i].task = STAY;
             }
-            MatArray array = tlMat(0, 0.1*d, 0);
+            array = tlMat(0, 0.1*param, 0);
             dotMat( array.matrix, cats[i].matrix);
             cats[i].duration --;
             break;
 
-    //     case WALK:
-    //         for (j = i+1; j<n; j++){
-    //             if (catsDistance(i, j) < 4.0){
-    //                 cats[i].task = TURN, STAY;
-    //                 duration = 0;
-    //                 break;
-    //             }
-    //         }
-    //         if (duration == 0){
-    //             duration = rand(); //進む距離決める
-    //             cats[i].speed = 
-    //         }else if (duration == 1){
-    //             cats[i].task = ; //次のtask
-    //         }
-    //         //z方向に進む
-    //         duration -= 1;
-    //         break;
+        case WALK:
+            for (j = i+1; j<n; j++){
+                if (catsDistance(i, j) < 4.0){
+                    cats[i].task = STAY;
+                    cats[i].duration = 0;
+                    break;
+                }
+            }
+            if (cats[i].duration == 0){
+                cats[i].duration = 60*(rand()%15+2); //進む距離決める
+                param = rand()%5+5;
+            }else if (cats[i].duration == 1){
+                cats[i].task = STAY; //次のtask
+            }
+            MatArray array = tlMat(0, 0, param/500.0);
+            dotMat( cats[i].matrix, array.matrix);
+            cats[i].duration --;
+            break;
     //     case TURN:
     //         for (j = i+1; j<n; j++){
     //             if (catsDistance(i, j) < 4.0){
