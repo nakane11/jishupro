@@ -70,9 +70,22 @@ MatArray tlMat(double x, double y, double z){
 void initCat (int num){
     srand((unsigned int)time(NULL));
     for (int i=0; i<num; i++){
-        cats[i].x = rand()%40-20;
-        cats[i].y = 0.0;
-        cats[i].z = -rand()%20;
+        double s = 0;
+        while(s<3*i){
+            cats[i].x = rand()%40-20;
+            cats[i].y = 0.0;
+            cats[i].z = -rand()%20;
+            s = 0;
+            for (int j = i-1; j>=0; j--){
+                s+=fmin(catsDistance(i, j),3);
+            }
+        }
+        
+        for (int j = i-1; j>=0; j--){
+            while (catsDistance(i, j) < 4.0){
+                    cats[i].y+=1;
+            }
+        }
         cats[i].scale = 1.0;
         cats[i].r = (rand()%100)/100.0;
         cats[i].g = (rand()%100)/100.0;

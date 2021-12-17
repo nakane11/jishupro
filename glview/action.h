@@ -14,6 +14,7 @@ typedef enum {
     TURN
 } task;
 
+double catsDistance (int a, int b);
 void updateFunc(void);
   
 #ifdef __cplusplus

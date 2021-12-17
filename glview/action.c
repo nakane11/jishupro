@@ -29,6 +29,7 @@ void updateFunc(void){
             if (cats[i].duration == 0){
                 cats[i].duration = 60*(rand()%4+1);
                 d = 1;
+                
             }else if(cats[i].duration %60 > 30){
                 d = 1;
             }else{
