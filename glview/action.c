@@ -24,7 +24,7 @@ double catsDistance (int a, int b){
 
 void updateFunc(void){
     int i, j;
-    MatArray array;
+    MatArray tlarray, rtarray;
     for (i = 0; i<n; i++){
         switch (cats[i].task){
         case EAT:
@@ -40,14 +40,14 @@ void updateFunc(void){
             if (cats[i].duration == 1){
                 cats[i].task = STAY;
             }
-            array = tlMat(0, 0.1*param, 0);
-            dotMat( array.matrix, cats[i].matrix);
+            tlarray = tlMat(0, 0.1*param, 0);
+            dotMat( cats[i].matrix, tlarray.matrix);
             cats[i].duration --;
             break;
 
         case WALK:
             for (j = i+1; j<n; j++){
-                if (catsDistance(i, j) < 4.0){
+                if (catsDistance(i, j) < 6.0){
                     cats[i].task = STAY;
                     cats[i].duration = 0;
                     break;
@@ -55,31 +55,35 @@ void updateFunc(void){
             }
             if (cats[i].duration == 0){
                 cats[i].duration = 60*(rand()%15+2); //進む距離決める
-                param = rand()%5+5;
+                param = rand()%10+5;
             }else if (cats[i].duration == 1){
                 cats[i].task = STAY; //次のtask
             }
-            MatArray array = tlMat(0, 0, param/500.0);
-            dotMat( cats[i].matrix, array.matrix);
+            tlarray = tlMat(0, 0, param/500.0);
+            dotMat( cats[i].matrix, tlarray.matrix);
             cats[i].duration --;
             break;
-    //     case TURN:
-    //         for (j = i+1; j<n; j++){
-    //             if (catsDistance(i, j) < 4.0){
-    //                 cats[i].task = STAY;//並進スピード小さくするかstay
-    //                 duration = 0;
-    //                 break;
-    //             }
-    //         }
-    //         if (duration == 0){
-    //             duration = rand(); //回転角決める
-    //             cats[i].speed = 
-    //         }else if (duration == 1){
-    //             cats[i].task = ; //次のtask
-    //         }
-    //         //曲がりながら進む
-    //         duration -= 1;
-    //         break;
+        case TURN:
+            for (j = i+1; j<n; j++){
+                if (catsDistance(i, j) < 6.0){
+                    cats[i].task = STAY;//並進スピード小さくするかstay
+                    cats[i].duration = 0;
+                    break;
+                }
+            }
+            if (cats[i].duration == 0){
+                cats[i].duration = 60*(rand()%4/3+2); //回転角決める
+                param = (rand()%2*2-1)*(rand()%10+5);
+            }else if (cats[i].duration == 1){
+                cats[i].task = WALK; //次のtask
+            }
+            //曲がりながら進む
+            tlarray = tlMat(0, 0, param/500.0);
+            if(param>0){rtarray = y_rtMat(0.5);}else{rtarray = y_rtMat(-0.5);}
+            dotMat(tlarray.matrix , rtarray.matrix);
+            dotMat( cats[i].matrix, tlarray.matrix);
+            cats[i].duration --;
+            break;
     //     }
            
     //     for (j = i+1; j<n; j++){
@@ -97,5 +101,5 @@ void updateFunc(void){
     //     cats[i].z = cats[i].matrix[14];
     // }
         }
-        }
+    }
 }

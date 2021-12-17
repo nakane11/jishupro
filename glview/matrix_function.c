@@ -94,7 +94,7 @@ void initCat (int num){
         cats[i].b = (rand()%100)/100.0;
         cats[i].neck_angle = 0.0;
         cats[i].face = 2;
-        cats[i].task = WALK;
+        cats[i].task = EAT;
         cats[i].duration = 0;
         
     
@@ -111,7 +111,7 @@ void initCat (int num){
         MatArray array1, array2;
         array1 = tlMat(cats[i].x, cats[i].y, cats[i].z);
         //printf("%f %f %f %f\n",array1.matrix[12],array1.matrix[13],array1.matrix[14],array1.matrix[15]);
-        array2 = y_rtMat(180+rand()%300-150.0);
+        array2 = y_rtMat(rand()%360-180.0);
         dotMat(array2.matrix, array1.matrix);
         //printf("%f %f %f %f\n",array1.matrix[12],array1.matrix[13],array1.matrix[14],array1.matrix[15]);
         dotMat( cats[i].matrix,array2.matrix);
