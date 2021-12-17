@@ -4,6 +4,7 @@
 #include <GL/glut.h>
 
 #include "matrix_function.h"
+#include "tex.h"
 
 
 typedef enum {
@@ -31,6 +32,7 @@ void updateFunc(void){
             if (cats[i].duration == 0){
                 cats[i].duration = 60*(rand()%4+1);
                 param = 1;
+                cats[i].face = HAPPY;
                 
             }else if(cats[i].duration %60 > 30){
                 param = 1;
@@ -38,7 +40,8 @@ void updateFunc(void){
                 param = -1;
             }
             if (cats[i].duration == 1){
-                cats[i].task = STAY;
+                cats[i].task = WALK;
+                cats[i].face = NORMAL;
             }
             tlarray = tlMat(0, 0.1*param, 0);
             dotMat( cats[i].matrix, tlarray.matrix);
@@ -54,7 +57,7 @@ void updateFunc(void){
                 }
             }
             if (cats[i].duration == 0){
-                cats[i].duration = 60*(rand()%15+2); //進む距離決める
+                cats[i].duration = 60*(rand()%20+4); //進む距離決める
                 param = rand()%10+5;
             }else if (cats[i].duration == 1){
                 cats[i].task = STAY; //次のtask
@@ -63,6 +66,7 @@ void updateFunc(void){
             dotMat( cats[i].matrix, tlarray.matrix);
             cats[i].duration --;
             break;
+
         case TURN:
             for (j = i+1; j<n; j++){
                 if (catsDistance(i, j) < 6.0){

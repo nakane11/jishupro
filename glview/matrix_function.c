@@ -5,6 +5,7 @@
 #include <GL/glut.h>
 
 #include "action.h"
+#include "tex.h"
 
 #define PI 3.141592653589793
 
@@ -93,7 +94,7 @@ void initCat (int num){
         cats[i].g = (rand()%100)/100.0;
         cats[i].b = (rand()%100)/100.0;
         cats[i].neck_angle = 0.0;
-        cats[i].face = 2;
+        cats[i].face = NORMAL;
         cats[i].task = EAT;
         cats[i].duration = 0;
         

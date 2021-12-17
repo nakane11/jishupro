@@ -4,12 +4,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-typedef enum{
-    HAPPY,
-    SLEEPY,
-    ANGRY,
-    NORMAL
-}face;
 
 typedef struct {
     double x, y, z, scale, r, g, b;
