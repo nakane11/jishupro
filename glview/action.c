@@ -26,7 +26,10 @@ double catsDistance (int a, int b){
 void updateFunc(void){
     int i, j;
     MatArray tlarray, rtarray;
+    
     for (i = 0; i<n; i++){
+        if(rand()%4000<2){cats[i].neck_angle = rand()%60-30;}
+        
         switch (cats[i].task){
         case EAT:
             if (cats[i].duration == 0){

@@ -45,40 +45,11 @@ void drowCuboid(double a, double b, double c){
     glPopMatrix();
 }
 
-// double nextActionHoge(int i) {
-//   int p = rand()%100;
-//   return 0.0;
-// }
-
 
 void drawCat(int i)
 {
-  // double e = 1.0;
-  // double f=1.0;
-  //nextAction0(i, &e, &f);
-
-  // static int count = 0;
-  // double a = 0;
-  // a = nextAction(1);
-  // double a2 = 0.1;
-  // nextAction2(i, &a2);
-  //printf("%d action:%lf hoge:%lf\n", count, nextAction(1), nextActionHoge(1));
-  //double a = 0.01;
-  // if(count % 100 == 0 && i == 0){
-  //   printf("%d a:%lf b:%lf func:%lf  action:%lf hoge:%lf\n", count, a, a2, nextAction(1), nextAction(1), nextActionHoge(1));
-  // }
-  //printf("%d %d %lf\n", count, i, a);
-  // ++count;
  
-  // if(e!=0.0){
-  //   htm_dot(m, htm_makeMat(0,0,e,f));
-  //   //htm_setMat(htm, m,i);
-  // }
-  /////////////////////htm_dot(m, htm_makeMat(0,0,e,f));
   double size = cats[i].scale;
- 
-  //printf("%f %f %f %f\n",cats[i].matrix[0],cats[i].matrix[1],cats[i].matrix[2],cats[i].matrix[3]);
-
 
   glPushMatrix();
   {
@@ -92,7 +63,7 @@ void drawCat(int i)
     
     glPushMatrix();
       glTranslated(0*size, 1.3*size, 1.4*size); //頭
-      //glRotated(cats[i].neck_angle, 1 , 0, 0);
+      glRotated(cats[i].neck_angle, 1 , 0, 0);
 
       //テクスチャマッピング
       facedisplay(cats[i].face, 1.0*size, 0.8*size,0.7*size);
