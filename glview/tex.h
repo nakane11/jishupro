@@ -5,15 +5,9 @@
 extern "C" {
 #endif
 
-typedef enum{
-    HAPPY,
-    SLEEPY,
-    ANGRY,
-    NORMAL
-}face;
 
 void texinit(void);
-void facedisplay(face t, float a, float b, float c);
+void facedisplay(int t, float a, float b, float c);
   
 #ifdef __cplusplus
 }

@@ -4,14 +4,13 @@
 #include <math.h>
 #include <GL/glut.h>
 
-#include "tex.h"
+#include "action.h"
 
 #define PI 3.141592653589793
 
 typedef struct {
     double x, y, z, scale, r, g, b;
-    int neck_angle, state, task, duration;
-    face face;
+    int neck_angle, state, task, duration, face;
     GLfloat matrix[16];
 } Cat;
 
@@ -79,7 +78,9 @@ void initCat (int num){
         cats[i].g = (rand()%100)/100.0;
         cats[i].b = (rand()%100)/100.0;
         cats[i].neck_angle = 0.0;
-        cats[i].face = ANGRY;
+        cats[i].face = 2;
+        cats[i].task = EAT;
+        cats[i].duration = 0;
         
     
         for (int k = 0; k<16; k++){

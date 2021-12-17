@@ -7,6 +7,7 @@
 #include "draw_function.h"
 #include "tex.h"
 #include "matrix_function.h"
+#include "action.h"
 
 //-----------------------------------------------------------------------------------
 // グローバル変数
@@ -55,9 +56,9 @@ void init(void)
 //-----------------------------------------------------------------------------------
 // レンダリング
 //-----------------------------------------------------------------------------------
+//60Hz
 void display(void)
 {
-
   // フレームバッファのクリア
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   gluLookAt(0, 8, -10, 0, 1, 2, 0, 1, 0);
@@ -71,6 +72,7 @@ void display(void)
   rx=rx-(int)(rx/360)*360;
   glRotated(rx, 0.0, 1.0, 0.0);
   
+  updateFunc();
   //初期位置
   glPushMatrix();
   {
@@ -88,7 +90,7 @@ void timer(int value){
   //     nextState(i);
   //     //printf("%d",(int)getMat(i,8));
   // }
-  //printf("\n");
+  //printf("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
   glutTimerFunc(1000,timer,0);
 }
 

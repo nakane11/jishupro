@@ -3,7 +3,6 @@
 #include <stdio.h>
 
 #include "tex.h"
-//#include "action.h"
 #include "matrix_function.h"
 
 void drowCuboid(double a, double b, double c){
@@ -76,7 +75,6 @@ void drawCat(int i)
   //   //htm_setMat(htm, m,i);
   // }
   /////////////////////htm_dot(m, htm_makeMat(0,0,e,f));
-
   double size = cats[i].scale;
  
   //printf("%f %f %f %f\n",cats[i].matrix[0],cats[i].matrix[1],cats[i].matrix[2],cats[i].matrix[3]);

@@ -7,7 +7,7 @@ CFLAGS=-Wall
 LDFLAGS=-lglut -lGLU -lGL -lm
 
 TARGET=main
-OBJS=main.o draw_function.o tex.o matrix_function.o
+OBJS=main.o draw_function.o tex.o matrix_function.o action.o
 
 sanitizer=-g -fsanitize=address
 

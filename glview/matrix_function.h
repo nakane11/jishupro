@@ -4,11 +4,16 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+typedef enum{
+    HAPPY,
+    SLEEPY,
+    ANGRY,
+    NORMAL
+}face;
 
 typedef struct {
     double x, y, z, scale, r, g, b;
-    int neck_angle, state, task, duration;
-    face face;
+    int neck_angle, state, task, duration, face;
     GLfloat matrix[16];
 } Cat;
 typedef struct { GLfloat matrix[16]; } MatArray;

@@ -126,7 +126,7 @@ void texinit(void){
     glShadeModel(GL_FLAT);
 }
 
-void facedisplay(face t, float a, float b, float c){
+void facedisplay(int t, float a, float b, float c){
     switch (t){
         case HAPPY:
             glBegin(GL_QUADS);
