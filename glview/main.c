@@ -14,7 +14,8 @@
 //-----------------------------------------------------------------------------------
 
 // 視点情報
-static double dz = 5.0, dx = 0.0, dy = 0.0, rx = 0.0;
+static double distance = 5.0, pitch = 0.0, yaw = 0.0, rx = 1.0;
+
 
 // マウス入力情報
 GLint mouse_button = -1;
@@ -67,33 +68,30 @@ void display(void)
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   
-  // マウス入力で視点を移動
-  glTranslatef( -dx, dy, -dz );
+  // 視点を移動
+  glTranslatef( -yaw, pitch, -distance );
   rx=rx-(int)(rx/360)*360;
   glRotated(rx, 0.0, 1.0, 0.0);
   
   
   updateFunc();
   //初期位置
-  glPushMatrix();
-  {
-    for(int i=0;i<n;i++){
-      drawCat(i);
-    }
-  }
-  glPopMatrix();
   
+  for(int i=0;i<n;i++){
+    drawCat(i);
+  }
+
   glutSwapBuffers();
 }
 
-void timer(int value){
-  // for(int i=0;i<n;i++){
-  //     nextState(i);
-  //     //printf("%d",(int)getMat(i,8));
-  // }
-  //printf("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
-  glutTimerFunc(1000,timer,0);
-}
+// void timer(int value){
+//   for(int i=0;i<n;i++){
+//       nextState(i);
+//       //printf("%d",(int)getMat(i,8));
+//   }
+//   printf("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
+//   glutTimerFunc(1000,timer,0);
+// }
 
 
 //-----------------------------------------------------------------------------------
@@ -114,34 +112,37 @@ void reshape (int w, int h)
 void keyboard (unsigned char key, int x, int y)
 {
   switch (key) {
-    case 'a':
-      dx += (GLfloat) 0.4;
-      break;
-    case 'd':
-      dx -= (GLfloat) 0.4;
-      break;
-    case 's':
-      dz -= 0.4;
-      break;
-    case 'w':
-      dz += 0.4;
-      break;
+    //視点高さ
     case 'z':
-      rx -= (GLfloat) 1;
+      pitch -= (GLfloat) 0.4;
       break;
     case 'x':
+      pitch += (GLfloat) 0.4;
+      break;
+    //前後方向
+    case 's':
+       distance -= (GLfloat) 0.4;
+      break;
+    case 'w':
+      distance += (GLfloat) 0.4;
+      break;
+    //左右回転
+    case 'a':
+      rx -= (GLfloat) 1;
+      break;
+    case 'd':
       rx += (GLfloat) 1;
       break;
+
     case 27:
-      //freeMat();
       exit(0);
       break;
   }
 }
 
-//-----------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------
 // マウスクリックのコールバック関数
-//-----------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------
 // void mouse(int button, int state, int x, int y)
 // {
 //   mouse_button = button;
@@ -154,9 +155,9 @@ void keyboard (unsigned char key, int x, int y)
 //   glutPostRedisplay();
 // }
 
-//-----------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------
 // マウス移動のコールバック関数
-//-----------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------
 // void motion(int x, int y)
 // {
 //   switch(mouse_button){
@@ -218,7 +219,7 @@ int main(int argc, char** argv)
   glutReshapeFunc(reshape);
   glutKeyboardFunc(keyboard);
   glutIdleFunc(idle);
-  glutTimerFunc(1000,timer,0);
+  //glutTimerFunc(1000,timer,0);
   // glutMouseFunc(mouse);
   // glutMotionFunc(motion);
 
