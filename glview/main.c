@@ -72,6 +72,7 @@ void display(void)
   rx=rx-(int)(rx/360)*360;
   glRotated(rx, 0.0, 1.0, 0.0);
   
+  
   updateFunc();
   //初期位置
   glPushMatrix();
@@ -104,7 +105,7 @@ void reshape (int w, int h)
 
   glMatrixMode (GL_PROJECTION);
   glLoadIdentity ();
-  gluPerspective(45.0, (GLfloat) w/(GLfloat) h, 1.0*2, 20.0*2);
+  gluPerspective(45.0, (GLfloat) w/(GLfloat) h, 1.0*4, 20.0*4);
 }
 
 //-----------------------------------------------------------------------------------

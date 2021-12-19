@@ -43,7 +43,7 @@ void updateFunc(void){
                 param = -1;
             }
             if (cats[i].duration == 1){
-                cats[i].task = WALK;
+                cats[i].task = STAY;
                 cats[i].face = NORMAL;
             }
             tlarray = tlMat(0, 0.1*param, 0);
@@ -63,7 +63,13 @@ void updateFunc(void){
                 cats[i].duration = 60*(rand()%20+4); //進む距離決める
                 param = rand()%10+5;
             }else if (cats[i].duration == 1){
-                cats[i].task = STAY; //次のtask
+            
+                if(rand()%100<10){
+                    cats[i].task = TURN;
+                }else{
+                    cats[i].task = STAY; //次のtask
+                }
+                
             }
             tlarray = tlMat(0, 0, param/500.0);
             dotMat( cats[i].matrix, tlarray.matrix);
@@ -85,12 +91,20 @@ void updateFunc(void){
                 cats[i].task = WALK; //次のtask
             }
             //曲がりながら進む
-            tlarray = tlMat(0, 0, param/500.0);
+            tlarray = tlMat(0, 0, abs(param)/500.0);
             if(param>0){rtarray = y_rtMat(0.5);}else{rtarray = y_rtMat(-0.5);}
             dotMat(tlarray.matrix , rtarray.matrix);
             dotMat( cats[i].matrix, tlarray.matrix);
             cats[i].duration --;
             break;
+
+        case STAY:
+      
+            if(rand()%100<20){
+                cats[i].task = WALK;
+            }else{
+                cats[i].task = STAY;
+            }
     //     }
            
     //     for (j = i+1; j<n; j++){
