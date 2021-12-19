@@ -58,21 +58,45 @@ void init(void)
 // レンダリング
 //-----------------------------------------------------------------------------------
 //60Hz
+
+void Square2D(int x1,int y1,int x2, int y2,float size){
+ glLineWidth(size);
+ glBegin(GL_LINE_LOOP);
+ glVertex2i(x1,y1);
+ glVertex2i(x2,y1);
+ glVertex2i(x2,y2);
+ glVertex2i(x1,y2);
+ glEnd();
+}
 void display(void)
 {
   // フレームバッファのクリア
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   gluLookAt(0, 8, -10, 0, 1, 2, 0, 1, 0);
 
-
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
+  Square2D(4,5,5,6,1.0f);
+  glPointSize(5.0f);
+  glBegin(GL_POINTS);
+    glVertex2f(4.5,5.5);
+  glEnd();
+  glLineWidth(20);   
+  glBegin(GL_LINES);                                    //      線分の描画
+    glVertex2f(-1, 0);
+    glVertex2f(1, 0);
+  glEnd();
+  glBegin(GL_LINES);                                    //      線分の描画
+    glVertex2f(0, -1);
+    glVertex2f(0, 1);
+  glEnd();
+
   
   // 視点を移動
   glTranslatef( -yaw, pitch, -distance );
   rx=rx-(int)(rx/360)*360;
   glRotated(rx, 0.0, 1.0, 0.0);
-  
+
   
   updateFunc();
   //初期位置
