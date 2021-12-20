@@ -3,11 +3,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <math.h>
 
 #include "draw_function.h"
 #include "tex.h"
 #include "matrix_function.h"
 #include "action.h"
+
+#define PI 3.141592653589793
 
 //-----------------------------------------------------------------------------------
 // グローバル変数
@@ -79,25 +82,27 @@ void display(void)
   glLoadIdentity();
 
   glPushMatrix();{
-  glRotated(25, 1.0, 0.0, 0.0);
+    glDisable( GL_LIGHTING ); //光源処理無効
+    glRotated(atan2(7,12)*360.0/(2*PI), 1.0, 0.0, 0.0);
 
-  Square2D(4,5,6.9,6.9,1.0f); //四角形
+    Square2D(4,5,6.9,6.9,1.0f); //四角形
 
-  glPointSize(5.0f); //点
-  glBegin(GL_POINTS);
-    glVertex2f(4.5,5.5);
-  glEnd();
+    glPointSize(5.0f); //点
+    glBegin(GL_POINTS);
+      glVertex2f(4.5,5.5);
+    glEnd();
 
-  glLineWidth(20);   
-  glBegin(GL_LINES);                                    //      線分の描画
-    glVertex2f(-0.5, 0);
-    glVertex2f(0.5, 0);
-  glEnd();
-  glBegin(GL_LINES);                                    //      線分の描画
-    glVertex2f(0, -0.5);
-    glVertex2f(0, 0.5);
-  glEnd();
-  }
+    glLineWidth(20);   
+    glBegin(GL_LINES);                                    //      線分の描画
+      glVertex2f(-0.5, 0);
+      glVertex2f(0.5, 0);
+    glEnd();
+    glBegin(GL_LINES);                                    //      線分の描画
+      glVertex2f(0, -0.5);
+      glVertex2f(0, 0.5);
+    glEnd();
+
+    }
   glPopMatrix();
 
   init3d();
@@ -108,8 +113,7 @@ void display(void)
 
   
   updateFunc();
-  //初期位置
-  
+ 
   for(int i=0;i<n;i++){
     drawCat(i);
   }
