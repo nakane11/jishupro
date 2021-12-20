@@ -29,6 +29,8 @@ static const GLfloat light_ambient[] = {1.0, 1.0, 1.0, 1.0};
 static const GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};
 static const GLfloat light_specular[]={1.0,1.0,1.0,1.0};
 
+double map_cx = -5.4, map_cz = 6.3;
+
 //-----------------------------------------------------------------------------------
 // 初期化
 //-----------------------------------------------------------------------------------
@@ -66,10 +68,10 @@ void init3d(void){
 void Square2D(int x1,int y1,int x2, int y2,float size){
  glLineWidth(size);
  glBegin(GL_LINE_LOOP);
- glVertex2i(x1,y1);
- glVertex2i(x2,y1);
- glVertex2i(x2,y2);
- glVertex2i(x1,y2);
+ glVertex2f(x1,y1);
+ glVertex2f(x2,y1);
+ glVertex2f(x2,y2);
+ glVertex2f(x1,y2);
  glEnd();
 }
 void display(void)
@@ -84,14 +86,28 @@ void display(void)
   glPushMatrix();{
     glDisable( GL_LIGHTING ); //光源処理無効
     glRotated(atan2(7,12)*360.0/(2*PI), 1.0, 0.0, 0.0);
-
-    Square2D(4,5,6.9,6.9,1.0f); //四角形
+    glColor3d(1.0, 1.0, 1.0);
+    Square2D(map_cx+1.3,map_cz-1.3,map_cx-1.3,map_cz+1.3,1.0f); //四角形
 
     glPointSize(5.0f); //点
     glBegin(GL_POINTS);
-      glVertex2f(4.5,5.5);
+      glVertex2f(map_cx+yaw/70,map_cz+distance/70);
+      for(int i=0;i<n;i++){
+        glPushMatrix();
+          glColor3d(cats[i].r, cats[i].g, cats[i].b);
+          glVertex2f(map_cx+cats[i].x/70,map_cz+cats[i].z/70);
+        glPopMatrix();
+      }
     glEnd();
 
+    // glBegin(GL_TRIANGLES);
+
+    //   glVertex2f(-1.0f, -1.0f);
+    //   glVertex2f(-1.0f, 1.0f);
+    //   glVertex2f(1.0f, -1.0f);
+    // glEnd();
+    
+    glColor3d(1.0, 1.0, 1.0);
     glLineWidth(20);   
     glBegin(GL_LINES);                                    //      線分の描画
       glVertex2f(-0.5, 0);
