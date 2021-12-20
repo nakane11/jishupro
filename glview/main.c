@@ -33,7 +33,8 @@ void init(void)
 {
   initCat(10); //ねこの生成
   texinit();
-  
+}
+void init3d(void){
   // クリアの値の設定
   glClearColor (0.0, 0.0, 0.0, 0.0);
   glClearDepth( 1.0 );
@@ -76,22 +77,30 @@ void display(void)
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  Square2D(4,5,5,6,1.0f);
-  glPointSize(5.0f);
+
+  glPushMatrix();{
+  glRotated(25, 1.0, 0.0, 0.0);
+
+  Square2D(4,5,6.9,6.9,1.0f); //四角形
+
+  glPointSize(5.0f); //点
   glBegin(GL_POINTS);
     glVertex2f(4.5,5.5);
   glEnd();
+
   glLineWidth(20);   
   glBegin(GL_LINES);                                    //      線分の描画
-    glVertex2f(-1, 0);
-    glVertex2f(1, 0);
+    glVertex2f(-0.5, 0);
+    glVertex2f(0.5, 0);
   glEnd();
   glBegin(GL_LINES);                                    //      線分の描画
-    glVertex2f(0, -1);
-    glVertex2f(0, 1);
+    glVertex2f(0, -0.5);
+    glVertex2f(0, 0.5);
   glEnd();
+  }
+  glPopMatrix();
 
-  
+  init3d();
   // 視点を移動
   glTranslatef( -yaw, pitch, -distance );
   rx=rx-(int)(rx/360)*360;
