@@ -44,7 +44,7 @@ void updateFunc(void){
             }
             if (cats[i].duration == 1){
                 cats[i].task = STAY;
-                cats[i].face = NORMAL;
+                cats[i].face = SLEEPY;
             }
             tlarray = tlMat(0, 0.1*param, 0);
             dotMat( cats[i].matrix, tlarray.matrix);
@@ -115,12 +115,12 @@ void updateFunc(void){
     //     }
     // }
     // //ここでaction
-    // for (i = 0; i<n; i++){
-    //     //行列を更新した後に座標を更新
-    //     cats[i].x = cats[i].matrix[12];
-    //     cats[i].y = cats[i].matrix[13];
-    //     cats[i].z = cats[i].matrix[14];
-    // }
+    for (i = 0; i<n; i++){
+        //行列を更新した後に座標を更新
+        cats[i].x = cats[i].matrix[12];
+        cats[i].y = cats[i].matrix[13];
+        cats[i].z = cats[i].matrix[14];
+    }
         }
     }
 }

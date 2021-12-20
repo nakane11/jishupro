@@ -29,30 +29,30 @@ void makeFaceImage(void){
     //nose
     for (i = 9; i < 11; i++) {
         for (j = 7; j < 9; j++) {
-            faceImage[i][j][0] = (GLubyte) 120;
-            faceImage[i][j][1] = (GLubyte) 0;
-            faceImage[i][j][2] = (GLubyte) 255;
+            faceImage[i][j][0] = (GLubyte) 0;
+            faceImage[i][j][1] = (GLubyte) 120;
+            faceImage[i][j][2] = (GLubyte) 0;
         }
     }
     for (i = 25; i < 27; i++) {
         for (j = 7; j < 9; j++) {
-            faceImage[i][j][0] = (GLubyte) 120;
-            faceImage[i][j][1] = (GLubyte) 0;
-            faceImage[i][j][2] = (GLubyte) 255;
+            faceImage[i][j][0] = (GLubyte) 0;
+            faceImage[i][j][1] = (GLubyte) 120;
+            faceImage[i][j][2] = (GLubyte) 0;
         }
     }
     for (i = 9; i < 11; i++) {
         for (j = 23; j < 25; j++) {
-            faceImage[i][j][0] = (GLubyte) 120;
-            faceImage[i][j][1] = (GLubyte) 0;
-            faceImage[i][j][2] = (GLubyte) 255;
+            faceImage[i][j][0] = (GLubyte) 0;
+            faceImage[i][j][1] = (GLubyte) 120;
+            faceImage[i][j][2] = (GLubyte) 0;
         }
     }
     for (i = 25; i < 27; i++) {
         for (j = 23; j < 25; j++) {
-            faceImage[i][j][0] = (GLubyte) 120;
-            faceImage[i][j][1] = (GLubyte) 0;
-            faceImage[i][j][2] = (GLubyte) 255;
+            faceImage[i][j][0] = (GLubyte) 0;
+            faceImage[i][j][1] = (GLubyte) 120;
+            faceImage[i][j][2] = (GLubyte) 0;
         }
     }
 
