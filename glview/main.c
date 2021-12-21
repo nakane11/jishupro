@@ -30,10 +30,12 @@ MatArray array1, array2;
 //-----------------------------------------------------------------------------------
 void init(void)
 {
-  initCat(10); //ねこの生成
-  texinit();
-  unitMat(camera.matrix);
+  initCat(10); //ねこ生成
+  texinit(); //テクスチャ作成
+  unitMat(camera.matrix); //カメラ座標初期化
 }
+
+
 
 //-----------------------------------------------------------------------------------
 // レンダリング
@@ -52,7 +54,9 @@ void display(void)
   glPushMatrix();{
     glDisable( GL_LIGHTING ); //光源処理無効
     glRotated(atan2(7,12)*360.0/(2*PI), 1.0, 0.0, 0.0);
+    
     drawMap(-5.4, 6.3);
+    drawPointer(0.0, 0.0);
 
     // glBegin(GL_TRIANGLES);
 
@@ -61,7 +65,6 @@ void display(void)
     //   glVertex2f(1.0f, -1.0f);
     // glEnd();
     
-    drawPointer(0.0, 0.0);
 
     }
   glPopMatrix();
@@ -71,7 +74,6 @@ void display(void)
   glMultMatrixf( camera.matrix );
   
   updateFunc();
- 
   for(int i=0;i<n;i++){
     drawCat(i);
   }
