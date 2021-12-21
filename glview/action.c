@@ -107,10 +107,6 @@ void updateFunc(void){
             }
             break;
         }
-<<<<<<< HEAD
-=======
-
->>>>>>> 0795ddb643e1547afb4790239d0cae8bffcdde88
            
     //     for (j = i+1; j<n; j++){
     //         if (catsDistance(i, j) < 4.0){
@@ -119,13 +115,12 @@ void updateFunc(void){
     //         }
     //     }
     // }
-   
-        for (i = 0; i<n; i++){
-            //行列を更新した後に座標を更新
-            cats[i].x = cats[i].matrix[12];
-            cats[i].y = cats[i].matrix[13];
-            cats[i].z = cats[i].matrix[14];
-        }
-    
     }
+    for (i = 0; i<n; i++){
+        //行列を更新した後に座標を更新
+        cats[i].x = cats[i].matrix[12];
+        cats[i].y = cats[i].matrix[13];
+        cats[i].z = cats[i].matrix[14];
+    }
+    
 }
