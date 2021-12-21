@@ -19,17 +19,11 @@
 // 視点情報
 static double distance = 5.0, pitch = 0.0, yaw = 0.0, rx = 1.0;
 
-
 // マウス入力情報
 GLint mouse_button = -1;
 GLint mouse_x = 0, mouse_y = 0;
 
-static const GLfloat light_position[] = { 0.0, 0.0, 0.0, 1.0 };
-static const GLfloat light_ambient[] = {1.0, 1.0, 1.0, 1.0};
-static const GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};
-static const GLfloat light_specular[]={1.0,1.0,1.0,1.0};
-
-double map_cx = -5.4, map_cz = 6.3;
+MatArray array1, array2;
 
 //-----------------------------------------------------------------------------------
 // 初期化
@@ -38,26 +32,7 @@ void init(void)
 {
   initCat(10); //ねこの生成
   texinit();
-}
-void init3d(void){
-  // クリアの値の設定
-  glClearColor (0.0, 0.0, 0.0, 0.0);
-  glClearDepth( 1.0 );
-
-  // デプステストを行う
-  glEnable( GL_DEPTH_TEST );
-  glDepthFunc( GL_LESS );
-  glShadeModel (GL_SMOOTH);
-
-  // デフォルトライト
-  
-  glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-  glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-  glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-  glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-  glEnable(GL_LIGHTING);
-  glEnable(GL_LIGHT0);
-
+  unitMat(camera.matrix);
 }
 
 //-----------------------------------------------------------------------------------
@@ -65,15 +40,6 @@ void init3d(void){
 //-----------------------------------------------------------------------------------
 //60Hz
 
-void Square2D(int x1,int y1,int x2, int y2,float size){
- glLineWidth(size);
- glBegin(GL_LINE_LOOP);
- glVertex2f(x1,y1);
- glVertex2f(x2,y1);
- glVertex2f(x2,y2);
- glVertex2f(x1,y2);
- glEnd();
-}
 void display(void)
 {
   // フレームバッファのクリア
@@ -86,19 +52,7 @@ void display(void)
   glPushMatrix();{
     glDisable( GL_LIGHTING ); //光源処理無効
     glRotated(atan2(7,12)*360.0/(2*PI), 1.0, 0.0, 0.0);
-    glColor3d(1.0, 1.0, 1.0);
-    Square2D(map_cx+1.3,map_cz-1.3,map_cx-1.3,map_cz+1.3,1.0f); //四角形
-
-    glPointSize(5.0f); //点
-    glBegin(GL_POINTS);
-      glVertex2f(map_cx+yaw/70,map_cz+distance/70);
-      for(int i=0;i<n;i++){
-        glPushMatrix();
-          glColor3d(cats[i].r, cats[i].g, cats[i].b);
-          glVertex2f(map_cx+cats[i].x/70,map_cz+cats[i].z/70);
-        glPopMatrix();
-      }
-    glEnd();
+    drawMap(-5.4, 6.3);
 
     // glBegin(GL_TRIANGLES);
 
@@ -107,26 +61,14 @@ void display(void)
     //   glVertex2f(1.0f, -1.0f);
     // glEnd();
     
-    glColor3d(1.0, 1.0, 1.0);
-    glLineWidth(20);   
-    glBegin(GL_LINES);                                    //      線分の描画
-      glVertex2f(-0.5, 0);
-      glVertex2f(0.5, 0);
-    glEnd();
-    glBegin(GL_LINES);                                    //      線分の描画
-      glVertex2f(0, -0.5);
-      glVertex2f(0, 0.5);
-    glEnd();
+    drawPointer(0.0, 0.0);
 
     }
   glPopMatrix();
 
   init3d();
   // 視点を移動
-  glTranslatef( -yaw, pitch, -distance );
-  rx=rx-(int)(rx/360)*360;
-  glRotated(rx, 0.0, 1.0, 0.0);
-
+  glMultMatrixf( camera.matrix );
   
   updateFunc();
  
@@ -164,33 +106,40 @@ void reshape (int w, int h)
 //-----------------------------------------------------------------------------------
 void keyboard (unsigned char key, int x, int y)
 {
+  yaw=0; pitch=0; distance=0; rx=0;
   switch (key) {
     //視点高さ
     case 'z':
-      pitch -= (GLfloat) 0.4;
+      pitch = -(GLfloat) 0.4;
       break;
     case 'x':
-      pitch += (GLfloat) 0.4;
+      pitch = (GLfloat) 0.4;
       break;
     //前後方向
     case 's':
-       distance -= (GLfloat) 0.4;
+       distance = -(GLfloat) 0.4;
       break;
     case 'w':
-      distance += (GLfloat) 0.4;
+      distance = (GLfloat) 0.4;
       break;
     //左右回転
     case 'a':
-      rx -= (GLfloat) 1;
+      rx = -(GLfloat) 1;
       break;
     case 'd':
-      rx += (GLfloat) 1;
+      rx = (GLfloat) 1;
       break;
 
     case 27:
       exit(0);
       break;
   }
+  //カメラの行列を更新
+  array1 = tlMat( -yaw, pitch, -distance);
+  array2 = y_rtMat(rx);
+  dotMat(array1.matrix, camera.matrix);
+  dotMat(array2.matrix, array1.matrix);
+  copyMat(camera.matrix, array2.matrix);
 }
 
 // -----------------------------------------------------------------------------------

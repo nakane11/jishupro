@@ -105,7 +105,8 @@ void updateFunc(void){
             }else{
                 cats[i].task = STAY;
             }
-    //     }
+            break;
+        }
            
     //     for (j = i+1; j<n; j++){
     //         if (catsDistance(i, j) < 4.0){
@@ -115,12 +116,13 @@ void updateFunc(void){
     //     }
     // }
     // //ここでaction
+    }
+
     for (i = 0; i<n; i++){
         //行列を更新した後に座標を更新
         cats[i].x = cats[i].matrix[12];
         cats[i].y = cats[i].matrix[13];
         cats[i].z = cats[i].matrix[14];
     }
-        }
-    }
+       
 }
