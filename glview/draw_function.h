@@ -5,7 +5,10 @@
 extern "C" {
 #endif
 
+void init3d(void);
 void drawCat(int i);
+void drawMap(double x, double z);
+void drawPointer(double cx, double cy);
   
 #ifdef __cplusplus
 }

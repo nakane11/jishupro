@@ -20,13 +20,18 @@ typedef struct { GLfloat matrix[16]; } MatArray;
 const int N=50; //出現数の上限
 int n=0; //現在のねこの出現数
 Cat cats[50];
+MatArray camera;
+
+
+void copyMat(GLfloat *a, GLfloat *b){
+    for(int i = 0; i < 16; i++) {
+            a[i] = b[i];
+    }
+}
 
 //内積
-void dotMat (GLfloat *s, GLfloat *b){
-    GLfloat a[16];
-    for(int i = 0; i < 16; i++) {
-        a[i] = s[i];
-    }
+void dotMat (GLfloat *a, GLfloat *b){
+    GLfloat s[16];
     
     s[0]=a[0]*b[0]+a[4]*b[1]+a[8]*b[2]+a[12]*b[3];
     s[1]=a[1]*b[0]+a[5]*b[1]+a[9]*b[2]+a[13]*b[3];
@@ -48,7 +53,7 @@ void dotMat (GLfloat *s, GLfloat *b){
     s[14]=a[2]*b[12]+a[6]*b[13]+a[10]*b[14]+a[14]*b[15];
     s[15]=a[3]*b[12]+a[7]*b[13]+a[11]*b[14]+a[15]*b[15];
 
-
+    copyMat(a, s);
 }
 
 //y軸回転
@@ -68,6 +73,16 @@ MatArray tlMat(double x, double y, double z){
                     0, 0, 1, 0,
                     x, y, z, 1}};
     return m;
+}
+
+void unitMat(GLfloat *a){
+    for (int k = 0; k<16; k++){
+        a[k] = 0;
+    }
+    a[0] = 1;
+    a[5] = 1;
+    a[10] = 1;
+    a[15] = 1;
 }
 
 void initCat (int num){
@@ -98,45 +113,15 @@ void initCat (int num){
         cats[i].task = EAT;
         cats[i].duration = 0;
         
-    
-        for (int k = 0; k<16; k++){
-            cats[i].matrix[k] = 0;
-        }
-        cats[i].matrix[0] = 1;
-        cats[i].matrix[5] = 1;
-        cats[i].matrix[10] = 1;
-        cats[i].matrix[15] = 1;
-
-
+        unitMat(cats[i].matrix);
 
         MatArray array1, array2;
         array1 = tlMat(cats[i].x, cats[i].y, cats[i].z);
-        //printf("%f %f %f %f\n",array1.matrix[12],array1.matrix[13],array1.matrix[14],array1.matrix[15]);
         array2 = y_rtMat(rand()%360-180.0);
         dotMat(array2.matrix, array1.matrix);
-        //printf("%f %f %f %f\n",array1.matrix[12],array1.matrix[13],array1.matrix[14],array1.matrix[15]);
         dotMat( cats[i].matrix,array2.matrix);
-        // printf("%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n\n",
-        // cats[i].matrix[0],cats[i].matrix[1],cats[i].matrix[2],cats[i].matrix[3],
-        // cats[i].matrix[4],cats[i].matrix[5],cats[i].matrix[6],cats[i].matrix[7],
-        // cats[i].matrix[8],cats[i].matrix[9],cats[i].matrix[10],cats[i].matrix[11],
-        // cats[i].matrix[12],cats[i].matrix[13],cats[i].matrix[14],cats[i].matrix[15]);
         
     }
     n = num;
-    
-    
-    //関数のテスト用
-    // MatArray tarray1, tarray2;
-    // tarray1 = tlMat(cats[0].x, cats[0].y, cats[0].z);
-    // tarray2 = y_rtMat(90);
-    // printf("x=%lf, y=%lf, z=%lf, angle=%lf\n",cats[0].x,cats[0].y,cats[0].z,angle);
-    // for(int i=0;i<16;i++){
-    //     printf("%lf, \n",tarray1.matrix[i]);
-    // }
-    // dotMat(tarray2.matrix, tarray1.matrix);
-    // for(int i=0;i<16;i++){
-    //     printf("%lf, \n",tarray2.matrix[i]);
-    // }
     
 }

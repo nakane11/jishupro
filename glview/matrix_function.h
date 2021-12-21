@@ -14,10 +14,13 @@ typedef struct { GLfloat matrix[16]; } MatArray;
 
 extern int n; //現在のねこの出現数
 extern Cat cats[];
+extern MatArray camera;
 
+void copyMat (GLfloat *a, GLfloat *b);
 void dotMat (GLfloat *a, GLfloat *b);
 MatArray y_rtMat(double angle);
 MatArray tlMat(double x, double y, double z);
+void unitMat(GLfloat *a);
 void initCat (int num);
   
 #ifdef __cplusplus
