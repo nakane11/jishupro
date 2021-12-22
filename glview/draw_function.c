@@ -5,6 +5,9 @@
 #include "tex.h"
 #include "matrix_function.h"
 
+#define PI 3.141592653589793
+
+
 //-----------------------------------------------------------------------------------
 
 static const GLfloat light_position[] = { 0.0, 0.0, 0.0, 1.0 };
@@ -75,8 +78,28 @@ void drowCuboid(double a, double b, double c){
     glPopMatrix();
 }
 
+// void Circle2D(float radius,float x,float y)
+// {
+//  for (float th1 = 0.0;  th1 <= 360.0;  th1 = th1 + 1.0)
+//  {             
+//   float th2 = th1 + 10.0;
+//   float th1_rad = th1 / 180.0 * PI; 
+//   float th2_rad = th2 / 180.0 * PI;
+
+//   float x1 = radius * cos(th1_rad);
+//   float y1 = radius * sin(th1_rad);
+//   float x2 = radius * cos(th2_rad);
+//   float y2 = radius * sin(th2_rad);
+
+//   glBegin(GL_LINES);   
+//    glVertex2f( x1+x, y1+y );     
+//    glVertex2f( x2+x, y2+y );
+//   glEnd();
+//  }
+// }
+
 //2D四角形
-void Square2D(int x1,int y1,int x2, int y2,float size){
+void Square2D(float x1,float y1,float x2, float y2,float size){
  glLineWidth(size);
  glBegin(GL_LINE_LOOP);
  glVertex2f(x1,y1);
@@ -84,6 +107,15 @@ void Square2D(int x1,int y1,int x2, int y2,float size){
  glVertex2f(x2,y2);
  glVertex2f(x1,y2);
  glEnd();
+}
+
+void SquareFill2D(int r){
+  glBegin(GL_QUADS);
+  glVertex2i(-r,-r);
+  glVertex2i(r,-r);
+  glVertex2i(r,r);
+  glVertex2i(-r,r);
+  glEnd();
 }
 
 void drawCat(int i)
@@ -132,12 +164,13 @@ void drawCat(int i)
   glFlush();
 }
 
-void drawMap(double x, double z){
+void drawMap(double x, double z, double range){
   GLfloat inv[16];
   gluInvertMatrix(camera.matrix, inv);
   glColor3d(1.0, 1.0, 1.0);
 
-  Square2D(x+1.3, z-1.3, x-1.3, z+1.3,1.0f); //四角形
+  Square2D(x+range/70, z-range/70, x-range/70, z+range/70, 1.0f); //四角形
+  //Circle2D(60.0/70, x, z);
 
   glPointSize(5.0f); //点
   glBegin(GL_POINTS);
@@ -167,3 +200,43 @@ void drawPointer(double cx, double cy){
     glVertex2f(cx, 0.5);
   glEnd();
 }
+
+void drawFloor(int r){
+  glPushMatrix();
+  {
+    GLfloat color[] = {43.0/255, 79.0/255, 50.0/255, 1.0};
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color);
+    glRotated(-90, 1 , 0, 0);
+    glTranslated(0, 0, -0.5);
+    SquareFill2D(r);
+  }
+  glPopMatrix();
+}
+
+
+// void Circle2DFill(float radius,int x,int y)
+// {
+//   glPushMatrix();
+//   {
+//     glRotated(-90, 1 , 0, 0);
+//     glTranslated(0, 0, -0.5);
+//     for (float th1 = 0.0;  th1 <= 360.0;  th1 = th1 + 1.0)
+//     {             
+//       float th2 = th1 + 10.0;
+//       float th1_rad = th1 / 180.0 * PI; 
+//       float th2_rad = th2 / 180.0 * PI;
+
+//       float x1 = radius * cos(th1_rad);
+//       float y1 = radius * sin(th1_rad);
+//       float x2 = radius * cos(th2_rad);
+//       float y2 = radius * sin(th2_rad);
+
+//       glBegin(GL_TRIANGLES); 
+//       glVertex2f( x, y );
+//       glVertex2f( x1+x, y1+y );     
+//       glVertex2f( x2+x, y2+y );
+//       glEnd();
+//     } 
+//   }
+//   glPopMatrix();
+// }

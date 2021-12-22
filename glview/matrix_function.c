@@ -240,7 +240,7 @@ void initCat (int num){
         cats[i].b = (rand()%100)/100.0;
         cats[i].neck_angle = 0.0;
         cats[i].face = NORMAL;
-        cats[i].task = EAT;
+        cats[i].task = WALK;
         cats[i].duration = 0;
         
         unitMat(cats[i].matrix);
