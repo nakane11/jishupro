@@ -23,6 +23,8 @@ static double distance = 5.0, pitch = 0.0, yaw = 0.0, rx = 1.0;
 GLint mouse_button = -1;
 GLint mouse_x = 0, mouse_y = 0;
 
+float px=0, py=0;
+
 MatArray array1, array2;
 
 //-----------------------------------------------------------------------------------
@@ -56,7 +58,7 @@ void display(void)
     glRotated(atan2(7,12)*360.0/(2*PI), 1.0, 0.0, 0.0);
     
     drawMap(-5.8, 6.1, 60);
-    drawPointer(0.0, 0.0);
+    drawPointer(px, py);
 
     // glBegin(GL_TRIANGLES);
 
@@ -135,6 +137,19 @@ void keyboard (unsigned char key, int x, int y)
     case 'd':
       rx = (GLfloat) 2;
       break;
+    case 'j':
+      px += 0.4;
+      break;
+    case 'l':
+      px -= 0.4;
+      break;
+    case 'i':
+      py += 0.4;
+      break;
+    case 'k':
+      py -= 0.4;
+      break;
+
 
     case 27:
       exit(0);

@@ -26,6 +26,21 @@ double catsDistance (int a, int b){
 void updateFunc(void){
     int i, j;
     MatArray tlarray, rtarray;
+    for(i=0;i<n;i++){
+        for (j = i+1; j<n; j++){
+            if (catsDistance(i, j) < 8.0){
+                if(cats[i].task==TURN){
+                    cats[j].task = STAY;
+                    cats[j].duration = 200;
+                }else{
+                    cats[i].task = STAY;
+                    cats[i].duration = 200;
+                    cats[j].task = TURN;
+                    cats[j].duration = 100;
+                }
+            }
+        }
+    }
     
     for (i = 0; i<n; i++){
         if(rand()%4000<2){cats[i].neck_angle = rand()%60-30;}
@@ -37,7 +52,7 @@ void updateFunc(void){
                 param = 1;
                 cats[i].face = HAPPY;
                 
-            }else if(cats[i].duration %60 > 30){
+            }else if(cats[i].duration %60 >= 30){
                 param = 1;
             }else{
                 param = -1;
@@ -52,19 +67,19 @@ void updateFunc(void){
             break;
 
         case WALK:
-            for (j = i+1; j<n; j++){
-                if (catsDistance(i, j) < 6.0){
-                    cats[i].task = STAY;
-                    cats[i].duration = 0;
-                    break;
-                }
-            }
+            // for (j = i+1; j<n; j++){
+            //     if (catsDistance(i, j) < 6.0){
+            //         cats[i].task = STAY;
+            //         cats[i].duration = 0;
+            //         break;
+            //     }
+            // }
             if (cats[i].duration == 0){
                 cats[i].duration = 60*(rand()%20+4); //進む距離決める
                 param = rand()%10+5;
             }else if (cats[i].duration == 1){
-            
-                if(rand()%100<10){
+                
+                if(rand()%100<30){
                     cats[i].task = TURN;
                 }else{
                     cats[i].task = STAY; //次のtask
@@ -77,13 +92,13 @@ void updateFunc(void){
             break;
 
         case TURN:
-            for (j = i+1; j<n; j++){
-                if (catsDistance(i, j) < 6.0){
-                    cats[i].task = STAY;//並進スピード小さくするかstay
-                    cats[i].duration = 0;
-                    break;
-                }
-            }
+            // for (j = i+1; j<n; j++){
+            //     if (catsDistance(i, j) < 6.0){
+            //         cats[i].task = STAY;//並進スピード小さくするかstay
+            //         cats[i].duration = 0;
+            //         break;
+            //     }
+            // }
             if (cats[i].duration == 0){
                 cats[i].duration = 60*(rand()%4/3+2); //回転角決める
                 param = (rand()%2*2-1)*(rand()%10+5);
