@@ -59,7 +59,6 @@ void updateFunc(void){
             }
             if (cats[i].duration == 1){
                 cats[i].task = STAY;
-                cats[i].face = SLEEPY;
             }
             tlarray = tlMat(0, 0.1*param, 0);
             dotMat( cats[i].matrix, tlarray.matrix);
@@ -75,11 +74,12 @@ void updateFunc(void){
             //     }
             // }
             if (cats[i].duration == 0){
-                cats[i].duration = 60*(rand()%20+4); //進む距離決める
+                cats[i].duration = 40*(rand()%20+4); //進む距離決める
                 param = rand()%10+5;
+                cats[i].face = NORMAL;
             }else if (cats[i].duration == 1){
                 
-                if(rand()%100<30){
+                if(rand()%100<40){
                     cats[i].task = TURN;
                 }else{
                     cats[i].task = STAY; //次のtask
@@ -102,6 +102,7 @@ void updateFunc(void){
             if (cats[i].duration == 0){
                 cats[i].duration = 60*(rand()%4/3+2); //回転角決める
                 param = (rand()%2*2-1)*(rand()%10+5);
+                cats[i].face = ANGRY;
             }else if (cats[i].duration == 1){
                 cats[i].task = WALK; //次のtask
             }
@@ -114,14 +115,30 @@ void updateFunc(void){
             break;
 
         case STAY:
-      
-            if(rand()%100<20){
-                cats[i].task = WALK;
-            }else{
+            if (cats[i].duration == 0){
+                cats[i].duration = 10*(rand()%20+4);
+                cats[i].face = NORMAL;
+            }else if(cats[i].duration == 1){
+                if(rand()%100<60){
+                    cats[i].task = WALK;
+                }else{
+                    cats[i].task = SLEEP;
+                }
+            }
+            cats[i].duration--;
+            break;
+
+        case SLEEP:
+            if (cats[i].duration == 0){
+                cats[i].duration = 40*(rand()%20+4);
+                cats[i].face = SLEEPY;
+            }else if(cats[i].duration == 1){
                 cats[i].task = STAY;
             }
+            cats[i].duration--;
             break;
         }
+
            
     //     for (j = i+1; j<n; j++){
     //         if (catsDistance(i, j) < 4.0){
