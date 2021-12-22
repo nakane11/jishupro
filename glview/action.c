@@ -119,7 +119,7 @@ void updateFunc(void){
                 cats[i].duration = 10*(rand()%20+4);
                 cats[i].face = NORMAL;
             }else if(cats[i].duration == 1){
-                if(rand()%100<60){
+                if(rand()%100<70){
                     cats[i].task = WALK;
                 }else{
                     cats[i].task = SLEEP;

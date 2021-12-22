@@ -60,14 +60,6 @@ void display(void)
     drawMap(-5.8, 6.1, 60);
     drawPointer(px, py);
 
-    // glBegin(GL_TRIANGLES);
-
-    //   glVertex2f(-1.0f, -1.0f);
-    //   glVertex2f(-1.0f, 1.0f);
-    //   glVertex2f(1.0f, -1.0f);
-    // glEnd();
-    
-
     }
   glPopMatrix();
 
@@ -89,10 +81,9 @@ void display(void)
 
 // void timer(int value){
 //   for(int i=0;i<n;i++){
-//       nextState(i);
-//       //printf("%d",(int)getMat(i,8));
+//       printf("%lf\t", cats[i].x);
 //   }
-//   printf("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
+//   printf("\n");
 //   glutTimerFunc(1000,timer,0);
 // }
 
@@ -243,7 +234,7 @@ int main(int argc, char** argv)
   glutReshapeFunc(reshape);
   glutKeyboardFunc(keyboard);
   glutIdleFunc(idle);
-  //glutTimerFunc(1000,timer,0);
+  // glutTimerFunc(1000,timer,0);
   // glutMouseFunc(mouse);
   // glutMotionFunc(motion);
 

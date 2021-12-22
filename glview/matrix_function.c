@@ -13,6 +13,7 @@ typedef struct {
     double x, y, z, scale, r, g, b;
     int neck_angle, state, task, duration, face;
     GLfloat matrix[16];
+    float p;
 } Cat;
 
 typedef struct { GLfloat matrix[16]; } MatArray;

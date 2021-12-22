@@ -170,7 +170,13 @@ void drawMap(double x, double z, double range){
   glColor3d(1.0, 1.0, 1.0);
 
   Square2D(x+range/70, z-range/70, x-range/70, z+range/70, 1.0f); //四角形
-  //Circle2D(60.0/70, x, z);
+  //三角形
+  glColor4d(1.0, 241.0/255, 0.0, 0.1);
+  glBegin(GL_LINE_LOOP);
+    glVertex2f(x+inv[12]/70, z+inv[14]/70);
+    glVertex2f(x+(-5*inv[0]+15*inv[8]+inv[12])/70, z+(-5*inv[2]+15*inv[10]+inv[14])/70);
+    glVertex2f(x+(5*inv[0]+15*inv[8]+inv[12])/70, z+(5*inv[2]+15*inv[10]+inv[14])/70);
+  glEnd();
 
   glPointSize(5.0f); //点
   glBegin(GL_POINTS);
