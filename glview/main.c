@@ -138,10 +138,27 @@ void keyboard (unsigned char key, int x, int y)
   }
   //カメラの行列を更新
   array1 = tlMat( -yaw, pitch, -distance);
+  //printf("1:%f %f %f %f\n",array1.matrix[12],array1.matrix[13],array1.matrix[14],array1.matrix[15]);
   array2 = y_rtMat(rx);
+  //printf("%f %f %f %f\n",array2.matrix[12],array2.matrix[13],array2.matrix[14],array2.matrix[15]);
+  // printf("%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n\n",
+  //       array2.matrix[0],array2.matrix[1],array2.matrix[2],array2.matrix[3],
+  //       array2.matrix[4],array2.matrix[5],array2.matrix[6],array2.matrix[7],
+  //       array2.matrix[8],array2.matrix[9],array2.matrix[10],array2.matrix[11],
+  //       array2.matrix[12],array2.matrix[13],array2.matrix[14],array2.matrix[15]);
   dotMat(array1.matrix, camera.matrix);
+  printf("%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n\n",
+        array1.matrix[0],array1.matrix[1],array1.matrix[2],array1.matrix[3],
+        array1.matrix[4],array1.matrix[5],array1.matrix[6],array1.matrix[7],
+        array1.matrix[8],array1.matrix[9],array1.matrix[10],array1.matrix[11],
+        array1.matrix[12],array1.matrix[13],array1.matrix[14],array1.matrix[15]);
+  //printf("2:%f %f %f %f\n",array1.matrix[12],array1.matrix[13],array1.matrix[14],array1.matrix[15]);
+
   dotMat(array2.matrix, array1.matrix);
+  //printf("%f %f %f %f\n",array2.matrix[12],array2.matrix[13],array2.matrix[14],array2.matrix[15]);
   copyMat(camera.matrix, array2.matrix);
+
+  //printf("3:%f %f %f %f\n",camera.matrix[12],camera.matrix[13],camera.matrix[14],camera.matrix[15]);
 }
 
 // -----------------------------------------------------------------------------------

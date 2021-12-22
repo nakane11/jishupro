@@ -16,6 +16,7 @@ extern int n; //現在のねこの出現数
 extern Cat cats[];
 extern MatArray camera;
 
+int gluInvertMatrix(const GLfloat m[16], GLfloat invOut[16]);
 void copyMat (GLfloat *a, GLfloat *b);
 void dotMat (GLfloat *a, GLfloat *b);
 MatArray y_rtMat(double angle);

@@ -133,13 +133,15 @@ void drawCat(int i)
 }
 
 void drawMap(double x, double z){
+  GLfloat inv[16];
+  gluInvertMatrix(camera.matrix, inv);
   glColor3d(1.0, 1.0, 1.0);
 
   Square2D(x+1.3, z-1.3, x-1.3, z+1.3,1.0f); //四角形
 
   glPointSize(5.0f); //点
   glBegin(GL_POINTS);
-    glVertex2f(x+camera.matrix[12]/70, z-camera.matrix[14]/70);
+    glVertex2f(x+inv[12]/70, z+inv[14]/70);
 
     for(int i=0;i<n;i++){
       glPushMatrix();
