@@ -270,9 +270,9 @@ void myUnProject(GLfloat winX, GLfloat winY, GLfloat winZ,
 	            GLfloat *model, GLfloat *proj, GLint *view,
 	            GLfloat* objX, GLfloat* objY, GLfloat* objZ)
 {
-    dotMat(proj, model);
+    dotMat(model, proj);
     GLfloat invPM[16];
-    gluInvertMatrix(proj, invPM);
+    gluInvertMatrix(model, invPM);
 
     GLfloat invVp[4] = {2 * (winX - view[0]) / view[2] - 1.0 ,
                         2 * (winY - view[1]) / view[3] - 1.0 ,

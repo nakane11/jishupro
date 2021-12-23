@@ -23,12 +23,13 @@ static double distance = 5.0, pitch = 0.0, yaw = 0.0, rx = 1.0;
 GLint mouse_button = -1;
 GLint mouse_x = 0, mouse_y = 0;
 
+int winW = 1280, winH = 960;
+
 float px=0, py=0;
 
 MatArray array1, array2;
 
-GLdouble  modeld[16], projd[16];
-GLint view[4];
+double objX, objY, objZ;
 
 //-----------------------------------------------------------------------------------
 // 初期化
@@ -39,6 +40,28 @@ void init(void)
   texinit(); //テクスチャ作成
   unitMat(camera.matrix); //カメラ座標初期化
 }
+
+void getWorldCood(int TargetX, int TargetY)
+{
+
+	double modelview[16];
+	glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
+
+	double projection[16];
+	glGetDoublev(GL_PROJECTION_MATRIX, projection);
+
+	int viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);
+
+	float z;
+
+	glReadPixels(TargetX,winH - TargetY,1,1,GL_DEPTH_COMPONENT,GL_FLOAT,&z);
+
+	gluUnProject(TargetX,winH - TargetY,z,modelview,projection,viewport,&objX,&objY,&objZ);
+  printf("(%d, %d) -> (%lf, %lf, %lf)\n",TargetX,TargetY,-objX,objY,-objZ);
+	
+}
+
 
 
 
@@ -70,11 +93,8 @@ void display(void)
   
   // 視点を移動
   glMultMatrixf( camera.matrix );
-  glGetDoublev(GL_MODELVIEW_MATRIX, modeld);
 
-  drawFloor(60);
-  //Circle2DFill(60,0,0);
-  
+  drawFloor(60); //地面  
   
   updateFunc();
   for(int i=0;i<n;i++){
@@ -98,13 +118,12 @@ void display(void)
 //-----------------------------------------------------------------------------------
 void reshape (int w, int h)
 {
+  winH = h;
   glViewport (0, 0, (GLsizei) w, (GLsizei) h);
-  glGetIntegerv(GL_VIEWPORT, view);
 
   glMatrixMode (GL_PROJECTION);
   glLoadIdentity ();
   gluPerspective(45.0, (GLfloat) w/(GLfloat) h, 1.0*4, 20.0*4);
-  glGetDoublev(GL_PROJECTION_MATRIX, projd);
 }
 
 //-----------------------------------------------------------------------------------
@@ -172,8 +191,11 @@ void mouse(int button, int state, int x, int y)
 
   if(state == GLUT_UP){
     mouse_button = -1;
+  }else{
+    getWorldCood(x, y);
+    printf("%f, %f\n",px,py);
   }
-
+  
   glutPostRedisplay();
 }
 
@@ -231,7 +253,7 @@ int main(int argc, char** argv)
   
   glutInit(&argc, argv);
   glutInitDisplayMode ( GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH );
-  glutInitWindowSize (1280, 960);
+  glutInitWindowSize (winW, winH);
   glutInitWindowPosition (50, 50);
   glutCreateWindow ("planet");
 
@@ -242,7 +264,7 @@ int main(int argc, char** argv)
   glutKeyboardFunc(keyboard);
   glutIdleFunc(idle);
   // glutTimerFunc(1000,timer,0);
-  // glutMouseFunc(mouse);
+  glutMouseFunc(mouse);
   // glutMotionFunc(motion);
 
   glutMainLoop();
