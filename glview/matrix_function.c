@@ -187,6 +187,15 @@ void dotMat (GLfloat *a, GLfloat *b){
     copyMat(a, s);
 }
 
+void dotMat41 (GLfloat *a, GLfloat *b, GLfloat *ret){
+    
+    ret[0]=a[0]*b[0]+a[4]*b[1]+a[8]*b[2]+a[12]*b[3];
+    ret[1]=a[1]*b[0]+a[5]*b[1]+a[9]*b[2]+a[13]*b[3];
+    ret[2]=a[2]*b[0]+a[6]*b[1]+a[10]*b[2]+a[14]*b[3];
+    ret[3]=a[3]*b[0]+a[7]*b[1]+a[11]*b[2]+a[15]*b[3];
+
+}
+
 //y軸回転
 MatArray y_rtMat(double angle){
     double rad = angle * PI / 180.0;
@@ -255,4 +264,25 @@ void initCat (int num){
     }
     n = num;
     
+}
+
+void myUnProject(GLfloat winX, GLfloat winY, GLfloat winZ,
+	            GLfloat *model, GLfloat *proj, GLint *view,
+	            GLfloat* objX, GLfloat* objY, GLfloat* objZ)
+{
+    dotMat(proj, model);
+    GLfloat invPM[16];
+    gluInvertMatrix(proj, invPM);
+
+    GLfloat invVp[4] = {2 * (winX - view[0]) / view[2] - 1.0 ,
+                        2 * (winY - view[1]) / view[3] - 1.0 ,
+                        2 * winZ - 1.0,
+                        1};
+    GLfloat V[4];
+    dotMat41(invPM, invVp, V);
+
+    *objX = V[0] / V[3];
+    *objY = V[1] / V[3];
+    *objZ = V[2] / V[3];
+
 }

@@ -27,6 +27,9 @@ float px=0, py=0;
 
 MatArray array1, array2;
 
+GLdouble  modeld[16], projd[16];
+GLint view[4];
+
 //-----------------------------------------------------------------------------------
 // 初期化
 //-----------------------------------------------------------------------------------
@@ -67,6 +70,8 @@ void display(void)
   
   // 視点を移動
   glMultMatrixf( camera.matrix );
+  glGetDoublev(GL_MODELVIEW_MATRIX, modeld);
+
   drawFloor(60);
   //Circle2DFill(60,0,0);
   
@@ -94,10 +99,12 @@ void display(void)
 void reshape (int w, int h)
 {
   glViewport (0, 0, (GLsizei) w, (GLsizei) h);
+  glGetIntegerv(GL_VIEWPORT, view);
 
   glMatrixMode (GL_PROJECTION);
   glLoadIdentity ();
   gluPerspective(45.0, (GLfloat) w/(GLfloat) h, 1.0*4, 20.0*4);
+  glGetDoublev(GL_PROJECTION_MATRIX, projd);
 }
 
 //-----------------------------------------------------------------------------------
@@ -158,17 +165,17 @@ void keyboard (unsigned char key, int x, int y)
 // -----------------------------------------------------------------------------------
 // マウスクリックのコールバック関数
 // -----------------------------------------------------------------------------------
-// void mouse(int button, int state, int x, int y)
-// {
-//   mouse_button = button;
-//   mouse_x = x;	mouse_y = y;
+void mouse(int button, int state, int x, int y)
+{
+  mouse_button = button;
+  mouse_x = x;	mouse_y = y;
 
-//   if(state == GLUT_UP){
-//     mouse_button = -1;
-//   }
+  if(state == GLUT_UP){
+    mouse_button = -1;
+  }
 
-//   glutPostRedisplay();
-// }
+  glutPostRedisplay();
+}
 
 // -----------------------------------------------------------------------------------
 // マウス移動のコールバック関数

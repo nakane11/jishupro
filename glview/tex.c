@@ -5,6 +5,7 @@
 #define faceImageWidth 32
 #define faceImageHeight 32
 
+
 typedef enum{
     HAPPY,
     SLEEPY,
@@ -13,6 +14,7 @@ typedef enum{
 }face;
 
 GLubyte faceImage[faceImageWidth][faceImageHeight][3];
+
 
 void makeFaceImage(void){
     int i, j;
@@ -111,6 +113,7 @@ void makeFaceImage(void){
 
 
 void texinit(void){
+    
     makeFaceImage();
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glTexImage2D(GL_TEXTURE_2D, 0, 3, faceImageWidth,
@@ -124,6 +127,7 @@ void texinit(void){
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND);
     glEnable(GL_TEXTURE_2D);
     glShadeModel(GL_FLAT);
+    
 }
 
 void facedisplay(int t, float a, float b, float c){
@@ -165,3 +169,4 @@ void facedisplay(int t, float a, float b, float c){
         
     }
 }
+

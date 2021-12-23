@@ -24,6 +24,9 @@ MatArray y_rtMat(double angle);
 MatArray tlMat(double x, double y, double z);
 void unitMat(GLfloat *a);
 void initCat (int num);
+void myUnProject(GLfloat winX, GLfloat winY, GLfloat winZ,
+	            GLfloat *model, GLfloat *proj, GLint *view,
+	            GLfloat* objX, GLfloat* objY, GLfloat* objZ);
   
 #ifdef __cplusplus
 }

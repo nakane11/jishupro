@@ -212,6 +212,7 @@ void drawFloor(int r){
   {
     GLfloat color[] = {43.0/255, 79.0/255, 50.0/255, 1.0};
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color);
+ 
     glRotated(-90, 1 , 0, 0);
     glTranslated(0, 0, -0.5);
     SquareFill2D(r);
