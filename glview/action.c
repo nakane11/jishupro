@@ -180,6 +180,18 @@ void updateFunc(void){
         }
     }
 
+    for (i = 0; i<n; i++){
+       if(cats[i].task == EAT){
+           for (j = i+1; j<n; j++){
+               if(cats[j].task == EAT){
+                   //printf("%lf\n",catsDistance(i,j));
+                   addCat(i, j);
+               }
+           }
+       }
+    }
+
+
     
     
 }

@@ -64,10 +64,22 @@ void getWorldCood(int TargetX, int TargetY)
 	glReadPixels(TargetX,winH - TargetY,1,1,GL_DEPTH_COMPONENT,GL_FLOAT,&z);
 
 	gluUnProject(TargetX,winH - TargetY,z,modelview,projection,viewport,&objX,&objY,&objZ);
-  printf("(%d, %d) -> (%lf, %lf, %lf)\n",TargetX,TargetY,-objX,objY,-objZ);
+  //printf("(%d, %d) -> (%lf, %lf, %lf)\n",TargetX,TargetY,-objX,objY,-objZ);
 	
 }
 
+ 
+void liner_search (double x, double z) {
+ for (int i=0;i < n;i++) {
+   if (abs(cats[i].x - x)*abs(cats[i].z-z)<3)
+   {
+     cats[i].task = EAT;
+     cats[i].duration = 0;
+     return;
+     }
+ }
+}
+ 
 
 
 
@@ -207,7 +219,9 @@ void mouse(int button, int state, int x, int y)
     mouse_button = -1;
   }else{
     getWorldCood(x, y);
-    printf("%f, %f\n",px,py);
+    liner_search(objX, objZ);
+
+    //printf("%f, %f\n",px,py);
   }
   
   glutPostRedisplay();
@@ -277,7 +291,7 @@ int main(int argc, char** argv)
   glutReshapeFunc(reshape);
   glutKeyboardFunc(keyboard);
   glutIdleFunc(idle);
-  glutTimerFunc(1000,timer,0);
+  //glutTimerFunc(1000,timer,0);
   glutMouseFunc(mouse);
   // glutMotionFunc(motion);
 

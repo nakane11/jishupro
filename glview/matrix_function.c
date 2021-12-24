@@ -225,46 +225,66 @@ void unitMat(GLfloat *a){
     a[15] = 1;
 }
 
+ 
 void initCat (int num){
-    for (int i=0; i<num; i++){
-        double s = 0;
-        while(s<3*i){
-            cats[i].x = rand()%40-20;
-            cats[i].y = 0.0;
-            cats[i].z = -rand()%20;
-            s = 0;
-            for (int j = i-1; j>=0; j--){
-                s+=fmin(catsDistance(i, j),3);
-            }
-        }
-        
-        for (int j = i-1; j>=0; j--){
-            while (catsDistance(i, j) < 4.0){
-                    cats[i].y+=1;
-            }
-        }
-        cats[i].scale = 1.0;
-        cats[i].r = (rand()%100)/100.0;
-        cats[i].g = (rand()%100)/100.0;
-        cats[i].b = (rand()%100)/100.0;
-        cats[i].neck_angle = 0.0;
-        // cats[i].face = NORMAL;
-        cats[i].task = EAT;
-        cats[i].duration = 0;
-        
-        unitMat(cats[i].matrix);
-
-        MatArray array1, array2;
-        array1 = tlMat(cats[i].x, cats[i].y, cats[i].z);
-        array2 = y_rtMat(rand()%360-180.0);
-        dotMat(array2.matrix, array1.matrix);
-        dotMat( cats[i].matrix,array2.matrix);
-        
-    }
-    n = num;
-    
+   for (int i=0; i<num; i++){
+       // double s = 0;
+       // while(s<3*i){
+           cats[i].x = rand()%40-20;
+           cats[i].y = 0.0;
+           cats[i].z = -rand()%20;
+           // s = 0;
+           // for (int j = i-1; j>=0; j--){
+           //     s+=fmin(catsDistance(i, j),3);
+           // }
+       // }
+      
+       // for (int j = i-1; j>=0; j--){
+       //     while (catsDistance(i, j) < 4.0){
+       //             cats[i].y+=1;
+       //     }
+       // }
+       cats[i].scale = 1.0;
+       cats[i].r = (rand()%100)/100.0;
+       cats[i].g = (rand()%100)/100.0;
+       cats[i].b = (rand()%100)/100.0;
+       cats[i].neck_angle = 0.0;
+       // cats[i].face = NORMAL;
+       cats[i].task = STAY;
+       cats[i].duration = 0;
+      
+       unitMat(cats[i].matrix);
+ 
+       MatArray array1, array2;
+       array1 = tlMat(cats[i].x, cats[i].y, cats[i].z);
+       array2 = y_rtMat(rand()%360-180.0);
+       dotMat(array2.matrix, array1.matrix);
+       dotMat( cats[i].matrix,array2.matrix);
+      
+   }
+   n = num;
+  
 }
 
+void addCat(int i, int j){
+   if(n<N){
+       cats[n].x = (cats[i].x+cats[j].x)/2.0;
+       cats[n].y = 0.0;
+       cats[n].z = (cats[i].z+cats[j].z)/2.0;
+       cats[n].scale = 0.7;
+       cats[n].r = (cats[i].r+cats[j].r)/2.0;
+       cats[n].g = (cats[i].g+cats[j].g)/2.0;
+       cats[n].b = (cats[i].b+cats[j].b)/2.0;
+       cats[n].neck_angle = 0.0;
+       cats[n].task = STAY;
+       cats[n].duration = 0;
+       printf("%d -> (%lf, %lf, %lf)\n",n, cats[n].x,cats[n].y,cats[n].z);
+       n+=1;
+   }
+}
+ 
+
+ 
 void myUnProject(GLfloat winX, GLfloat winY, GLfloat winZ,
 	            GLfloat *model, GLfloat *proj, GLint *view,
 	            GLfloat* objX, GLfloat* objY, GLfloat* objZ)
