@@ -32,6 +32,7 @@ MatArray array1, array2;
 double objX, objY, objZ;
 
 float cz = 5.0; //カメラ高さ
+float lz;
 
 //-----------------------------------------------------------------------------------
 // 初期化
@@ -41,6 +42,7 @@ void init(void)
   initCat(10); //ねこ生成
   texinit(); //テクスチャ作成
   unitMat(camera.matrix); //カメラ座標初期化
+  lz = tan((cz-5)/20);
 }
 
 void getWorldCood(int TargetX, int TargetY)
@@ -76,7 +78,7 @@ void display(void)
 {
   // フレームバッファのクリア
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  gluLookAt(0, 5, -10, 0, 1, 2, 0, 1, 0);
+  gluLookAt(0, 5, -10, 0, 1-600*lz, 2, 0, 1, 0);
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
@@ -127,7 +129,7 @@ void reshape (int w, int h)
 
   glMatrixMode (GL_PROJECTION);
   glLoadIdentity ();
-  gluPerspective(45.0, (GLfloat) w/(GLfloat) h, 1.0*4, 20.0*4);
+  gluPerspective(45.0, (GLfloat) w/(GLfloat) h, 1.0*6, 20.0*6);
 }
 
 //-----------------------------------------------------------------------------------
@@ -181,6 +183,8 @@ void keyboard (unsigned char key, int x, int y)
       break;
   }
   //カメラの行列を更新
+  lz = tan((cz-5)/20);
+  if(lz>1.0) lz = 1.0;
   array1 = tlMat( -yaw, pitch, -distance);
   array2 = y_rtMat(rx);
   dotMat(array1.matrix, camera.matrix);
