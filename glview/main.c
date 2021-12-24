@@ -41,7 +41,7 @@ float lz; //カメラ角度(tan <=1.0)
 void init(void)
 {
   srand((unsigned int)time(NULL));
-  initCat(7); //ねこ生成
+  initCat(9); //ねこ生成
   texinit(); //テクスチャ作成
   unitMat(camera.matrix); //カメラ座標初期化
   lz = tan((cz-5)/20);
@@ -114,7 +114,7 @@ void display(void)
 
 void timer(int value){
   for(int i=0;i<n;i++){
-      printf("%lf  ", -cats[i].x);
+      printf("(%d, %d)  ", (int)-cats[i].x, (int)cats[i].z);
   }
   printf("\n");
   glutTimerFunc(1000,timer,0);

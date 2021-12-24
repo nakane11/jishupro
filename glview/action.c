@@ -117,10 +117,10 @@ void updateFunc(void){
 
         case STAY:
             if (cats[i].duration == 0){
-                cats[i].duration = 10*(rand()%20+4);
+                cats[i].duration = 5*(rand()%20+4);
                 cats[i].face = NORMAL;
             }else if(cats[i].duration == 1){
-                if(rand()%100<70){
+                if(rand()%100<60){
                     cats[i].task = WALK;
                 }else{
                     cats[i].task = SLEEP;
@@ -131,7 +131,7 @@ void updateFunc(void){
 
         case SLEEP:
             if (cats[i].duration == 0){
-                cats[i].duration = 40*(rand()%20+4);
+                cats[i].duration = 20*(rand()%20+4);
                 cats[i].face = SLEEPY;
             }else if(cats[i].duration == 1){
                 cats[i].task = STAY;
@@ -170,7 +170,7 @@ void updateFunc(void){
         cats[i].y = cats[i].matrix[13];
         cats[i].z = cats[i].matrix[14];
 
-        if((abs(cats[i].x>64)||abs(cats[i].z)>64)&&cats[i].task!=DIE){
+        if((abs(cats[i].x)>64||abs(cats[i].z)>64)&&cats[i].task!=DIE){
             cats[i].task = DIE;
             cats[i].duration = 60;
             cats[i].r = 1.0;
