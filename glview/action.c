@@ -61,6 +61,7 @@ void updateFunc(void){
             }
             if (cats[i].duration == 1){
                 cats[i].task = STAY;
+                cats[i].flg = 0;
             }
             tlarray = tlMat(0, 0.1*param, 0);
             dotMat( cats[i].matrix, tlarray.matrix);

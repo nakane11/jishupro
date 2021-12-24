@@ -41,7 +41,7 @@ float lz; //カメラ角度(tan <=1.0)
 void init(void)
 {
   srand((unsigned int)time(NULL));
-  initCat(9); //ねこ生成
+  initCat(25); //ねこ生成
   texinit(); //テクスチャ作成
   unitMat(camera.matrix); //カメラ座標初期化
   lz = tan((cz-5)/20);
