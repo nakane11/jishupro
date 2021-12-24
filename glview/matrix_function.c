@@ -242,6 +242,7 @@ void initCat (int num){
        // cats[i].face = NORMAL;
        cats[i].task = STAY;
        cats[i].duration = 0;
+       cats[i].flg = 0;
       
        unitMat(cats[i].matrix);
  
@@ -261,13 +262,25 @@ void addCat(int i, int j){
        cats[n].x = (cats[i].x+cats[j].x)/2.0;
        cats[n].y = 0.0;
        cats[n].z = (cats[i].z+cats[j].z)/2.0;
-       cats[n].scale = 0.7;
+       cats[n].scale = 0.6;
        cats[n].r = (cats[i].r+cats[j].r)/2.0;
        cats[n].g = (cats[i].g+cats[j].g)/2.0;
        cats[n].b = (cats[i].b+cats[j].b)/2.0;
        cats[n].neck_angle = 0.0;
        cats[n].task = STAY;
        cats[n].duration = 0;
+       cats[i].flg = 0;
+       
+       unitMat(cats[n].matrix);
+ 
+       MatArray array1, array2;
+       array1 = tlMat(cats[n].x, cats[n].y, cats[n].z);
+       array2 = y_rtMat(rand()%360-180.0);
+       dotMat(array2.matrix, array1.matrix);
+       dotMat( cats[n].matrix,array2.matrix);
+
+       cats[i].flg=0;
+       cats[j].flg=0;
        printf("%d -> (%lf, %lf, %lf)\n",n, cats[n].x,cats[n].y,cats[n].z);
        n+=1;
    }

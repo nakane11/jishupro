@@ -52,6 +52,7 @@ void updateFunc(void){
                 cats[i].duration = 60*(rand()%4+1);
                 param = 1;
                 cats[i].face = HAPPY;
+                cats[i].flg = 1;
                 
             }else if(cats[i].duration %60 >= 30){
                 param = 1;
@@ -181,9 +182,9 @@ void updateFunc(void){
     }
 
     for (i = 0; i<n; i++){
-       if(cats[i].task == EAT){
+       if(cats[i].flg){
            for (j = i+1; j<n; j++){
-               if(cats[j].task == EAT){
+               if(cats[j].flg && catsDistance(i, j)<100){
                    //printf("%lf\n",catsDistance(i,j));
                    addCat(i, j);
                }
