@@ -73,10 +73,12 @@ void liner_search (double x, double z) {
  for (int i=0;i < n;i++) {
    if (abs(cats[i].x - x)*abs(cats[i].z-z)<3)
    {
+     if(cats[i].task!=EAT){
      cats[i].task = EAT;
      cats[i].duration = 0;
      return;
      }
+   }
  }
 }
  
