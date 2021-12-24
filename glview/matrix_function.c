@@ -5,21 +5,11 @@
 
 #include "action.h"
 #include "tex.h"
-
+#include "matrix_function.h"
 #define PI 3.141592653589793
 
-typedef struct {
-    double x, y, z, scale, r, g, b;
-    int neck_angle, state, task, duration, face;
-    GLfloat matrix[16];
-    float p_speed;
-    //int p_dir;
-} Cat;
-
-typedef struct { GLfloat matrix[16]; } MatArray;
-
 const int N=50; //出現数の上限
-int n=0; //現在のねこの出現数
+int n=0;
 Cat cats[50];
 MatArray camera;
 

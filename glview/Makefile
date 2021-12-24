@@ -20,3 +20,8 @@ TARGET: ${OBJS}
 clean:
 	${RM} ${TARGET} *.o *~
 
+main.o: main.c draw_function.h tex.h matrix_function.h action.h
+draw_function.o: draw_function.c tex.h matrix_function.h
+tex.o: tex.c
+matrix_function.o: matrix_function.c tex.h matrix_function.h action.h
+

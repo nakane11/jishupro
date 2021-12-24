@@ -10,7 +10,7 @@ typedef struct {
     int neck_angle, state, task, duration, face;
     GLfloat matrix[16];
     float p_speed;
-    //int p_dir;
+    int p;
 } Cat;
 typedef struct { GLfloat matrix[16]; } MatArray;
 
