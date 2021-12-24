@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <math.h>
+#include <time.h>
 
 #include "draw_function.h"
 #include "tex.h"
@@ -25,21 +26,22 @@ GLint mouse_x = 0, mouse_y = 0;
 
 int winW = 1280, winH = 960;
 
-float px=0, py=0;
+float px=0, py=0; //ポインタ位置
 
 MatArray array1, array2;
 
-double objX, objY, objZ;
+double objX, objY, objZ; //ピッキングした座標
 
 float cz = 5.0; //カメラ高さ
-float lz;
+float lz; //カメラ角度(tan <=1.0)
 
 //-----------------------------------------------------------------------------------
 // 初期化
 //-----------------------------------------------------------------------------------
 void init(void)
 {
-  initCat(10); //ねこ生成
+  srand((unsigned int)time(NULL));
+  initCat(7); //ねこ生成
   texinit(); //テクスチャ作成
   unitMat(camera.matrix); //カメラ座標初期化
   lz = tan((cz-5)/20);
@@ -110,13 +112,13 @@ void display(void)
   glutSwapBuffers();
 }
 
-// void timer(int value){
-//   for(int i=0;i<n;i++){
-//       printf("%lf\t", cats[i].x);
-//   }
-//   printf("\n");
-//   glutTimerFunc(1000,timer,0);
-// }
+void timer(int value){
+  for(int i=0;i<n;i++){
+      printf("%lf  ", -cats[i].x);
+  }
+  printf("\n");
+  glutTimerFunc(1000,timer,0);
+}
 
 
 //-----------------------------------------------------------------------------------
@@ -275,7 +277,7 @@ int main(int argc, char** argv)
   glutReshapeFunc(reshape);
   glutKeyboardFunc(keyboard);
   glutIdleFunc(idle);
-  // glutTimerFunc(1000,timer,0);
+  glutTimerFunc(1000,timer,0);
   glutMouseFunc(mouse);
   // glutMotionFunc(motion);
 

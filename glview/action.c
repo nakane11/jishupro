@@ -12,7 +12,8 @@ typedef enum {
     EAT,
     STAY,
     SLEEP,
-    TURN
+    TURN,
+    DIE
 } task;
 
 double param = 0;
@@ -26,21 +27,21 @@ double catsDistance (int a, int b){
 void updateFunc(void){
     int i, j;
     MatArray tlarray, rtarray;
-    for(i=0;i<n;i++){
-        for (j = i+1; j<n; j++){
-            if (catsDistance(i, j) < 8.0){
-                if(cats[i].task==TURN){
-                    cats[j].task = STAY;
-                    cats[j].duration = 200;
-                }else{
-                    cats[i].task = STAY;
-                    cats[i].duration = 200;
-                    cats[j].task = TURN;
-                    cats[j].duration = 100;
-                }
-            }
-        }
-    }
+    // for(i=0;i<n;i++){
+    //     for (j = i+1; j<n; j++){
+    //         if (catsDistance(i, j) < 9.0){
+    //             if(cats[i].task==TURN){
+    //                 cats[j].task = STAY;
+    //                 cats[j].duration = 200;
+    //             }else{
+    //                 cats[i].task = STAY;
+    //                 cats[i].duration = 200;
+    //                 cats[j].task = TURN;
+    //                 cats[j].duration = 100;
+    //             }
+    //         }
+    //     }
+    // }
     
     for (i = 0; i<n; i++){
         if(rand()%4000<2){cats[i].neck_angle = rand()%60-30;}
@@ -75,7 +76,7 @@ void updateFunc(void){
             // }
             if (cats[i].duration == 0){
                 cats[i].duration = 40*(rand()%20+4); //進む距離決める
-                param = rand()%10+5;
+                cats[i].p_speed = rand()%10+5;
                 cats[i].face = NORMAL;
             }else if (cats[i].duration == 1){
                 
@@ -86,7 +87,7 @@ void updateFunc(void){
                 }
                 
             }
-            tlarray = tlMat(0, 0, param/500.0);
+            tlarray = tlMat(0, 0, cats[i].p_speed/200.0);
             dotMat( cats[i].matrix, tlarray.matrix);
             cats[i].duration --;
             break;
@@ -101,14 +102,14 @@ void updateFunc(void){
             // }
             if (cats[i].duration == 0){
                 cats[i].duration = 60*(rand()%4/3+2); //回転角決める
-                param = (rand()%2*2-1)*(rand()%10+5);
+                cats[i].p_speed = (rand()%2*2-1)*(rand()%10+5);
                 cats[i].face = ANGRY;
             }else if (cats[i].duration == 1){
                 cats[i].task = WALK; //次のtask
             }
             //曲がりながら進む
-            tlarray = tlMat(0, 0, abs(param)/500.0);
-            if(param>0){rtarray = y_rtMat(0.5);}else{rtarray = y_rtMat(-0.5);}
+            tlarray = tlMat(0, 0, abs(cats[i].p_speed)/500.0);
+            if(cats[i].p_speed>0){rtarray = y_rtMat(0.5);}else{rtarray = y_rtMat(-0.5);}
             dotMat(tlarray.matrix , rtarray.matrix);
             dotMat( cats[i].matrix, tlarray.matrix);
             cats[i].duration --;
@@ -137,8 +138,23 @@ void updateFunc(void){
             }
             cats[i].duration--;
             break;
-        }
 
+        case DIE:
+            if (cats[i].duration == 1){
+                for(j=i;j<n;j++){
+                    cats[j]=cats[j+1];
+                }
+                i--;
+                n--;
+                printf("%d\n",n);
+            }else{
+                tlarray = tlMat(0, -0.6, 0);
+                dotMat( cats[i].matrix, tlarray.matrix);
+                cats[i].duration --;
+            }
+            break;
+
+        }
            
     //     for (j = i+1; j<n; j++){
     //         if (catsDistance(i, j) < 4.0){
@@ -153,6 +169,17 @@ void updateFunc(void){
         cats[i].x = cats[i].matrix[12];
         cats[i].y = cats[i].matrix[13];
         cats[i].z = cats[i].matrix[14];
+
+        if((abs(cats[i].x>64)||abs(cats[i].z)>64)&&cats[i].task!=DIE){
+            cats[i].task = DIE;
+            cats[i].duration = 60;
+            cats[i].r = 1.0;
+            cats[i].g = 0.0;
+            cats[i].b = 0.0;
+            //ネコ消す
+        }
     }
+
+    
     
 }

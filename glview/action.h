@@ -11,7 +11,8 @@ typedef enum {
     EAT,
     STAY,
     SLEEP,
-    TURN
+    TURN,
+    DIE
 } task;
 
 double catsDistance (int a, int b);

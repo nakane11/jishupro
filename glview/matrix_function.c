@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <time.h>
 #include <math.h>
 #include <GL/glut.h>
 
@@ -13,7 +12,8 @@ typedef struct {
     double x, y, z, scale, r, g, b;
     int neck_angle, state, task, duration, face;
     GLfloat matrix[16];
-    float p;
+    float p_speed;
+    //int p_dir;
 } Cat;
 
 typedef struct { GLfloat matrix[16]; } MatArray;
@@ -226,7 +226,6 @@ void unitMat(GLfloat *a){
 }
 
 void initCat (int num){
-    srand((unsigned int)time(NULL));
     for (int i=0; i<num; i++){
         double s = 0;
         while(s<3*i){

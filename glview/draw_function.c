@@ -78,26 +78,6 @@ void drowCuboid(double a, double b, double c){
     glPopMatrix();
 }
 
-// void Circle2D(float radius,float x,float y)
-// {
-//  for (float th1 = 0.0;  th1 <= 360.0;  th1 = th1 + 1.0)
-//  {             
-//   float th2 = th1 + 10.0;
-//   float th1_rad = th1 / 180.0 * PI; 
-//   float th2_rad = th2 / 180.0 * PI;
-
-//   float x1 = radius * cos(th1_rad);
-//   float y1 = radius * sin(th1_rad);
-//   float x2 = radius * cos(th2_rad);
-//   float y2 = radius * sin(th2_rad);
-
-//   glBegin(GL_LINES);   
-//    glVertex2f( x1+x, y1+y );     
-//    glVertex2f( x2+x, y2+y );
-//   glEnd();
-//  }
-// }
-
 //2D四角形
 void Square2D(float x1,float y1,float x2, float y2,float size){
  glLineWidth(size);
@@ -190,6 +170,7 @@ void drawMap(double x, double z, double range){
     }
 
   glEnd();
+  //printf("%f, %f\n",inv[12],inv[14]);
 }
 
 void drawPointer(double cx, double cy){
@@ -219,31 +200,3 @@ void drawFloor(int r){
   }
   glPopMatrix();
 }
-
-
-// void Circle2DFill(float radius,int x,int y)
-// {
-//   glPushMatrix();
-//   {
-//     glRotated(-90, 1 , 0, 0);
-//     glTranslated(0, 0, -0.5);
-//     for (float th1 = 0.0;  th1 <= 360.0;  th1 = th1 + 1.0)
-//     {             
-//       float th2 = th1 + 10.0;
-//       float th1_rad = th1 / 180.0 * PI; 
-//       float th2_rad = th2 / 180.0 * PI;
-
-//       float x1 = radius * cos(th1_rad);
-//       float y1 = radius * sin(th1_rad);
-//       float x2 = radius * cos(th2_rad);
-//       float y2 = radius * sin(th2_rad);
-
-//       glBegin(GL_TRIANGLES); 
-//       glVertex2f( x, y );
-//       glVertex2f( x1+x, y1+y );     
-//       glVertex2f( x2+x, y2+y );
-//       glEnd();
-//     } 
-//   }
-//   glPopMatrix();
-// }
