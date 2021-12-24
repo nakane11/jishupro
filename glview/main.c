@@ -31,6 +31,8 @@ MatArray array1, array2;
 
 double objX, objY, objZ;
 
+float cz = 5.0; //カメラ高さ
+
 //-----------------------------------------------------------------------------------
 // 初期化
 //-----------------------------------------------------------------------------------
@@ -74,16 +76,18 @@ void display(void)
 {
   // フレームバッファのクリア
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  gluLookAt(0, 8, -10, 0, 1, 2, 0, 1, 0);
+  gluLookAt(0, 5, -10, 0, 1, 2, 0, 1, 0);
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
   glPushMatrix();{
     glDisable( GL_LIGHTING ); //光源処理無効
-    glRotated(atan2(7,12)*360.0/(2*PI), 1.0, 0.0, 0.0);
+    glRotated(atan2(4,12)*360.0/(2*PI), 1.0, 0.0, 0.0);
     
-    drawMap(-5.8, 6.1, 60);
+    drawMap(-5, 5.2, 60);
+    
+    glTranslated(0,0.0,-5);
     drawPointer(px, py);
 
     }
@@ -136,9 +140,13 @@ void keyboard (unsigned char key, int x, int y)
     //視点高さ
     case 'z':
       pitch = -(GLfloat) 0.4;
+      cz += 0.4;
       break;
     case 'x':
-      pitch = (GLfloat) 0.4;
+      if(cz>5){
+        pitch = (GLfloat) 0.4;
+        cz -= 0.4;
+      }
       break;
     //前後方向
     case 's':

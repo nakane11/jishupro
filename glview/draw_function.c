@@ -197,13 +197,13 @@ void drawPointer(double cx, double cy){
   glLineWidth(20);   
 
   glBegin(GL_LINES);                                    // 横線
-    glVertex2f(cx-0.5, cy);
-    glVertex2f(cx+0.5, cy);
+    glVertex2f(cx-0.3, cy);
+    glVertex2f(cx+0.3, cy);
   glEnd();
 
   glBegin(GL_LINES);                                    // 縦線
-    glVertex2f(cx, cy-0.5);
-    glVertex2f(cx, cy+0.5);
+    glVertex2f(cx, cy-0.3);
+    glVertex2f(cx, cy+0.3);
   glEnd();
 }
 
