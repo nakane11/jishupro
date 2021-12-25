@@ -117,6 +117,7 @@ void display(void)
   glMultMatrixf( camera.matrix );
 
   drawFloor(60); //地面  
+  drawCloud();
   
   updateFunc();
   for(int i=0;i<n;i++){

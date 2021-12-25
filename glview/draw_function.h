@@ -10,6 +10,7 @@ void drawCat(int i);
 void drawMap(double x, double z, double range);
 void drawPointer(double cx, double cy);
 void drawFloor(int r);
+void drawCloud(void);
 
   
 #ifdef __cplusplus

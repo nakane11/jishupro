@@ -19,7 +19,7 @@ static const GLfloat light_specular[]={1.0,1.0,1.0,1.0};
 
 void init3d(void){
   // クリアの値の設定
-  glClearColor (0.0, 0.0, 0.0, 0.0);
+  glClearColor (0.0, 0.0, 1.0, 0.0);
   glClearDepth( 1.0 );
 
   // デプステストを行う
@@ -96,6 +96,23 @@ void SquareFill2D(int r){
   glVertex2i(r,r);
   glVertex2i(-r,r);
   glEnd();
+}
+
+void drawCloud(void){
+  GLfloat color[] = {1.0, 1.0, 1.0, 1.0};
+  glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color);
+  srand(2);
+  for(int k=0;k<20;k++){
+    glPushMatrix();{
+      glRotated(rand()%180, 0 , 1, 0);
+      int y = rand()%20+5;
+      int x = rand()%180-90;
+      int z = (rand()%2*2-1)*sqrt(9000-x*x-y*y);
+      glTranslated(x,y,z);
+      drowCuboid(rand()%16+4, 2.0+rand()%3, rand()%16+4);
+    }
+    glPopMatrix();
+  }   
 }
 
 void drawCat(int i)
