@@ -8,11 +8,12 @@ extern "C" {
 
 typedef enum {
     WALK,
-    EAT,
+    JUMP,
     STAY,
     SLEEP,
     TURN,
-    DIE
+    DIE,
+    PICKED
 } task;
 
 double catsDistance (int a, int b);

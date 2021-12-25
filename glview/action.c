@@ -5,16 +5,7 @@
 
 #include "matrix_function.h"
 #include "tex.h"
-
-
-typedef enum {
-    WALK,
-    EAT,
-    STAY,
-    SLEEP,
-    TURN,
-    DIE
-} task;
+#include "action.h"
 
 double param = 0;
 
@@ -47,7 +38,7 @@ void updateFunc(void){
         if(rand()%4000<2){cats[i].neck_angle = rand()%60-30;}
         
         switch (cats[i].task){
-        case EAT:
+        case JUMP:
             if (cats[i].duration == 0){
                 cats[i].duration = 60*(rand()%4+4);
                 param = 1;
@@ -148,12 +139,15 @@ void updateFunc(void){
                 }
                 i--;
                 n--;
-                printf("%d\n",n);
+                //printf("%d\n",n);
             }else{
                 tlarray = tlMat(0, -0.6, 0);
                 dotMat( cats[i].matrix, tlarray.matrix);
                 cats[i].duration --;
             }
+            break;
+
+        case PICKED:
             break;
 
         }

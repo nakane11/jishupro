@@ -281,7 +281,7 @@ void addCat(int i, int j){
 
        cats[i].flg=0;
        cats[j].flg=0;
-       printf("%d -> (%lf, %lf, %lf)\n",n, cats[n].x,cats[n].y,cats[n].z);
+       //printf("%d -> (%lf, %lf, %lf)\n",n, cats[n].x,cats[n].y,cats[n].z);
        n+=1;
    }
 }

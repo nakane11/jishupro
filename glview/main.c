@@ -22,7 +22,7 @@ static double distance = 5.0, pitch = 0.0, yaw = 0.0, rx = 1.0;
 
 // マウス入力情報
 // GLint mouse_button = -1;
-// GLint mouse_x = 0, mouse_y = 0;
+GLint mouse_x = 0, mouse_y = 0;
 
 int winW = 1280, winH = 960;
 
@@ -34,6 +34,16 @@ double objX, objY, objZ; //ピッキングした座標
 
 float cz = 5.0; //カメラ高さ
 float lz; //カメラ角度(tan <=1.0)
+
+typedef enum{
+  WATCH,
+  BREED,
+  PICK
+} Mode; 
+
+Mode mode = WATCH;
+
+int pick_obj;
 
 //-----------------------------------------------------------------------------------
 // 初期化
@@ -73,11 +83,29 @@ void liner_search (double x, double z) {
  for (int i=0;i < n;i++) {
    if (abs(cats[i].x - x)*abs(cats[i].z-z)<2.0)
    {
-     if(cats[i].task!=EAT){
-     cats[i].task = EAT;
-     cats[i].duration = 0;
-     return;
+     switch(mode){
+       case BREED:
+        if(cats[i].task!=JUMP){
+          cats[i].task = JUMP;
+          cats[i].duration = 0;
+        }
+        break;
+
+       case PICK:
+        pick_obj = i;
+        cats[pick_obj].state = PICKED;
+        MatArray tlarray;
+        tlarray = tlMat(0, 10, 0);
+        dotMat( cats[pick_obj].matrix, tlarray.matrix);
+        // cats[pick_obj].x = cats[pick_obj].matrix[12];
+        // cats[pick_obj].y = cats[pick_obj].matrix[13];
+        // cats[pick_obj].z = cats[pick_obj].matrix[14];
+        break;
+
+      default:
+        break;
      }
+     return;
    }
  }
 }
@@ -104,11 +132,11 @@ void display(void)
     glRotated(atan2(4,12)*360.0/(2*PI), 1.0, 0.0, 0.0);
     
     drawMap(-5, 5.2, 60);
-    
-    glTranslated(0,0.0,-5);
-    drawPointer(px, py);
-
+    if(mode == BREED||mode == PICK){
+      glTranslated(0,0.0,-5);
+      drawPointer(px, py);
     }
+  }
   glPopMatrix();
 
   init3d();
@@ -181,18 +209,10 @@ void keyboard (unsigned char key, int x, int y)
     case 'd':
       rx = (GLfloat) 2;
       break;
-    // case 'j':
-    //   px += 0.4;
-    //   break;
-    // case 'l':
-    //   px -= 0.4;
-    //   break;
-    // case 'i':
-    //   py += 0.4;
-    //   break;
-    // case 'k':
-    //   py -= 0.4;
-    //   break;
+    case 32:
+      mode = (mode+1)%3;
+      printf("%d\n", mode);
+      break;
 
 
     case 27:
@@ -216,13 +236,26 @@ void keyboard (unsigned char key, int x, int y)
 void mouse(int button, int state, int x, int y)
 {
   // mouse_button = button;
-  // mouse_x = x;	mouse_y = y;
+  mouse_x = x;	mouse_y = y;
 
-  if(state == GLUT_UP){
+  if(state == GLUT_UP && mode == BREED){
     getWorldCood(x+6, y+30);
     liner_search(objX, objZ);
+  }else if(state == GLUT_DOWN && mode == PICK){
+    if(pick_obj>0){
+      MatArray tlarray;
+      tlarray = tlMat(0, -10, 0);
+      dotMat( cats[pick_obj].matrix, tlarray.matrix);
+      cats[pick_obj].x = cats[pick_obj].matrix[12];
+      cats[pick_obj].y = cats[pick_obj].matrix[13];
+      cats[pick_obj].z = cats[pick_obj].matrix[14];
+      cats[pick_obj].state = STAY;
+      pick_obj = -1;
+    }else{
+      getWorldCood(x+6, y+30);
+      liner_search(objX, objZ);
+    }
   }
-  
   glutPostRedisplay();
 }
 
@@ -264,9 +297,21 @@ void mouse(int button, int state, int x, int y)
 //   glutPostRedisplay();
 // }
 
-void pmotion(int x, int y){
+void motion(int x, int y){
   px = (640 - x-40)/191.0;
   py = (770 - y-40)/191.0;
+  // if(mode == PICK && pick_obj>0){
+  //   //pick_objのねこを動かす
+  //   MatArray tlarray;
+  //   tlarray = tlMat((x-mouse_x)/100, 0, (y-mouse_y)/100);
+  //   dotMat( cats[pick_obj].matrix, tlarray.matrix);
+  //   // cats[pick_obj].x = cats[pick_obj].matrix[12];
+  //   // cats[pick_obj].y = cats[pick_obj].matrix[13];
+  //   // cats[pick_obj].z = cats[pick_obj].matrix[14];
+  //   mouse_x = x;
+  //   mouse_y = y;
+  // }
+  glutPostRedisplay();
 }
 
 //-----------------------------------------------------------------------------------
@@ -297,9 +342,9 @@ int main(int argc, char** argv)
   glutIdleFunc(idle);
   //glutTimerFunc(1000,timer,0);
   glutMouseFunc(mouse);
-  // glutMotionFunc(motion);
+  //glutMotionFunc(motion);
   glutSetCursor(GLUT_CURSOR_NONE);
-  glutPassiveMotionFunc(pmotion);
+  glutPassiveMotionFunc(motion);
 
   glutMainLoop();
 
