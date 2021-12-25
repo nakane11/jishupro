@@ -15,6 +15,7 @@ static const GLfloat light_ambient[] = {1.0, 1.0, 1.0, 1.0};
 static const GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};
 static const GLfloat light_specular[]={1.0,1.0,1.0,1.0};
 
+
 //-----------------------------------------------------------------------------------
 
 void init3d(void){

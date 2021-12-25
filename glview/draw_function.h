@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+
 void init3d(void);
 void drawCat(int i);
 void drawMap(double x, double z, double range);

@@ -8,6 +8,7 @@
 #include "action.h"
 
 double param = 0;
+int pick_obj;
 
 double catsDistance (int a, int b){
     return (cats[a].x - cats[b].x)*(cats[a].x - cats[b].x) 
@@ -137,8 +138,8 @@ void updateFunc(void){
                 for(j=i;j<n;j++){
                     cats[j]=cats[j+1];
                 }
-                i--;
-                n--;
+                i--; n--; 
+                if(i<pick_obj){pick_obj --;}
                 //printf("%d\n",n);
             }else{
                 tlarray = tlMat(0, -0.6, 0);
@@ -172,7 +173,7 @@ void updateFunc(void){
             cats[i].r = 1.0;
             cats[i].g = 0.0;
             cats[i].b = 0.0;
-            //ネコ消す
+            
         }
     }
 

@@ -43,7 +43,7 @@ typedef enum{
 
 Mode mode = WATCH;
 
-int pick_obj;
+extern int pick_obj;
 
 //-----------------------------------------------------------------------------------
 // 初期化
@@ -156,10 +156,7 @@ void display(void)
 }
 
 void timer(int value){
-  for(int i=0;i<n;i++){
-      printf("(%d, %d)  ", (int)-cats[i].x, (int)cats[i].z);
-  }
-  printf("\n");
+  printf("%d, %d\n", mouse_x, mouse_y);
   glutTimerFunc(1000,timer,0);
 }
 
@@ -211,6 +208,16 @@ void keyboard (unsigned char key, int x, int y)
       break;
     case 32:
       mode = (mode+1)%3;
+      if(pick_obj>0){
+        MatArray tlarray;
+        tlarray = tlMat(0, -10, 0);
+        dotMat( cats[pick_obj].matrix, tlarray.matrix);
+        cats[pick_obj].x = cats[pick_obj].matrix[12];
+        cats[pick_obj].y = cats[pick_obj].matrix[13];
+        cats[pick_obj].z = cats[pick_obj].matrix[14];
+        cats[pick_obj].state = STAY;
+        pick_obj = -1;
+      }
       printf("%d\n", mode);
       break;
 
@@ -302,12 +309,12 @@ void motion(int x, int y){
   py = (770 - y-40)/191.0;
   // if(mode == PICK && pick_obj>0){
   //   //pick_objのねこを動かす
-  //   MatArray tlarray;
-  //   tlarray = tlMat((x-mouse_x)/100, 0, (y-mouse_y)/100);
-  //   dotMat( cats[pick_obj].matrix, tlarray.matrix);
-  //   // cats[pick_obj].x = cats[pick_obj].matrix[12];
+  //   MatArray array;
+  //   array = tlMat((x-mouse_x)/191.0, 0, (y-mouse_y)/191.0);
+  //   dotMat( cats[pick_obj].matrix, array.matrix);
+  //   cats[pick_obj].x = cats[pick_obj].matrix[12];
   //   // cats[pick_obj].y = cats[pick_obj].matrix[13];
-  //   // cats[pick_obj].z = cats[pick_obj].matrix[14];
+  //   cats[pick_obj].z = cats[pick_obj].matrix[14];
   //   mouse_x = x;
   //   mouse_y = y;
   // }
