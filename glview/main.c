@@ -21,8 +21,8 @@
 static double distance = 5.0, pitch = 0.0, yaw = 0.0, rx = 1.0;
 
 // マウス入力情報
-GLint mouse_button = -1;
-GLint mouse_x = 0, mouse_y = 0;
+// GLint mouse_button = -1;
+// GLint mouse_x = 0, mouse_y = 0;
 
 int winW = 1280, winH = 960;
 
@@ -71,7 +71,7 @@ void getWorldCood(int TargetX, int TargetY)
  
 void liner_search (double x, double z) {
  for (int i=0;i < n;i++) {
-   if (abs(cats[i].x - x)*abs(cats[i].z-z)<3)
+   if (abs(cats[i].x - x)*abs(cats[i].z-z)<2.0)
    {
      if(cats[i].task!=EAT){
      cats[i].task = EAT;
@@ -180,18 +180,18 @@ void keyboard (unsigned char key, int x, int y)
     case 'd':
       rx = (GLfloat) 2;
       break;
-    case 'j':
-      px += 0.4;
-      break;
-    case 'l':
-      px -= 0.4;
-      break;
-    case 'i':
-      py += 0.4;
-      break;
-    case 'k':
-      py -= 0.4;
-      break;
+    // case 'j':
+    //   px += 0.4;
+    //   break;
+    // case 'l':
+    //   px -= 0.4;
+    //   break;
+    // case 'i':
+    //   py += 0.4;
+    //   break;
+    // case 'k':
+    //   py -= 0.4;
+    //   break;
 
 
     case 27:
@@ -214,16 +214,12 @@ void keyboard (unsigned char key, int x, int y)
 // -----------------------------------------------------------------------------------
 void mouse(int button, int state, int x, int y)
 {
-  mouse_button = button;
-  mouse_x = x;	mouse_y = y;
+  // mouse_button = button;
+  // mouse_x = x;	mouse_y = y;
 
   if(state == GLUT_UP){
-    mouse_button = -1;
-  }else{
-    getWorldCood(x, y);
+    getWorldCood(x+6, y+30);
     liner_search(objX, objZ);
-
-    //printf("%f, %f\n",px,py);
   }
   
   glutPostRedisplay();
@@ -267,6 +263,11 @@ void mouse(int button, int state, int x, int y)
 //   glutPostRedisplay();
 // }
 
+void pmotion(int x, int y){
+  px = (640 - x-40)/191.0;
+  py = (770 - y-40)/191.0;
+}
+
 //-----------------------------------------------------------------------------------
 // アイドル時のコールバック関数
 //-----------------------------------------------------------------------------------
@@ -296,6 +297,8 @@ int main(int argc, char** argv)
   //glutTimerFunc(1000,timer,0);
   glutMouseFunc(mouse);
   // glutMotionFunc(motion);
+  glutSetCursor(GLUT_CURSOR_NONE);
+  glutPassiveMotionFunc(pmotion);
 
   glutMainLoop();
 
