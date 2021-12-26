@@ -7,7 +7,7 @@ extern "C" {
 
 typedef struct {
     double x, y, z, scale, r, g, b;
-    int neck_angle, state, task, duration, face;
+    int neck_angle, task, duration, face;
     GLfloat matrix[16];
     float p_speed;
     int flg;
@@ -16,7 +16,8 @@ typedef struct { GLfloat matrix[16]; } MatArray;
 
 extern int n; //現在のねこの出現数
 extern Cat cats[];
-extern MatArray camera;
+extern GLfloat camera[];
+extern GLfloat inv[];
 
 int gluInvertMatrix(const GLfloat m[16], GLfloat invOut[16]);
 void copyMat (GLfloat *a, GLfloat *b);

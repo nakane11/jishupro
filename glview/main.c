@@ -51,9 +51,10 @@ extern int pick_obj;
 void init(void)
 {
   srand((unsigned int)time(NULL));
-  initCat(25); //ねこ生成
+  initCat(6); //ねこ生成
   texinit(); //テクスチャ作成
-  unitMat(camera.matrix); //カメラ座標初期化
+  unitMat(camera); //カメラ座標初期化
+  pick_obj = -1;
 }
 
 void getWorldCood(int TargetX, int TargetY)
@@ -92,7 +93,7 @@ void liner_search (double x, double z) {
 
        case PICK:
         pick_obj = i;
-        cats[pick_obj].state = PICKED;
+        cats[pick_obj].task = PICKED;
         MatArray tlarray;
         tlarray = tlMat(0, 10, 0);
         dotMat( cats[pick_obj].matrix, tlarray.matrix);
@@ -134,6 +135,7 @@ void display(void)
     if(mode == BREED||mode == PICK){
       glTranslated(0,0.0,-5);
       drawPointer(px, py);
+      
     }
   }
   glPopMatrix();
@@ -141,7 +143,7 @@ void display(void)
   init3d();
   
   // 視点を移動
-  glMultMatrixf( camera.matrix );
+  glMultMatrixf(camera);
 
   drawFloor(60); //地面  
   drawCloud();
@@ -155,7 +157,8 @@ void display(void)
 }
 
 void timer(int value){
-  printf("%d, %d\n", mouse_x, mouse_y);
+  printf("%d, %d\n", pick_obj, n);
+  if(pick_obj>=0){printf("%d\n", cats[pick_obj].task);}
   glutTimerFunc(1000,timer,0);
 }
 
@@ -189,7 +192,7 @@ void keyboard (unsigned char key, int x, int y)
         pitch = -(GLfloat) 0.4;
         cz += 0.4;
       }
-      printf("cz:%f, ry:%f, pitch:%f\n",cz,ry,pitch);
+      //printf("cz:%f, ry:%f, pitch:%f\n",cz,ry,pitch);
       break;
     case 'x':
       if(cz>5){
@@ -199,7 +202,7 @@ void keyboard (unsigned char key, int x, int y)
           ry = ry-0.4/20;
         }
       }
-      printf("cz:%f, ry:%f, pitch:%f\n",cz,ry,pitch);
+      //printf("cz:%f, ry:%f, pitch:%f\n",cz,ry,pitch);
       break;
     //前後方向
     case 's':
@@ -217,17 +220,17 @@ void keyboard (unsigned char key, int x, int y)
       break;
     case 32:
       mode = (mode+1)%3;
-      if(pick_obj>0){
+      if(pick_obj>=0){
         MatArray tlarray;
         tlarray = tlMat(0, -10, 0);
         dotMat( cats[pick_obj].matrix, tlarray.matrix);
         cats[pick_obj].x = cats[pick_obj].matrix[12];
         cats[pick_obj].y = cats[pick_obj].matrix[13];
         cats[pick_obj].z = cats[pick_obj].matrix[14];
-        cats[pick_obj].state = STAY;
+        cats[pick_obj].task = STAY;
         pick_obj = -1;
       }
-      printf("%d\n", mode);
+      //printf("%d\n", mode);
       break;
 
 
@@ -238,9 +241,10 @@ void keyboard (unsigned char key, int x, int y)
   //カメラの行列を更新
   array1 = tlMat( -yaw, pitch, -distance);
   array2 = y_rtMat(rx);
-  dotMat(array1.matrix, camera.matrix);
+  dotMat(array1.matrix, camera);
   dotMat(array2.matrix, array1.matrix);
-  copyMat(camera.matrix, array2.matrix);
+  copyMat(camera, array2.matrix);
+  gluInvertMatrix(camera, inv);
 
 }
 
@@ -255,15 +259,16 @@ void mouse(int button, int state, int x, int y)
   if(state == GLUT_UP && mode == BREED){
     getWorldCood(x+6, y+30);
     liner_search(objX, objZ);
+    printf("%d\n",n);
   }else if(state == GLUT_DOWN && mode == PICK){
-    if(pick_obj>0){
+    if(pick_obj>=0){
       MatArray tlarray;
       tlarray = tlMat(0, -10, 0);
       dotMat( cats[pick_obj].matrix, tlarray.matrix);
       cats[pick_obj].x = cats[pick_obj].matrix[12];
       cats[pick_obj].y = cats[pick_obj].matrix[13];
       cats[pick_obj].z = cats[pick_obj].matrix[14];
-      cats[pick_obj].state = STAY;
+      cats[pick_obj].task = STAY;
       pick_obj = -1;
     }else{
       getWorldCood(x+6, y+30);
@@ -314,7 +319,7 @@ void mouse(int button, int state, int x, int y)
 void motion(int x, int y){
   px = (640 - x-40)/191.0;
   py = (770 - y-40)/191.0;
-  // if(mode == PICK && pick_obj>0){
+  // if(mode == PICK && pick_obj>=0){
   //   //pick_objのねこを動かす
   //   MatArray array;
   //   array = tlMat((x-mouse_x)/191.0, 0, (y-mouse_y)/191.0);
@@ -354,7 +359,7 @@ int main(int argc, char** argv)
   glutReshapeFunc(reshape);
   glutKeyboardFunc(keyboard);
   glutIdleFunc(idle);
-  //glutTimerFunc(1000,timer,0);
+  glutTimerFunc(1000,timer,0);
   glutMouseFunc(mouse);
   //glutMotionFunc(motion);
   glutSetCursor(GLUT_CURSOR_NONE);

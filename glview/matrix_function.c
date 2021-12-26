@@ -11,7 +11,8 @@
 const int N=50; //出現数の上限
 int n=0;
 Cat cats[50];
-MatArray camera;
+GLfloat camera[16];
+GLfloat inv[16];
 
 int gluInvertMatrix(const GLfloat m[16], GLfloat invOut[16])
 {

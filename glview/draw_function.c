@@ -177,8 +177,6 @@ void drawCat(int i)
 }
 
 void drawMap(double x, double z, double range){
-  GLfloat inv[16];
-  gluInvertMatrix(camera.matrix, inv);
   
   //三角形
   glColor3d(1.0, 241.0/255, 0.0);

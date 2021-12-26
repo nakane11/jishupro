@@ -81,7 +81,7 @@ void updateFunc(void){
                 }
                 
             }
-            tlarray = tlMat(0, 0, cats[i].p_speed/200.0);
+            tlarray = tlMat(0, 0, cats[i].p_speed/400.0);
             dotMat( cats[i].matrix, tlarray.matrix);
             cats[i].duration --;
             break;
@@ -114,7 +114,7 @@ void updateFunc(void){
                 cats[i].duration = 5*(rand()%20+4);
                 cats[i].face = NORMAL;
             }else if(cats[i].duration == 1){
-                if(rand()%100<60){
+                if(rand()%100<50){
                     cats[i].task = WALK;
                 }else{
                     cats[i].task = SLEEP;
@@ -180,8 +180,7 @@ void updateFunc(void){
     for (i = 0; i<n; i++){
        if(cats[i].flg){
            for (j = i+1; j<n; j++){
-               if(cats[j].flg && catsDistance(i, j)<120){
-                   
+               if(cats[j].flg && catsDistance(i, j)<250){
                    //printf("%lf\n",catsDistance(i,j));
                    addCat(i, j);
                }
