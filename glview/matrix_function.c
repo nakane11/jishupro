@@ -14,7 +14,7 @@ Cat cats[50];
 GLfloat camera[16];
 GLfloat inv[16];
 
-int gluInvertMatrix(const GLfloat m[16], GLfloat invOut[16])
+int gluInvertMatrix(const GLfloat m[16], GLfloat invOut[16]) //逆行列
 {
     GLfloat inv[16];
     double det;
@@ -206,6 +206,7 @@ MatArray tlMat(double x, double y, double z){
     return m;
 }
 
+//単位行列
 void unitMat(GLfloat *a){
     for (int k = 0; k<16; k++){
         a[k] = 0;
@@ -240,7 +241,6 @@ void initCat (int num){
        cats[i].g = (rand()%100)/100.0;
        cats[i].b = (rand()%100)/100.0;
        cats[i].neck_angle = 0.0;
-       // cats[i].face = NORMAL;
        cats[i].task = STAY;
        cats[i].duration = 0;
        cats[i].flg = 0;

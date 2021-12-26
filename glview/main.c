@@ -38,7 +38,7 @@ float ry = 0.0; //カメラ角度
 typedef enum{
   WATCH,
   BREED,
-  PICK
+  CARRY
 } Mode; 
 
 Mode mode = WATCH;
@@ -72,9 +72,7 @@ void getWorldCood(int TargetX, int TargetY)
 	float z;
 
 	glReadPixels(TargetX,winH - TargetY,1,1,GL_DEPTH_COMPONENT,GL_FLOAT,&z);
-
 	gluUnProject(TargetX,winH - TargetY,z,modelview,projection,viewport,&objX,&objY,&objZ);
-  //printf("(%d, %d) -> (%lf, %lf, %lf)\n",TargetX,TargetY,-objX,objY,-objZ);
 	
 }
 
@@ -91,10 +89,10 @@ void liner_search (double x, double z) {
         }
         break;
 
-       case PICK:
+       case CARRY:
         pick_obj = i;
         cats[pick_obj].task = PICKED;
-        
+        //カメラ位置に拘束
         GLfloat t[16];
         copyMat(t, inv);
         dotMat(t, tlMat( 0, 4, 20).matrix);
@@ -129,12 +127,12 @@ void display(void)
   glPushMatrix();{
     glDisable( GL_LIGHTING ); //光源処理無効
     glRotated(atan2(4,12)*360.0/(2*PI), 1.0, 0.0, 0.0);
-    
+    //drawStr(mode);
     drawMap(-5, 5.2, 60);
-    if(mode == BREED||mode == PICK){
+    
+    if(mode == BREED||mode == CARRY){
       glTranslated(0,0.0,-5);
       drawPointer(px, py);
-      
     }
   }
   glPopMatrix();
@@ -145,9 +143,9 @@ void display(void)
   glMultMatrixf(camera);
 
   drawFloor(60); //地面  
-  drawCloud();
+  drawCloud(); //雲
   
-  updateFunc();
+  updateFunc(); 
   for(int i=0;i<n;i++){
     drawCat(i);
   }
@@ -155,11 +153,10 @@ void display(void)
   glutSwapBuffers();
 }
 
-void timer(int value){
-  printf("%d, %d\n", pick_obj, n);
-  if(pick_obj>=0){printf("%d\n", cats[pick_obj].task);}
-  glutTimerFunc(1000,timer,0);
-}
+// void timer(int value){
+  
+//   glutTimerFunc(1000,timer,0);
+// }
 
 
 //-----------------------------------------------------------------------------------
@@ -191,7 +188,6 @@ void keyboard (unsigned char key, int x, int y)
         pitch = -(GLfloat) 0.4;
         cz += 0.4;
       }
-      //printf("cz:%f, ry:%f, pitch:%f\n",cz,ry,pitch);
       break;
     case 'x':
       if(cz>5){
@@ -201,8 +197,8 @@ void keyboard (unsigned char key, int x, int y)
           ry = ry-0.4/20;
         }
       }
-      //printf("cz:%f, ry:%f, pitch:%f\n",cz,ry,pitch);
       break;
+
     //前後方向
     case 's':
        distance = -(GLfloat) 0.4;
@@ -210,6 +206,7 @@ void keyboard (unsigned char key, int x, int y)
     case 'w':
       distance = (GLfloat) 0.4;
       break;
+
     //左右回転
     case 'a':
       rx = -(GLfloat) 2;
@@ -217,14 +214,15 @@ void keyboard (unsigned char key, int x, int y)
     case 'd':
       rx = (GLfloat) 2;
       break;
-    case 32:
+
+    //モード切替
+    case 32: 
       mode = (mode+1)%3;
       if(pick_obj>=0){
         cats[pick_obj].matrix[13] = 0.0;
         cats[pick_obj].task = STAY;
         pick_obj = -1;
       }
-      //printf("%d\n", mode);
       break;
 
 
@@ -232,6 +230,7 @@ void keyboard (unsigned char key, int x, int y)
       exit(0);
       break;
   }
+
   //カメラの行列を更新
   array1 = tlMat( -yaw, pitch, -distance);
   array2 = y_rtMat(rx);
@@ -246,7 +245,6 @@ void keyboard (unsigned char key, int x, int y)
     dotMat(t, tlMat( 0, 4, 20).matrix);
     copyMat(cats[pick_obj].matrix, t);
   }
- 
 
 }
 
@@ -262,7 +260,8 @@ void mouse(int button, int state, int x, int y)
     getWorldCood(x+6, y+30);
     liner_search(objX, objZ);
     printf("%d\n",n);
-  }else if(state == GLUT_DOWN && mode == PICK){
+
+  }else if(state == GLUT_DOWN && mode == CARRY){
     if(pick_obj>=0){
       cats[pick_obj].matrix[13] = 0.0;
       cats[pick_obj].task = STAY;
@@ -278,41 +277,6 @@ void mouse(int button, int state, int x, int y)
 // -----------------------------------------------------------------------------------
 // マウス移動のコールバック関数
 // -----------------------------------------------------------------------------------
-// void motion(int x, int y)
-// {
-//   switch(mouse_button){
-//   case GLUT_LEFT_BUTTON:
-
-//     if( x == mouse_x && y == mouse_y )
-//       return;
-
-//     yaw -= (GLfloat) (x - mouse_x) / 100.0;
-//     pitch -= (GLfloat) (y - mouse_y) / 100.0;
-
-//     break;
-
-//   case GLUT_RIGHT_BUTTON:
-
-//     if( y == mouse_y )
-//       return;
-
-//     if( y < mouse_y )
-//       distance += (GLfloat) (mouse_y - y)/50.0;
-//     else
-//       distance -= (GLfloat) (y-mouse_y)/50.0;
-
-//     if( distance < 1.0 ) distance = 1.0;
-//     if( distance > 10.0 ) distance = 10.0;
-
-//     break;
-//   }
-
-//   mouse_x = x;
-//   mouse_y = y;
-
-//   glutPostRedisplay();
-// }
-
 void motion(int x, int y){
   px = (640 - x-40)/191.0;
   py = (770 - y-40)/191.0;
@@ -346,7 +310,7 @@ int main(int argc, char** argv)
   glutReshapeFunc(reshape);
   glutKeyboardFunc(keyboard);
   glutIdleFunc(idle);
-  glutTimerFunc(1000,timer,0);
+  //glutTimerFunc(1000,timer,0);
   glutMouseFunc(mouse);
   //glutMotionFunc(motion);
   glutSetCursor(GLUT_CURSOR_NONE);

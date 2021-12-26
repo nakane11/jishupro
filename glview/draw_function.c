@@ -1,6 +1,7 @@
 #include <GL/glut.h>
 #include <math.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "tex.h"
 #include "matrix_function.h"
@@ -14,6 +15,9 @@ static const GLfloat light_position[] = { 0.0, 0.0, 0.0, 1.0 };
 static const GLfloat light_ambient[] = {1.0, 1.0, 1.0, 1.0};
 static const GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};
 static const GLfloat light_specular[]={1.0,1.0,1.0,1.0};
+
+char str0[] = "MODE =  ";
+char strs[3][6] = { "WATCH" , "BREED" , "CARRY" };
 
 
 //-----------------------------------------------------------------------------------
@@ -235,4 +239,17 @@ void drawFloor(int r){
     SquareFill2D(-r, -r, r, r);
   }
   glPopMatrix();
+}
+
+void drawStr(int m){
+  glColor3d(255/255, 140/255.0, 0.0);
+  glRasterPos2f(-4.25, 4.15);
+        char* c = str0;
+        while (*c) {
+          glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c++);
+        }
+        c = strs[m];
+        while (*c) {
+          glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c++);
+        }
 }

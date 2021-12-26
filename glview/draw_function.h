@@ -12,6 +12,7 @@ void drawMap(double x, double z, double range);
 void drawPointer(double cx, double cy);
 void drawFloor(int r);
 void drawCloud(void);
+void drawStr(int m);
 
   
 #ifdef __cplusplus
