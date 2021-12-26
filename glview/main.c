@@ -94,12 +94,11 @@ void liner_search (double x, double z) {
        case PICK:
         pick_obj = i;
         cats[pick_obj].task = PICKED;
-        MatArray tlarray;
-        tlarray = tlMat(0, 10, 0);
-        dotMat( cats[pick_obj].matrix, tlarray.matrix);
-        // cats[pick_obj].x = cats[pick_obj].matrix[12];
-        // cats[pick_obj].y = cats[pick_obj].matrix[13];
-        // cats[pick_obj].z = cats[pick_obj].matrix[14];
+        
+        GLfloat t[16];
+        copyMat(t, inv);
+        dotMat(t, tlMat( 0, 4, 20).matrix);
+        copyMat(cats[pick_obj].matrix, t);
         break;
 
       default:
@@ -221,12 +220,7 @@ void keyboard (unsigned char key, int x, int y)
     case 32:
       mode = (mode+1)%3;
       if(pick_obj>=0){
-        MatArray tlarray;
-        tlarray = tlMat(0, -10, 0);
-        dotMat( cats[pick_obj].matrix, tlarray.matrix);
-        cats[pick_obj].x = cats[pick_obj].matrix[12];
-        cats[pick_obj].y = cats[pick_obj].matrix[13];
-        cats[pick_obj].z = cats[pick_obj].matrix[14];
+        cats[pick_obj].matrix[13] = 0.0;
         cats[pick_obj].task = STAY;
         pick_obj = -1;
       }
@@ -246,6 +240,14 @@ void keyboard (unsigned char key, int x, int y)
   copyMat(camera, array2.matrix);
   gluInvertMatrix(camera, inv);
 
+  if(pick_obj>=0){
+    GLfloat t[16];
+    copyMat(t, inv);
+    dotMat(t, tlMat( 0, 4, 20).matrix);
+    copyMat(cats[pick_obj].matrix, t);
+  }
+ 
+
 }
 
 // -----------------------------------------------------------------------------------
@@ -262,12 +264,7 @@ void mouse(int button, int state, int x, int y)
     printf("%d\n",n);
   }else if(state == GLUT_DOWN && mode == PICK){
     if(pick_obj>=0){
-      MatArray tlarray;
-      tlarray = tlMat(0, -10, 0);
-      dotMat( cats[pick_obj].matrix, tlarray.matrix);
-      cats[pick_obj].x = cats[pick_obj].matrix[12];
-      cats[pick_obj].y = cats[pick_obj].matrix[13];
-      cats[pick_obj].z = cats[pick_obj].matrix[14];
+      cats[pick_obj].matrix[13] = 0.0;
       cats[pick_obj].task = STAY;
       pick_obj = -1;
     }else{
@@ -319,17 +316,7 @@ void mouse(int button, int state, int x, int y)
 void motion(int x, int y){
   px = (640 - x-40)/191.0;
   py = (770 - y-40)/191.0;
-  // if(mode == PICK && pick_obj>=0){
-  //   //pick_objのねこを動かす
-  //   MatArray array;
-  //   array = tlMat((x-mouse_x)/191.0, 0, (y-mouse_y)/191.0);
-  //   dotMat( cats[pick_obj].matrix, array.matrix);
-  //   cats[pick_obj].x = cats[pick_obj].matrix[12];
-  //   // cats[pick_obj].y = cats[pick_obj].matrix[13];
-  //   cats[pick_obj].z = cats[pick_obj].matrix[14];
-  //   mouse_x = x;
-  //   mouse_y = y;
-  // }
+
   glutPostRedisplay();
 }
 

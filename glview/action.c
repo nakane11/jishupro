@@ -139,7 +139,6 @@ void updateFunc(void){
                     cats[j]=cats[j+1];
                 }
                 i--; n--; 
-                if(i<pick_obj){pick_obj --;}
                 //printf("%d\n",n);
             }else{
                 tlarray = tlMat(0, -0.6, 0);
@@ -168,6 +167,7 @@ void updateFunc(void){
         cats[i].z = cats[i].matrix[14];
 
         if((abs(cats[i].x)>64||abs(cats[i].z)>64)&&cats[i].task!=DIE){
+            if(i==pick_obj){pick_obj=-1;}
             cats[i].task = DIE;
             cats[i].duration = 60;
             cats[i].r = 1.0;
