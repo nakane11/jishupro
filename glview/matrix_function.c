@@ -246,12 +246,9 @@ void initCat (int num){
        cats[i].flg = 0;
       
        unitMat(cats[i].matrix);
- 
-       MatArray array1, array2;
-       array1 = tlMat(cats[i].x, cats[i].y, cats[i].z);
-       array2 = y_rtMat(rand()%360-180.0);
-       dotMat(array2.matrix, array1.matrix);
-       dotMat( cats[i].matrix,array2.matrix);
+       MatArray array = y_rtMat(rand()%360-180.0);
+       dotMat(array.matrix, tlMat(cats[i].x, cats[i].y, cats[i].z).matrix );
+       dotMat( cats[i].matrix, array.matrix);
       
    }
    n = num;
@@ -273,39 +270,15 @@ void addCat(int i, int j){
        cats[i].flg = 0;
        
        unitMat(cats[n].matrix);
- 
-       MatArray array1, array2;
-       array1 = tlMat(cats[n].x, cats[n].y, cats[n].z);
-       array2 = y_rtMat(rand()%360-180.0);
-       dotMat(array2.matrix, array1.matrix);
-       dotMat( cats[n].matrix,array2.matrix);
+       MatArray array = y_rtMat(rand()%360-180.0);
+       dotMat(array.matrix, tlMat(cats[n].x, cats[n].y, cats[n].z).matrix);
+       dotMat( cats[n].matrix, array.matrix);
 
        cats[i].flg=0;
        cats[j].flg=0;
-       //printf("%d -> (%lf, %lf, %lf)\n",n, cats[n].x,cats[n].y,cats[n].z);
        n+=1;
    }
 }
  
 
- 
-void myUnProject(GLfloat winX, GLfloat winY, GLfloat winZ,
-	            GLfloat *model, GLfloat *proj, GLint *view,
-	            GLfloat* objX, GLfloat* objY, GLfloat* objZ)
-{
-    dotMat(model, proj);
-    GLfloat invPM[16];
-    gluInvertMatrix(model, invPM);
 
-    GLfloat invVp[4] = {2 * (winX - view[0]) / view[2] - 1.0 ,
-                        2 * (winY - view[1]) / view[3] - 1.0 ,
-                        2 * winZ - 1.0,
-                        1};
-    GLfloat V[4];
-    dotMat41(invPM, invVp, V);
-
-    *objX = V[0] / V[3];
-    *objY = V[1] / V[3];
-    *objZ = V[2] / V[3];
-
-}

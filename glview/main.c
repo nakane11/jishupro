@@ -18,22 +18,20 @@
 //-----------------------------------------------------------------------------------
 
 // 視点情報
-static double distance = 5.0, pitch = 0.0, yaw = 0.0, rx = 1.0;
+static double distance, pitch, yaw;
+static int rx;
 
 // マウス入力情報
-// GLint mouse_button = -1;
-GLint mouse_x = 0, mouse_y = 0;
+GLint mouse_x, mouse_y;
 
 int winW = 1280, winH = 960;
 
-float px=0, py=0; //ポインタ位置
-
-MatArray array1, array2;
+double px=0, py=0; //ポインタ位置
 
 double objX, objY, objZ; //ピッキングした座標
 
-float cz = 5.0; //カメラ高さ
-float ry = 0.0; //カメラ角度
+double cz = 5.0; //カメラ高さ
+double ry = 0.0; //カメラ角度
 
 typedef enum{
   WATCH,
@@ -185,13 +183,13 @@ void keyboard (unsigned char key, int x, int y)
         ry = ry+0.4/20;
       }
       if(cz<60){
-        pitch = -(GLfloat) 0.4;
+        pitch = - 0.4;
         cz += 0.4;
       }
       break;
     case 'x':
       if(cz>5){
-        pitch = (GLfloat) 0.4;
+        pitch =  0.4;
         cz -= 0.4;
         if(cz<60){
           ry = ry-0.4/20;
@@ -201,18 +199,18 @@ void keyboard (unsigned char key, int x, int y)
 
     //前後方向
     case 's':
-       distance = -(GLfloat) 0.4;
+       distance = - 0.4;
       break;
     case 'w':
-      distance = (GLfloat) 0.4;
+      distance =  0.4;
       break;
 
     //左右回転
     case 'a':
-      rx = -(GLfloat) 2;
+      rx = - 2;
       break;
     case 'd':
-      rx = (GLfloat) 2;
+      rx =  2;
       break;
 
     //モード切替
@@ -232,6 +230,7 @@ void keyboard (unsigned char key, int x, int y)
   }
 
   //カメラの行列を更新
+  MatArray array1, array2;
   array1 = tlMat( -yaw, pitch, -distance);
   array2 = y_rtMat(rx);
   dotMat(array1.matrix, camera);
@@ -253,7 +252,6 @@ void keyboard (unsigned char key, int x, int y)
 // -----------------------------------------------------------------------------------
 void mouse(int button, int state, int x, int y)
 {
-  // mouse_button = button;
   mouse_x = x;	mouse_y = y;
 
   if(state == GLUT_UP && mode == BREED){

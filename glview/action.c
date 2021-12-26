@@ -18,7 +18,7 @@ double catsDistance (int a, int b){
 
 void updateFunc(void){
     int i, j;
-    MatArray tlarray, rtarray;
+   
     // for(i=0;i<n;i++){
     //     for (j = i+1; j<n; j++){
     //         if (catsDistance(i, j) < 9.0){
@@ -55,8 +55,7 @@ void updateFunc(void){
                 cats[i].task = STAY;
                 cats[i].flg = 0;
             }
-            tlarray = tlMat(0, 0.1*param, 0);
-            dotMat( cats[i].matrix, tlarray.matrix);
+            dotMat( cats[i].matrix, tlMat(0, 0.1*param, 0).matrix);
             cats[i].duration --;
             break;
 
@@ -81,8 +80,7 @@ void updateFunc(void){
                 }
                 
             }
-            tlarray = tlMat(0, 0, cats[i].p_speed/400.0);
-            dotMat( cats[i].matrix, tlarray.matrix);
+            dotMat( cats[i].matrix, tlMat(0, 0, cats[i].p_speed/400.0).matrix);
             cats[i].duration --;
             break;
 
@@ -102,8 +100,11 @@ void updateFunc(void){
                 cats[i].task = WALK; //次のtask
             }
             //曲がりながら進む
+            MatArray tlarray, rtarray;
             tlarray = tlMat(0, 0, abs(cats[i].p_speed)/500.0);
-            if(cats[i].p_speed>0){rtarray = y_rtMat(0.5);}else{rtarray = y_rtMat(-0.5);}
+            if(cats[i].p_speed>0){
+                rtarray = y_rtMat(0.5);}else{rtarray = y_rtMat(-0.5);
+            }
             dotMat(tlarray.matrix , rtarray.matrix);
             dotMat( cats[i].matrix, tlarray.matrix);
             cats[i].duration --;
@@ -141,8 +142,7 @@ void updateFunc(void){
                 i--; n--; 
                 //printf("%d\n",n);
             }else{
-                tlarray = tlMat(0, -0.6, 0);
-                dotMat( cats[i].matrix, tlarray.matrix);
+                dotMat( cats[i].matrix, tlMat(0, -0.6, 0).matrix);
                 cats[i].duration --;
             }
             break;

@@ -83,7 +83,7 @@ void drowCuboid(double a, double b, double c){
     glPopMatrix();
 }
 
-//2D四角形
+//長方形
 void Square2D(float x1,float y1,float x2, float y2,float size){
  glLineWidth(size);
  glBegin(GL_LINE_LOOP);
@@ -103,6 +103,7 @@ void SquareFill2D(float x1,float y1,float x2, float y2){
   glEnd();
 }
 
+//雲
 void drawCloud(void){
   GLfloat color[] = {1.0, 1.0, 1.0, 1.0};
   glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color);
@@ -134,6 +135,7 @@ void drawCloud(void){
   }   
 }
 
+//猫
 void drawCat(int i)
 {
  
@@ -157,8 +159,6 @@ void drawCat(int i)
       facedisplay(cats[i].face, 1.0*size, 0.8*size,0.7*size);
 
       drowCuboid(2.0*size,  1.6*size,1.4*size);
-      
-
 
       glPushMatrix();
         glTranslated(-0.7*size, 0.8*size, 0.0); //左耳
@@ -182,7 +182,7 @@ void drawCat(int i)
 
 void drawMap(double x, double z, double range){
   
-  //三角形
+  //サーチライト
   glColor3d(1.0, 241.0/255, 0.0);
   glLineWidth(1.0f);
   glBegin(GL_LINE_LOOP);
@@ -191,24 +191,24 @@ void drawMap(double x, double z, double range){
     glVertex2f(x+(5*inv[0]+15*inv[8]+inv[12])/70, z+(5*inv[2]+15*inv[10]+inv[14])/70);
   glEnd();
 
-  glPointSize(5.0f); //点
+  glPointSize(5.0f);
   glBegin(GL_POINTS);
-    glVertex2f(x+inv[12]/70, z+inv[14]/70);
+    glVertex2f(x+inv[12]/70, z+inv[14]/70); //カメラ位置
 
     for(int i=0;i<n;i++){
       glPushMatrix();
         glColor3d(cats[i].r, cats[i].g, cats[i].b);
-        glVertex2f(x+cats[i].x/70, z+cats[i].z/70);
+        glVertex2f(x+cats[i].x/70, z+cats[i].z/70); //猫位置
       glPopMatrix();
     }
   glEnd();
   
   glColor3d(0.0, 0.0, 0.0);
-  SquareFill2D(x-range/70, z-range/70, x+range/70, z+range/70); //四角形
+  SquareFill2D(x-range/70, z-range/70, x+range/70, z+range/70); //マップ
   glColor3d(255/255, 140/255.0, 0.0);
-  Square2D(x-range/70, z-range/70, x+range/70, z+range/70, 1.5f);
+  Square2D(x-range/70, z-range/70, x+range/70, z+range/70, 1.5f); //マップ枠
   
-  Square2D(x-range/70-0.21, z-range/70, x-range/70-0.05, z+range/70, 1.0f);
+  Square2D(x-range/70-0.21, z-range/70, x-range/70-0.05, z+range/70, 1.0f); //高度計
   SquareFill2D(x-range/70-0.21, z-range/70, x-range/70-0.05, z-range/70+inv[13]/70*2.18);
 }
 
