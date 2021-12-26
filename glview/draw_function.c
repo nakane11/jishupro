@@ -90,12 +90,12 @@ void Square2D(float x1,float y1,float x2, float y2,float size){
  glEnd();
 }
 
-void SquareFill2D(int r){
+void SquareFill2D(float x1,float y1,float x2, float y2){
   glBegin(GL_QUADS);
-  glVertex2i(-r,-r);
-  glVertex2i(r,-r);
-  glVertex2i(r,r);
-  glVertex2i(-r,r);
+  glVertex2f(x1,y1);
+  glVertex2f(x2,y1);
+  glVertex2f(x2,y2);
+  glVertex2f(x1,y2);
   glEnd();
 }
 
@@ -103,14 +103,28 @@ void drawCloud(void){
   GLfloat color[] = {1.0, 1.0, 1.0, 1.0};
   glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color);
   srand(2);
-  for(int k=0;k<20;k++){
+  for(int k=0;k<30;k++){
     glPushMatrix();{
       glRotated(rand()%180, 0 , 1, 0);
-      int y = rand()%20+5;
-      int x = rand()%180-90;
-      int z = (rand()%2*2-1)*sqrt(9000-x*x-y*y);
+      int y = rand()%40+5;
+      int x = rand()%300-150;
+      int z = (rand()%2*2-1)*sqrt((rand()%10/10+1)*25000-x*x-y*y);
       glTranslated(x,y,z);
-      drowCuboid(rand()%16+4, 2.0+rand()%3, rand()%16+4);
+      
+      int a = rand()%16+16;
+      int b = 3.0;
+      int c = rand()%16+16;
+      drowCuboid(a, b, c);
+
+      glPushMatrix();{
+        glTranslated(0,-2.0,0);
+        drowCuboid(a-rand()%10, b, c-rand()%10);
+      }glPopMatrix();
+
+      glPushMatrix();{
+        glTranslated(0,2.0,0);
+        drowCuboid(a-rand()%6, b, c-rand()%6);
+      }glPopMatrix();
     }
     glPopMatrix();
   }   
@@ -165,11 +179,10 @@ void drawCat(int i)
 void drawMap(double x, double z, double range){
   GLfloat inv[16];
   gluInvertMatrix(camera.matrix, inv);
-  glColor3d(1.0, 1.0, 1.0);
-
-  Square2D(x+range/70, z-range/70, x-range/70, z+range/70, 1.0f); //四角形
+  
   //三角形
-  glColor4d(1.0, 241.0/255, 0.0, 0.1);
+  glColor3d(1.0, 241.0/255, 0.0);
+  glLineWidth(1.0f);
   glBegin(GL_LINE_LOOP);
     glVertex2f(x+inv[12]/70, z+inv[14]/70);
     glVertex2f(x+(-5*inv[0]+15*inv[8]+inv[12])/70, z+(-5*inv[2]+15*inv[10]+inv[14])/70);
@@ -186,10 +199,17 @@ void drawMap(double x, double z, double range){
         glVertex2f(x+cats[i].x/70, z+cats[i].z/70);
       glPopMatrix();
     }
-
   glEnd();
-  //printf("%f, %f\n",inv[12],inv[14]);
+  
+  glColor3d(0.0, 0.0, 0.0);
+  SquareFill2D(x-range/70, z-range/70, x+range/70, z+range/70); //四角形
+  glColor3d(1.0, 1.0, 1.0);
+  Square2D(x-range/70, z-range/70, x+range/70, z+range/70, 1.5f);
+  
+  Square2D(x-range/70-0.21, z-range/70, x-range/70-0.05, z+range/70, 1.0f);
+  SquareFill2D(x-range/70-0.21, z-range/70, x-range/70-0.05, z-range/70+inv[13]/70*2.18);
 }
+
 
 void drawPointer(double cx, double cy){
   glColor3d(1.0, 1.0, 1.0);
@@ -214,7 +234,7 @@ void drawFloor(int r){
  
     glRotated(-90, 1 , 0, 0);
     glTranslated(0, 0, -0.5);
-    SquareFill2D(r);
+    SquareFill2D(-r, -r, r, r);
   }
   glPopMatrix();
 }

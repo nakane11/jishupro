@@ -33,7 +33,7 @@ MatArray array1, array2;
 double objX, objY, objZ; //ピッキングした座標
 
 float cz = 5.0; //カメラ高さ
-float lz; //カメラ角度(tan <=1.0)
+float ry = 0.0; //カメラ角度
 
 typedef enum{
   WATCH,
@@ -54,7 +54,6 @@ void init(void)
   initCat(25); //ねこ生成
   texinit(); //テクスチャ作成
   unitMat(camera.matrix); //カメラ座標初期化
-  lz = tan((cz-5)/20);
 }
 
 void getWorldCood(int TargetX, int TargetY)
@@ -122,7 +121,7 @@ void display(void)
 {
   // フレームバッファのクリア
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  gluLookAt(0, 5, -10, 0, 1-600*lz, 2, 0, 1, 0);
+  gluLookAt(0, 5, -10, 0, 1-600*tan(ry), 2, 0, 1, 0);
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
@@ -171,7 +170,7 @@ void reshape (int w, int h)
 
   glMatrixMode (GL_PROJECTION);
   glLoadIdentity ();
-  gluPerspective(45.0, (GLfloat) w/(GLfloat) h, 1.0*6, 20.0*6);
+  gluPerspective(45.0, (GLfloat) w/(GLfloat) h, 1.0*6, 20.0*10);
 }
 
 //-----------------------------------------------------------------------------------
@@ -183,14 +182,24 @@ void keyboard (unsigned char key, int x, int y)
   switch (key) {
     //視点高さ
     case 'z':
-      pitch = -(GLfloat) 0.4;
-      cz += 0.4;
+      if(ry<1.57){
+        ry = ry+0.4/20;
+      }
+      if(cz<60){
+        pitch = -(GLfloat) 0.4;
+        cz += 0.4;
+      }
+      printf("cz:%f, ry:%f, pitch:%f\n",cz,ry,pitch);
       break;
     case 'x':
       if(cz>5){
         pitch = (GLfloat) 0.4;
         cz -= 0.4;
+        if(cz<60){
+          ry = ry-0.4/20;
+        }
       }
+      printf("cz:%f, ry:%f, pitch:%f\n",cz,ry,pitch);
       break;
     //前後方向
     case 's':
@@ -227,8 +236,6 @@ void keyboard (unsigned char key, int x, int y)
       break;
   }
   //カメラの行列を更新
-  lz = tan((cz-5)/20);
-  if(lz>1.0) lz = 1.0;
   array1 = tlMat( -yaw, pitch, -distance);
   array2 = y_rtMat(rx);
   dotMat(array1.matrix, camera.matrix);
