@@ -13,6 +13,8 @@ void drawPointer(double cx, double cy);
 void drawFloor(int r);
 void drawCloud(void);
 void drawStr(int m);
+void makeCloud(void);
+void drawCloud(void);
 
   
 #ifdef __cplusplus

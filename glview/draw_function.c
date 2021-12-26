@@ -19,6 +19,13 @@ static const GLfloat light_specular[]={1.0,1.0,1.0,1.0};
 char str0[] = "MODE =  ";
 char strs[3][6] = { "WATCH" , "BREED" , "CARRY" };
 
+typedef struct {
+    int r, x, y, z,
+        ax, az, bx, bz, cx, cz;
+} Cloud;
+
+static Cloud clouds[30];
+
 
 //-----------------------------------------------------------------------------------
 
@@ -104,31 +111,44 @@ void SquareFill2D(float x1,float y1,float x2, float y2){
 }
 
 //雲
+void makeCloud(void){
+  for(int s=0; s<30; s++){;
+    clouds[s].r = rand()%180;
+    clouds[s].x = rand()%300-150;
+    clouds[s].y = rand()%40+5;
+    clouds[s].z = (rand()%2*2-1)*sqrt((rand()%10/10+1)*25000-clouds[s].x*clouds[s].x-clouds[s].y*clouds[s].y);
+
+    clouds[s].ax = rand()%16+16;
+    clouds[s].az = rand()%16+16;
+
+    clouds[s].bx = clouds[s].ax-rand()%10;
+    clouds[s].bz = clouds[s].az-rand()%10;
+
+    clouds[s].cx = clouds[s].ax-rand()%10;
+    clouds[s].cz = clouds[s].az-rand()%10;
+  }
+}
+
 void drawCloud(void){
   GLfloat color[] = {1.0, 1.0, 1.0, 1.0};
   glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color);
-  srand(2);
-  for(int k=0;k<30;k++){
+ 
+  for(int s=0;s<30;s++){
     glPushMatrix();{
-      glRotated(rand()%180, 0 , 1, 0);
-      int y = rand()%40+5;
-      int x = rand()%300-150;
-      int z = (rand()%2*2-1)*sqrt((rand()%10/10+1)*25000-x*x-y*y);
-      glTranslated(x,y,z);
-      
-      int a = rand()%16+16;
-      int b = 3.0;
-      int c = rand()%16+16;
-      drowCuboid(a, b, c);
+      glRotated(clouds[s].r, 0 , 1, 0);
+      glTranslated(clouds[s].x, clouds[s].y, clouds[s].z);
+    
+      int h = 4;
+      drowCuboid(clouds[s].ax, h, clouds[s].az);
 
       glPushMatrix();{
-        glTranslated(0,-2.0,0);
-        drowCuboid(a-rand()%10, b, c-rand()%10);
+        glTranslated(0,-h/2,0);
+        drowCuboid(clouds[s].bx, h, clouds[s].bz);
       }glPopMatrix();
 
       glPushMatrix();{
-        glTranslated(0,2.0,0);
-        drowCuboid(a-rand()%6, b, c-rand()%6);
+        glTranslated(0,h/2,0);
+        drowCuboid(clouds[s].cx, h, clouds[s].cz);
       }glPopMatrix();
     }
     glPopMatrix();

@@ -52,6 +52,7 @@ void init(void)
   initCat(6); //ねこ生成
   texinit(); //テクスチャ作成
   unitMat(camera); //カメラ座標初期化
+  makeCloud(); //雲生成
   pick_obj = -1;
 }
 
@@ -125,7 +126,7 @@ void display(void)
   glPushMatrix();{
     glDisable( GL_LIGHTING ); //光源処理無効
     glRotated(atan2(4,12)*360.0/(2*PI), 1.0, 0.0, 0.0);
-    //drawStr(mode);
+    drawStr(mode);
     drawMap(-5, 5.2, 60);
     
     if(mode == BREED||mode == CARRY){
