@@ -201,7 +201,7 @@ void drawMap(double x, double z, double range){
   
   glColor3d(0.0, 0.0, 0.0);
   SquareFill2D(x-range/70, z-range/70, x+range/70, z+range/70); //四角形
-  glColor3d(1.0, 1.0, 1.0);
+  glColor3d(255/255, 140/255.0, 0.0);
   Square2D(x-range/70, z-range/70, x+range/70, z+range/70, 1.5f);
   
   Square2D(x-range/70-0.21, z-range/70, x-range/70-0.05, z+range/70, 1.0f);
@@ -227,7 +227,7 @@ void drawPointer(double cx, double cy){
 void drawFloor(int r){
   glPushMatrix();
   {
-    GLfloat color[] = {43.0/255, 79.0/255, 50.0/255, 1.0};
+    GLfloat color[] = {0.0/255, 84.0/255, 58.0/255, 1.0};
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color);
  
     glRotated(-90, 1 , 0, 0);
