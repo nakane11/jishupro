@@ -10,6 +10,7 @@
 #include "tex.h"
 #include "matrix_function.h"
 #include "action.h"
+#include "font0.h"
 
 #define PI 3.141592653589793
 
@@ -54,6 +55,8 @@ void init(void)
   unitMat(camera); //カメラ座標初期化
   makeCloud(); //雲生成
   pick_obj = -1;
+  readfont0();
+  
 }
 
 void getWorldCood(int TargetX, int TargetY)
@@ -116,8 +119,11 @@ void liner_search (double x, double z) {
 
 void display(void)
 {
+  
   // フレームバッファのクリア
+  glClearColor (0.0, 0.0, 1.0, 0.0);
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  
   gluLookAt(0, 5, -10, 0, 1-600*tan(ry), 2, 0, 1, 0);
 
   glMatrixMode(GL_MODELVIEW);
@@ -126,9 +132,9 @@ void display(void)
   glPushMatrix();{
     glDisable( GL_LIGHTING ); //光源処理無効
     glRotated(atan2(4,12)*360.0/(2*PI), 1.0, 0.0, 0.0);
-    drawStr(mode);
+    //drawStr(mode);
     drawMap(-5, 5.2, 60);
-    
+    drawfont0();
     if(mode == BREED||mode == CARRY){
       glTranslated(0,0.0,-5);
       drawPointer(px, py);
