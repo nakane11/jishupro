@@ -121,7 +121,7 @@ void display(void)
 {
   
   // フレームバッファのクリア
-  glClearColor (0.0, 0.0, 1.0, 0.0);
+  glClearColor (0.0, 0.0, 1.0, 1.0);
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   
   gluLookAt(0, 5, -10, 0, 1-600*tan(ry), 2, 0, 1, 0);

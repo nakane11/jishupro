@@ -1,4 +1,4 @@
-/*  GIMP header image file format (RGB): /home/mech-user/Documents/名称未設定.h  */
+/*  GIMP header image file format (RGB) */
 
 #define width0 68
 #define height0 30
@@ -9,7 +9,7 @@
 pixel[0] = (((data[0] - 33) << 2) | ((data[1] - 33) >> 4)); \
 pixel[1] = ((((data[1] - 33) & 0xF) << 4) | ((data[2] - 33) >> 2)); \
 pixel[2] = ((((data[2] - 33) & 0x3) << 6) | ((data[3] - 33))); \
-pixel[3] = 0;\
+pixel[3] = !(pixel[0]==255 && pixel[1]==255 && pixel[2]==255)*255 ;\
 data += 4; \
 }
 
@@ -152,16 +152,16 @@ void readfont0(){
 	for (int j = 0 ; j < height0;j++){
 			for (int i = 0 ; i < width0;i++){
 				HEADER_PIXEL(header_data,font0[height0-1-j][i]); //1pix読み込む
+				//printf("%d ",font0[height0-1-j][i][3]);
 			}
+			//printf("\n");
     }
 }
 
 void drawfont0(){
-	
-	// glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	// glEnable(GL_BLEND);
-	//glColor4f(1.0, 140.0/255,0.0, 0.0);
+  	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
 	glRasterPos2f(-4.25, 4.1);
 	glDrawPixels(width0,height0, GL_RGBA, GL_UNSIGNED_BYTE, font0);
-	//glFlush();
+	//glDisable(GL_BLEND);
 }

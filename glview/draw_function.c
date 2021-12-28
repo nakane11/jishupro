@@ -31,7 +31,6 @@ static Cloud clouds[30];
 
 void init3d(void){
   // クリアの値の設定
-  glClearColor (0.0, 0.0, 1.0, 0.0);
   glClearDepth( 1.0 );
 
   // デプステストを行う
