@@ -163,5 +163,5 @@ void drawfont0(){
 	glEnable(GL_BLEND);
 	glRasterPos2f(-4.25, 4.1);
 	glDrawPixels(width0,height0, GL_RGBA, GL_UNSIGNED_BYTE, font0);
-	//glDisable(GL_BLEND);
+	glDisable(GL_BLEND);
 }

@@ -39,7 +39,7 @@ typedef enum{
   BREED,
   CARRY
 } Mode; 
-
+const char* mode_name[3] = {"WATCH", "BREED", "CARRY"}; 
 Mode mode = WATCH;
 
 extern int pick_obj;
@@ -121,7 +121,7 @@ void display(void)
 {
   
   // フレームバッファのクリア
-  glClearColor (0.0, 0.0, 1.0, 1.0);
+  glClearColor (0.0, 0.0, 1.0, 0.0);
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   
   gluLookAt(0, 5, -10, 0, 1-600*tan(ry), 2, 0, 1, 0);
@@ -134,7 +134,7 @@ void display(void)
     glRotated(atan2(4,12)*360.0/(2*PI), 1.0, 0.0, 0.0);
     //drawStr(mode);
     drawMap(-5, 5.2, 60);
-    drawfont0();
+    //drawfont0();
     if(mode == BREED||mode == CARRY){
       glTranslated(0,0.0,-5);
       drawPointer(px, py);
@@ -228,6 +228,7 @@ void keyboard (unsigned char key, int x, int y)
         cats[pick_obj].task = STAY;
         pick_obj = -1;
       }
+      glutSetWindowTitle(mode_name[mode]);
       break;
 
 
@@ -304,10 +305,10 @@ int main(int argc, char** argv)
 {
   
   glutInit(&argc, argv);
-  glutInitDisplayMode ( GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH );
+  glutInitDisplayMode ( GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
   glutInitWindowSize (winW, winH);
   glutInitWindowPosition (50, 50);
-  glutCreateWindow ("planet");
+  glutCreateWindow (mode_name[mode]);
 
   init();
   
