@@ -267,6 +267,15 @@ void mouse(int button, int state, int x, int y)
   switch(mode){
     case BREED:
       if(i>-1){
+        
+        if(cats[i].scale==0.6){
+          cats[i].scale = 0.8;
+          break;
+        }else if(cats[i].scale==0.8){
+          cats[i].scale = 1.0;
+          break;
+        }
+
         if(cats[i].task!=JUMP){
           cats[i].task = JUMP;
           cats[i].duration = 0;
