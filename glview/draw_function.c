@@ -233,6 +233,7 @@ void drawMap(double x, double z, double range){
 
 
 void drawPointer(double cx, double cy){
+
   glColor3d(1.0, 1.0, 1.0);
   glLineWidth(20);   
 
@@ -245,6 +246,30 @@ void drawPointer(double cx, double cy){
     glVertex2f(cx, cy-0.3);
     glVertex2f(cx, cy+0.3);
   glEnd();
+}
+
+void drawColorPointer(double cx, double cy, int color, int pm){
+  if(color==0)
+    glColor3d(1.0, 0.0, 0.0);
+  else if(color==1)
+    glColor3d(0.0, 1.0, 0.0);
+  else if(color==2)
+    glColor3d(0.0, 0.0, 1.0);
+  else
+    glColor3d(1.0, 1.0, 1.0);
+    
+  glLineWidth(20);   
+
+  glBegin(GL_LINES);                                    // 横線
+    glVertex2f(cx-0.2, cy);
+    glVertex2f(cx+0.2, cy);
+  glEnd();
+  if(pm==1){
+    glBegin(GL_LINES);                                    // 縦線
+    glVertex2f(cx, cy-0.2);
+    glVertex2f(cx, cy+0.2);
+    glEnd();
+  }
 }
 
 void drawFloor(int r){

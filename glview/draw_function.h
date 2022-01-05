@@ -10,6 +10,7 @@ void init3d(void);
 void drawCat(int i);
 void drawMap(double x, double z, double range);
 void drawPointer(double cx, double cy);
+void drawColorPointer(double cx, double cy, int color, int pm);
 void drawFloor(int r);
 void drawCloud(void);
 void drawStr(int m);

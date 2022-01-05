@@ -22,7 +22,7 @@ static double distance, pitch, yaw;
 static int rx;
 
 // マウス入力情報
-GLint mouse_x, mouse_y;
+//GLint mouse_x, mouse_y;
 
 int winW = 1280, winH = 960;
 
@@ -33,12 +33,16 @@ double objX, objY, objZ; //ピッキングした座標
 double cz = 5.0; //カメラ高さ
 double ry = 0.0; //カメラ角度
 
+int rgb_flg = 0; //rgb
+int color_pm = 1;
+
 typedef enum{
   WATCH,
   BREED,
-  CARRY
+  CARRY,
+  COLOR
 } Mode; 
-const char* mode_name[3] = {"WATCH", "BREED", "CARRY"}; 
+const char* mode_name[] = {"WATCH", "BREED", "CARRY", "COLOR"}; 
 Mode mode = WATCH;
 
 extern int pick_obj;
@@ -77,34 +81,12 @@ void getWorldCood(int TargetX, int TargetY)
 }
 
  
-void liner_search (double x, double z) {
+int liner_search (double x, double z) {
  for (int i=0;i < n;i++) {
    if (abs(cats[i].x - x)*abs(cats[i].z-z)<2.0)
-   {
-     switch(mode){
-       case BREED:
-        if(cats[i].task!=JUMP){
-          cats[i].task = JUMP;
-          cats[i].duration = 0;
-        }
-        break;
-
-       case CARRY:
-        pick_obj = i;
-        cats[pick_obj].task = PICKED;
-        //カメラ位置に拘束
-        GLfloat t[16];
-        copyMat(t, inv);
-        dotMat(t, tlMat( 0, 4, 20).matrix);
-        copyMat(cats[pick_obj].matrix, t);
-        break;
-
-      default:
-        break;
-     }
-     return;
-   }
+     return i;
  }
+ return -1;
 }
  
 
@@ -134,6 +116,9 @@ void display(void)
     if(mode == BREED||mode == CARRY){
       glTranslated(0,0.0,-5);
       drawPointer(px, py);
+    }else if(mode == COLOR){
+      glTranslated(0,0.0,-5);
+      drawColorPointer(px, py, rgb_flg, color_pm);
     }
   }
   glPopMatrix();
@@ -216,9 +201,23 @@ void keyboard (unsigned char key, int x, int y)
       rx =  2;
       break;
 
+    //色変更
+    case 'r':
+      rgb_flg = 0;
+      color_pm *= -1;
+      break;
+    case 'g':
+      rgb_flg = 1;
+      color_pm *= -1;
+      break;
+    case 'b':
+      rgb_flg = 2;
+      color_pm *= -1;
+      break;
+
     //モード切替
     case 32: 
-      mode = (mode+1)%3;
+      mode = (mode+1)%4;
       if(pick_obj>=0){
         cats[pick_obj].matrix[13] = 0.0;
         cats[pick_obj].task = STAY;
@@ -256,23 +255,75 @@ void keyboard (unsigned char key, int x, int y)
 // -----------------------------------------------------------------------------------
 void mouse(int button, int state, int x, int y)
 {
-  mouse_x = x;	mouse_y = y;
-
-  if(state == GLUT_UP && mode == BREED){
+  int i=-1;
+  //mouse_x = x;	mouse_y = y;
+  if(state == GLUT_UP) 
+    return;
+  else{
     getWorldCood(x+6, y+30);
-    liner_search(objX, objZ);
-    //printf("%d\n",n);
-
-  }else if(state == GLUT_DOWN && mode == CARRY){
-    if(pick_obj>=0){
-      cats[pick_obj].matrix[13] = 0.0;
-      cats[pick_obj].task = STAY;
-      pick_obj = -1;
-    }else{
-      getWorldCood(x+6, y+30);
-      liner_search(objX, objZ);
-    }
+    i = liner_search(objX, objZ);
   }
+
+  switch(mode){
+    case BREED:
+      if(i>-1){
+        if(cats[i].task!=JUMP){
+          cats[i].task = JUMP;
+          cats[i].duration = 0;
+        }
+      }
+      break;
+    
+    case CARRY:
+      if(pick_obj>=0){ //離す
+        cats[pick_obj].matrix[13] = 0.0;
+        cats[pick_obj].task = STAY;
+        pick_obj = -1;
+      }else{
+        if(i>-1){
+          pick_obj = i;
+          cats[pick_obj].task = PICKED;
+          //カメラ位置に拘束
+          GLfloat t[16];
+          copyMat(t, inv);
+          dotMat(t, tlMat( 0, 4, 20).matrix);
+          copyMat(cats[pick_obj].matrix, t);
+        }
+      }
+      break;
+
+    case COLOR:
+      if(i>-1){
+        switch(rgb_flg){
+          case 0:
+            cats[i].r += color_pm*0.2;
+            if(cats[i].r>1.0)
+              cats[i].r=1.0;
+            if(cats[i].r<0.0)
+              cats[i].r=0.0;
+            break;
+          case 1:
+            cats[i].g += color_pm*0.2;
+            if(cats[i].g>1.0)
+              cats[i].g=1.0;
+            if(cats[i].g<0.0)
+              cats[i].g=0.0;
+            break;
+          case 2:
+            cats[i].b += color_pm*0.2;
+            if(cats[i].b>1.0)
+              cats[i].b=1.0;
+            if(cats[i].b<0.0)
+              cats[i].b=0.0;
+            break;
+        }
+      }
+      break;
+
+    default:
+      break;
+  }
+
   glutPostRedisplay();
 }
 
