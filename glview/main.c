@@ -10,7 +10,6 @@
 #include "tex.h"
 #include "matrix_function.h"
 #include "action.h"
-#include "font0.h"
 
 #define PI 3.141592653589793
 
@@ -50,12 +49,11 @@ extern int pick_obj;
 void init(void)
 {
   srand((unsigned int)time(NULL));
-  initCat(6); //ねこ生成
+  initCat(10); //ねこ生成
   texinit(); //テクスチャ作成
   unitMat(camera); //カメラ座標初期化
   makeCloud(); //雲生成
   pick_obj = -1;
-  readfont0();
   
 }
 
@@ -132,9 +130,7 @@ void display(void)
   glPushMatrix();{
     glDisable( GL_LIGHTING ); //光源処理無効
     glRotated(atan2(4,12)*360.0/(2*PI), 1.0, 0.0, 0.0);
-    //drawStr(mode);
     drawMap(-5, 5.2, 60);
-    //drawfont0();
     if(mode == BREED||mode == CARRY){
       glTranslated(0,0.0,-5);
       drawPointer(px, py);
@@ -265,7 +261,7 @@ void mouse(int button, int state, int x, int y)
   if(state == GLUT_UP && mode == BREED){
     getWorldCood(x+6, y+30);
     liner_search(objX, objZ);
-    printf("%d\n",n);
+    //printf("%d\n",n);
 
   }else if(state == GLUT_DOWN && mode == CARRY){
     if(pick_obj>=0){

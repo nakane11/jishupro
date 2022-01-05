@@ -180,9 +180,10 @@ void updateFunc(void){
     for (i = 0; i<n; i++){
        if(cats[i].flg){
            for (j = i+1; j<n; j++){
-               if(cats[j].flg && catsDistance(i, j)<250){
+               if(cats[j].flg ){
                    //printf("%lf\n",catsDistance(i,j));
                    addCat(i, j);
+                   //printf("%d\n",n);
                }
            }
        }

@@ -222,9 +222,9 @@ void initCat (int num){
    for (int i=0; i<num; i++){
        // double s = 0;
        // while(s<3*i){
-           cats[i].x = rand()%40-20;
-           cats[i].y = 0.0;
-           cats[i].z = -rand()%20;
+        cats[i].x = rand()%40-20;
+        cats[i].y = 0.0;
+        cats[i].z = -rand()%20;
            // s = 0;
            // for (int j = i-1; j>=0; j--){
            //     s+=fmin(catsDistance(i, j),3);
@@ -257,6 +257,9 @@ void initCat (int num){
 
 void addCat(int i, int j){
    if(n<N){
+       cats[i].flg=0;
+       cats[j].flg=0;
+
        cats[n].x = (cats[i].x+cats[j].x)/2.0;
        cats[n].y = 0.0;
        cats[n].z = (cats[i].z+cats[j].z)/2.0;
@@ -267,15 +270,13 @@ void addCat(int i, int j){
        cats[n].neck_angle = 0.0;
        cats[n].task = STAY;
        cats[n].duration = 0;
-       cats[i].flg = 0;
+       cats[n].flg = 0;
        
        unitMat(cats[n].matrix);
        MatArray array = y_rtMat(rand()%360-180.0);
        dotMat(array.matrix, tlMat(cats[n].x, cats[n].y, cats[n].z).matrix);
        dotMat( cats[n].matrix, array.matrix);
-
-       cats[i].flg=0;
-       cats[j].flg=0;
+       
        n+=1;
    }
 }
