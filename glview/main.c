@@ -300,7 +300,7 @@ void keyboard (unsigned char key, int x, int y)
       line_vec_num ++;
     }
   }
-  if(line_flg && (key == 'a' || key == 'd') && line_vec_num<=100){
+  if(line_flg && (key == 'a' || key == 'd') && line_vec_num<30){
     if(pre == 'w' || pre == 's'){
       line_vector[line_vec_num].x = inv[12];
       line_vector[line_vec_num].y = -0.5;
