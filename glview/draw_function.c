@@ -5,6 +5,7 @@
 
 #include "tex.h"
 #include "matrix_function.h"
+#include "draw_function.h"
 
 #define PI 3.141592653589793
 
@@ -26,7 +27,8 @@ typedef struct {
 
 static Cloud clouds[30];
 
-
+Vector line_vector[100];
+int line_vec_num;
 //-----------------------------------------------------------------------------------
 
 void init3d(void){
@@ -222,6 +224,15 @@ void drawMap(double x, double z, double range){
     }
   glEnd();
   
+  glLineWidth(0.8f);
+  glColor3d(1.0, 1.0, 1.0);
+  for(int k = 0; k<(line_vec_num-1); k++){ //線
+      glBegin( GL_LINES );
+      glVertex2f(x+line_vector[k].x/70, z+line_vector[k].z/70);
+      glVertex2f(x+line_vector[k+1].x/70, z+line_vector[k+1].z/70);
+      glEnd();
+  }
+  
   glColor3d(0.0, 0.0, 0.0);
   SquareFill2D(x-range/70, z-range/70, x+range/70, z+range/70); //マップ
   glColor3d(255/255, 140/255.0, 0.0);
@@ -285,15 +296,4 @@ void drawFloor(int r){
   glPopMatrix();
 }
 
-void drawStr(int m){
-  glColor3d(255/255, 140/255.0, 0.0);
-  glRasterPos2f(-4.25, 4.15);
-        char* c = str0;
-        while (*c) {
-          glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c++);
-        }
-        c = strs[m];
-        while (*c) {
-          glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c++);
-        }
-}
+

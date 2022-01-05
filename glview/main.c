@@ -40,12 +40,16 @@ typedef enum{
   WATCH,
   BREED,
   CARRY,
-  COLOR
+  COLOR,
+  LINE
 } Mode; 
-const char* mode_name[] = {"WATCH", "BREED", "CARRY", "COLOR"}; 
+const char* mode_name[] = {"WATCH", "BREED", "CARRY", "COLOR", "LINE"}; 
 Mode mode = WATCH;
 
 extern int pick_obj;
+
+int line_flg;
+unsigned char pre;
 
 //-----------------------------------------------------------------------------------
 // 初期化
@@ -55,7 +59,7 @@ void init(void)
   srand((unsigned int)time(NULL));
   initCat(10); //ねこ生成
   texinit(); //テクスチャ作成
-  unitMat(camera); //カメラ座標初期化
+  unitMat(camera); 
   makeCloud(); //雲生成
   pick_obj = -1;
   
@@ -103,6 +107,7 @@ void display(void)
   // フレームバッファのクリア
   glClearColor (0.0, 0.0, 1.0, 0.0);
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glDisable( GL_LIGHTING ); //光源処理無効
   
   gluLookAt(0, 5, -10, 0, 1-600*tan(ry), 2, 0, 1, 0);
 
@@ -110,7 +115,6 @@ void display(void)
   glLoadIdentity();
 
   glPushMatrix();{
-    glDisable( GL_LIGHTING ); //光源処理無効
     glRotated(atan2(4,12)*360.0/(2*PI), 1.0, 0.0, 0.0);
     drawMap(-5, 5.2, 60);
     if(mode == BREED||mode == CARRY){
@@ -135,6 +139,18 @@ void display(void)
   for(int i=0;i<n;i++){
     drawCat(i);
   }
+
+  glPushMatrix();{
+    glDisable( GL_LIGHTING ); 
+    glColor3d(1.0, 1.0, 1.0);
+    glLineWidth(5.0f);
+    for(int k = 0; k<(line_vec_num-1); k++){
+      glBegin( GL_LINES );
+      glVertex3f( line_vector[k].x, line_vector[k].y, line_vector[k].z);
+      glVertex3f( line_vector[k+1].x, line_vector[k+1].y, line_vector[k+1].z);
+      glEnd();
+    }
+  }glPopMatrix();
 
   glutSwapBuffers();
 }
@@ -215,14 +231,33 @@ void keyboard (unsigned char key, int x, int y)
       color_pm *= -1;
       break;
 
+    case 'n':
+    if(mode == LINE){
+      if(line_flg == 1){
+        line_flg = 0;
+      }else{
+        for (size_t i = 0; i < line_vec_num; ++i) {
+          line_vector[i] = (Vector){0, 0, 0};
+        }
+        line_vector[0].x = inv[12];
+        line_vector[0].y = 0;
+        line_vector[0].z = inv[14];
+        line_vec_num = 1;
+        line_flg = 1; //記録開始
+      }
+      break;
+    }
+
     //モード切替
     case 32: 
-      mode = (mode+1)%4;
+      mode = (mode+1)%5;
       if(pick_obj>=0){
         cats[pick_obj].matrix[13] = 0.0;
         cats[pick_obj].task = STAY;
         pick_obj = -1;
       }
+      if(line_flg == 1)
+        line_flg = 0;
       glutSetWindowTitle(mode_name[mode]);
       break;
 
@@ -248,6 +283,28 @@ void keyboard (unsigned char key, int x, int y)
     copyMat(cats[pick_obj].matrix, t);
   }
 
+  if(line_flg && (key == 'w' || key == 's')){
+    if(pre == 'w' || pre == 's'){
+      line_vector[line_vec_num-1].x = inv[12];
+      line_vector[line_vec_num-1].y = -0.5;
+      line_vector[line_vec_num-1].z = inv[14];
+    }else if(line_vec_num == 1){
+      line_vector[line_vec_num].x = inv[12];
+      line_vector[line_vec_num].y = -0.5;
+      line_vector[line_vec_num].z = inv[14];
+      line_vec_num ++;
+    }
+  }
+  if(line_flg && (key == 'a' || key == 'd') && line_vec_num<=100){
+    if(pre == 'w' || pre == 's'){
+      line_vector[line_vec_num].x = inv[12];
+      line_vector[line_vec_num].y = -0.5;
+      line_vector[line_vec_num].z = inv[14];
+      line_vec_num ++;
+    }
+  }
+  pre = key;
+
 }
 
 // -----------------------------------------------------------------------------------
@@ -267,7 +324,7 @@ void mouse(int button, int state, int x, int y)
   switch(mode){
     case BREED:
       if(i>-1){
-        
+
         if(cats[i].scale==0.6){
           cats[i].scale = 0.8;
           break;
