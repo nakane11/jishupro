@@ -5,6 +5,12 @@
 extern "C" {
 #endif
 
+typedef struct{
+  double x, y, z;
+}Vector;
+extern Vector line_vector[];
+extern int line_vec_num;
+
 
 void init3d(void);
 void drawCat(int i);
@@ -13,7 +19,6 @@ void drawPointer(double cx, double cy);
 void drawColorPointer(double cx, double cy, int color, int pm);
 void drawFloor(int r);
 void drawCloud(void);
-void drawStr(int m);
 void makeCloud(void);
 void drawCloud(void);
 
