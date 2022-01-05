@@ -10,6 +10,7 @@ typedef struct{
 }Vector;
 extern Vector line_vector[];
 extern int line_vec_num;
+extern GLUquadricObj *bucket, *paint;
 
 
 void init3d(void);
@@ -20,8 +21,8 @@ void drawColorPointer(double cx, double cy, int color, int pm);
 void drawFloor(int r);
 void drawCloud(void);
 void makeCloud(void);
-void drawCloud(void);
-
+void drawBucket(double r);
+void makeBucket();
   
 #ifdef __cplusplus
 }

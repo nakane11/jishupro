@@ -51,6 +51,8 @@ extern int pick_obj;
 int line_flg;
 unsigned char pre;
 
+
+
 //-----------------------------------------------------------------------------------
 // 初期化
 //-----------------------------------------------------------------------------------
@@ -62,7 +64,7 @@ void init(void)
   unitMat(camera); 
   makeCloud(); //雲生成
   pick_obj = -1;
-  
+  makeBucket();
 }
 
 void getWorldCood(int TargetX, int TargetY)
@@ -113,7 +115,10 @@ void display(void)
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-
+  if(mode == LINE){
+    drawBucket(line_vec_num/30.0);
+  }
+  
   glPushMatrix();{
     glRotated(atan2(4,12)*360.0/(2*PI), 1.0, 0.0, 0.0);
     drawMap(-5, 5.2, 60);

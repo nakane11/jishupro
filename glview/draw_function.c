@@ -27,8 +27,10 @@ typedef struct {
 
 static Cloud clouds[30];
 
-Vector line_vector[100];
+Vector line_vector[30];
 int line_vec_num;
+
+GLUquadricObj *bucket, *paint;
 //-----------------------------------------------------------------------------------
 
 void init3d(void){
@@ -223,7 +225,7 @@ void drawMap(double x, double z, double range){
       glPopMatrix();
     }
   glEnd();
-  
+
   glLineWidth(0.8f);
   glColor3d(1.0, 1.0, 1.0);
   for(int k = 0; k<(line_vec_num-1); k++){ //線
@@ -295,5 +297,27 @@ void drawFloor(int r){
   }
   glPopMatrix();
 }
+
+void drawBucket(double r){
+  glPushMatrix();{
+      glRotated(-90, 1.0, 0.0, 0.0);
+      glLineWidth(0.5f);
+    
+      glColor3d(190.0/255, 193.0/255, 195.0/255);
+      gluCylinder(bucket,0.8, 1.1, 2.0, 20, 1);
+      
+      glColor3d(1.0, 1.0, 1.0);
+      gluCylinder(paint, 0.8, 1.1-0.3*r, 2.0*(1-r), 20, 1);
+  }glPopMatrix();
+
+}
+
+void makeBucket(){
+  bucket = gluNewQuadric();
+  gluQuadricDrawStyle(bucket, GLU_LINE);
+  paint = gluNewQuadric();
+  gluQuadricDrawStyle(paint, GLU_FILL);
+}
+
 
 
