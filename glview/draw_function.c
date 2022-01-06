@@ -298,16 +298,39 @@ void drawFloor(int r){
   glPopMatrix();
 }
 
+void Circle2DFill(float radius,int x,int y)
+{
+ for (float th1 = 0.0;  th1 <= 360.0;  th1 = th1 + 1.0)
+ {             
+  float th2 = th1 + 10.0;
+  float th1_rad = th1 / 180.0 * PI; 
+  float th2_rad = th2 / 180.0 * PI;
+
+  float x1 = radius * cos(th1_rad);
+  float y1 = radius * sin(th1_rad);
+  float x2 = radius * cos(th2_rad);
+  float y2 = radius * sin(th2_rad);
+
+  glBegin(GL_TRIANGLES); 
+   glVertex2f( x, y );
+   glVertex2f( x1+x, y1+y );     
+   glVertex2f( x2+x, y2+y );
+  glEnd();
+ } 
+}
+
 void drawBucket(double r){
   glPushMatrix();{
       glRotated(-90, 1.0, 0.0, 0.0);
       glLineWidth(0.5f);
     
       glColor3d(190.0/255, 193.0/255, 195.0/255);
-      gluCylinder(bucket,0.8, 1.1, 2.0, 20, 1);
+      gluCylinder(bucket,0.8, 1.1, 2.0, 40, 1);
       
       glColor3d(1.0, 1.0, 1.0);
       gluCylinder(paint, 0.8, 1.1-0.3*r, 2.0*(1-r), 20, 1);
+      if (r<1.0)
+        Circle2DFill(0.8,0,0);
   }glPopMatrix();
 
 }
