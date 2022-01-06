@@ -67,6 +67,11 @@ void init(void)
   makeBucket();
 }
 
+double line_distance(int i, int j){
+  return (line_vector[i].x-line_vector[j].x)*(line_vector[i].x-line_vector[j].x) 
+        +(line_vector[i].z-line_vector[j].z)*(line_vector[i].z-line_vector[j].z);
+}
+
 void getWorldCood(int TargetX, int TargetY)
 {
 
@@ -240,18 +245,49 @@ void keyboard (unsigned char key, int x, int y)
     if(mode == LINE){
       if(line_flg == 1){
         line_flg = 0;
+        for(int i=0;i<line_vec_num; i++){
+          printf("(%lf, %lf)\n",line_vector[i].x, line_vector[i].z);
+        }
+
+        // 1,6->1.058500
+        // 6,11->1.341924
+        // 4,7->0.183672
+        // 2,8->0.017051
+        // 5,9->0.000646
+        // 3,10->0.519728
+
+
+        if(line_vec_num>10){
+          printf("1,6->%lf\n",line_distance(0,5));
+          printf("6,11->%lf\n",line_distance(5,10));
+          printf("4,7->%lf\n",line_distance(3,6));
+          printf("2,8->%lf\n",line_distance(1,7));
+          printf("5,9->%lf\n",line_distance(4,8));
+          printf("3,10->%lf\n",line_distance(2,9));
+
+        }
+        
       }else{
         for (size_t i = 0; i < line_vec_num; ++i) {
           line_vector[i] = (Vector){0, 0, 0};
         }
         line_vector[0].x = inv[12];
-        line_vector[0].y = 0;
+        line_vector[0].y = -0.5;
         line_vector[0].z = inv[14];
         line_vec_num = 1;
         line_flg = 1; //記録開始
       }
       break;
     }
+
+    case 13: //Enter
+      if(line_vec_num == 11){
+        //五芒星判定
+        if(line_distance(0,5)<2.0 && line_distance(5,10)<2.0 && line_distance(3,6)<2.0 && line_distance(1,7)<2.0 && line_distance(4,8)<2.0 && line_distance(2,9)<2.0){
+          //円を描画, 錬成
+        }
+      }
+      break;
 
     //モード切替
     case 32: 
