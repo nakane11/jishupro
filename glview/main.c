@@ -155,7 +155,11 @@ void display(void)
     drawCat(i);
   }
 
+<<<<<<< HEAD
   //if(line_vec_num>1){ //mode = LINEで線を描画
+=======
+  if(line_vec_num>1){ //mode = LINEで線を描画
+>>>>>>> 83a07b5af7649f1682994351a5e3e2fbc31fc778
     glPushMatrix();{
       glDisable( GL_LIGHTING ); 
       glColor3d(1.0, 1.0, 1.0);
@@ -165,6 +169,7 @@ void display(void)
         glVertex3f( line_vector[k].x, line_vector[k].y, line_vector[k].z);
         glVertex3f( line_vector[k+1].x, line_vector[k+1].y, line_vector[k+1].z);
         glEnd();
+<<<<<<< HEAD
       }
 
       if(mode == FUSION){ //fusion_Circleで描画, 1を返すと終了処理
@@ -177,6 +182,20 @@ void display(void)
 
     }glPopMatrix();
   //}
+=======
+      }
+
+      if(mode == FUSION){ //fusion_Circleで描画, 1を返すと終了処理
+        if(fusion_Circle()){
+          mode = LINE;
+          line_init();
+          line_flg = 0;
+        }
+      }
+
+    }glPopMatrix();
+  }
+>>>>>>> 83a07b5af7649f1682994351a5e3e2fbc31fc778
 
   glutSwapBuffers();
 }
@@ -198,6 +217,7 @@ void reshape (int w, int h)
   glLoadIdentity ();
   gluPerspective(45.0, (GLfloat) w/(GLfloat) h, 1.0*6, 20.0*10);
 }
+
 
 //-----------------------------------------------------------------------------------
 // キーボード入力のコールバック関数
@@ -263,11 +283,19 @@ void keyboard (unsigned char key, int x, int y)
     case 'n':
       //描画終了後, 保存した頂点を破棄する(modeに依らない)
       if(line_flg == 0 && line_vec_num>0){ 
+<<<<<<< HEAD
         // for (size_t i = 0; i < line_vec_num; ++i) {
         //     line_vector[i] = (Vector){0, 0, 0};
         // }
         // line_vec_num=0;
         line_init();
+=======
+        for (size_t i = 0; i < line_vec_num; ++i) {
+            line_vector[i] = (Vector){0, 0, 0};
+        }
+        line_vec_num=0;
+        //line_init();
+>>>>>>> 83a07b5af7649f1682994351a5e3e2fbc31fc778
         break;
       }
     
@@ -306,15 +334,23 @@ void keyboard (unsigned char key, int x, int y)
       glutSetWindowTitle(mode_name[mode]); //ウィンドウ名変更
       break;
 
+    // case 13:
+    //   printf("%d\n",pre_key);
+    //   break;
     case 27:
       exit(0);
       break;
   }
+<<<<<<< HEAD
   //printf("2->%d\n",rdx);
+=======
+
+>>>>>>> 83a07b5af7649f1682994351a5e3e2fbc31fc778
   if(mode == LINE){ //mode = LINEのとき移動速度増加
     dx*=3.0;
     dz*=3.0;
   }
+  printf("%lf\n",dz);
 
   //キー入力した差分に応じてカメラの行列を更新
   MatArray array1, array2;
