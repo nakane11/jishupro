@@ -10,6 +10,7 @@
 #include "tex.h"
 #include "matrix_function.h"
 #include "action.h"
+#include "line.h"
 
 #define PI 3.141592653589793
 
@@ -17,24 +18,14 @@
 // グローバル変数
 //-----------------------------------------------------------------------------------
 
-// 視点情報
-static double distance, pitch, yaw;
-static int rx;
-
-// マウス入力情報
-//GLint mouse_x, mouse_y;
-
 int winW = 1280, winH = 960;
 
-double px=0, py=0; //ポインタ位置
+double pointer_x=0, pointer_y=0; //ポインタ位置
 
 double objX, objY, objZ; //ピッキングした座標
 
-double cz = 5.0; //カメラ高さ
-double ry = 0.0; //カメラ角度
-
-int rgb_flg = 0; //rgb
-int color_pm = 1;
+double cam_height = 5.0; //カメラ高さ
+double cam_angle = 0.0; //カメラ角度
 
 typedef enum{
   WATCH,
@@ -46,13 +37,13 @@ typedef enum{
 const char* mode_name[] = {"WATCH", "BREED", "CARRY", "COLOR", "LINE"}; 
 Mode mode = WATCH;
 
+int rgb_flg = 0; //r=0, g=1, b=2
+int rgb_pm = 1; 
+
 extern int pick_obj;
 
 int line_flg;
-unsigned char pre;
 
-double ex, ez; //図形重心
-double r;
 
 //-----------------------------------------------------------------------------------
 // 初期化
@@ -64,23 +55,8 @@ void init(void)
   texinit(); //テクスチャ作成
   unitMat(camera); 
   makeCloud(); //雲生成
-  pick_obj = -1;
   makeBucket();
-}
-
-double line_distance(int i, int j){
-  return (line_vector[i].x-line_vector[j].x)*(line_vector[i].x-line_vector[j].x) 
-        +(line_vector[i].z-line_vector[j].z)*(line_vector[i].z-line_vector[j].z);
-}
-
-double line_radius(){
-  double sum;
-  for (int i; i<line_vec_num-1; i++){
-    sum += (line_vector[i].x-ex)*(line_vector[i].x-ex) 
-        +(line_vector[i].z-ez)*(line_vector[i].z-ez);
-  }
-  sum /= line_vec_num;
-  return sqrt(sum);
+  pick_obj = -1;
 }
 
 void shaking(){ //地震
@@ -97,9 +73,9 @@ void shaking(){ //地震
   if(count==12)
     count = 0;
 }
+
 void getWorldCood(int TargetX, int TargetY)
 {
-
 	double modelview[16];
 	glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
 
@@ -112,12 +88,12 @@ void getWorldCood(int TargetX, int TargetY)
 	float z;
 
 	glReadPixels(TargetX,winH - TargetY,1,1,GL_DEPTH_COMPONENT,GL_FLOAT,&z);
-	gluUnProject(TargetX,winH - TargetY,z,modelview,projection,viewport,&objX,&objY,&objZ);
-	
+	gluUnProject(TargetX,winH - TargetY,z,modelview,projection,viewport,&objX,&objY,&objZ);	
 }
 
  
 int liner_search (double x, double z) {
+  //(x,y)との距離が2.0より小さい猫
  for (int i=0;i < n;i++) {
    if (abs(cats[i].x - x)*abs(cats[i].z-z)<2.0)
      return i;
@@ -138,7 +114,7 @@ void display(void)
   //shaking();
   glClearColor (0.0, 0.0, 1.0, 0.0);
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  gluLookAt(0, 5, -10, 0, 1-600*tan(ry), 2, 0, 1, 0);
+  gluLookAt(0, 5, -10, 0, 1-600*tan(cam_angle), 2, 0, 1, 0);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
@@ -151,10 +127,10 @@ void display(void)
 
     if(mode == BREED||mode == CARRY){
       glTranslated(0,0.0,-5);
-      drawPointer(px, py);
+      drawPointer(pointer_x, pointer_y);
     }else if(mode == COLOR){
       glTranslated(0,0.0,-5);
-      drawColorPointer(px, py, rgb_flg, color_pm);
+      drawColorPointer(pointer_x, pointer_y, rgb_flg, rgb_pm);
     }
   }
   glPopMatrix();
@@ -214,56 +190,60 @@ void reshape (int w, int h)
 //-----------------------------------------------------------------------------------
 void keyboard (unsigned char key, int x, int y)
 {
-  yaw=0; pitch=0; distance=0; rx=0;
+  static unsigned char pre_key;
+  // 視点移動変位
+  double dx = 0.0, dy = 0.0, dz = 0.0;
+  int rdx;
+
   switch (key) {
     //視点高さ
     case 'z':
-      if(ry<1.57){
-        ry = ry+0.4/20;
+      if(cam_angle<1.57){
+        cam_angle = cam_angle+0.4/20;
       }
-      if(cz<60){
-        pitch = - 0.4;
-        cz += 0.4;
+      if(cam_height<60){
+        dy = - 0.4;
+        cam_height += 0.4;
       }
       break;
     case 'x':
-      if(cz>5){
-        pitch =  0.4;
-        cz -= 0.4;
-        if(cz<60){
-          ry = ry-0.4/20;
+      if(cam_height>5){
+        dy =  0.4;
+        cam_height -= 0.4;
+        if(cam_height<60){
+          cam_angle = cam_angle-0.4/20;
         }
       }
       break;
 
     //前後方向
     case 's':
-       distance = - 0.4;
+      dz = - 0.4;
       break;
     case 'w':
-      distance =  0.4;
+      dz =  0.4;
       break;
 
     //左右回転
     case 'a':
-      rx = - 2;
+      rdx = - 2;
       break;
     case 'd':
-      rx =  2;
+      rdx =  2;
       break;
 
     //色変更
     case 'r':
       rgb_flg = 0;
-      color_pm *= -1;
+      rgb_pm *= -1;
       break;
     case 'g':
       rgb_flg = 1;
-      color_pm *= -1;
+      rgb_pm *= -1;
       break;
     case 'b':
       rgb_flg = 2;
-      color_pm *= -1;
+      rgb_pm *= -1;
       break;
 
     case 'n':
@@ -291,15 +271,8 @@ void keyboard (unsigned char key, int x, int y)
     case 13: //Enter
       if(line_vec_num == 11){
         //五芒星判定
-        if(line_distance(0,5)<20 && line_distance(5,10)<20 && line_distance(3,6)<20 && line_distance(1,7)<20 && line_distance(4,8)<20 && line_distance(2,9)<20){
-          //重心を計算
-          for(int k = 0; k < line_vec_num; k++){
-            ex += line_vector[k].x;
-            ez += line_vector[k].z;
-          }
-          ex /= line_vec_num;  ez /= line_vec_num;
-          //半径を計算
-          r = line_radius();
+        if(line_isstar(20)){
+          line_culc();
           
           //円を描画, 錬成
         }
@@ -327,8 +300,8 @@ void keyboard (unsigned char key, int x, int y)
 
   //カメラの行列を更新
   MatArray array1, array2;
-  array1 = tlMat( -yaw, pitch, -distance);
-  array2 = y_rtMat(rx);
+  array1 = tlMat( -dx, dy, -dz);
+  array2 = y_rtMat(rdx);
   dotMat(array1.matrix, camera);
   dotMat(array2.matrix, array1.matrix);
   copyMat(camera, array2.matrix);
@@ -342,7 +315,7 @@ void keyboard (unsigned char key, int x, int y)
   }
 
   if(line_flg && (key == 'w' || key == 's')){
-    if(pre == 'w' || pre == 's'){
+    if(pre_key == 'w' || pre_key == 's'){
       line_vector[line_vec_num-1].x = inv[12];
       line_vector[line_vec_num-1].y = -0.5;
       line_vector[line_vec_num-1].z = inv[14];
@@ -354,14 +327,14 @@ void keyboard (unsigned char key, int x, int y)
     }
   }
   if(line_flg && (key == 'a' || key == 'd') && line_vec_num<30){
-    if(pre == 'w' || pre == 's'){
+    if(pre_key == 'w' || pre_key == 's'){
       line_vector[line_vec_num].x = inv[12];
       line_vector[line_vec_num].y = -0.5;
       line_vector[line_vec_num].z = inv[14];
       line_vec_num ++;
     }
   }
-  pre = key;
+  pre_key = key;
 
 }
 
@@ -371,7 +344,7 @@ void keyboard (unsigned char key, int x, int y)
 void mouse(int button, int state, int x, int y)
 {
   int i=-1;
-  //mouse_x = x;	mouse_y = y;
+
   if(state == GLUT_UP) 
     return;
   else{
@@ -420,21 +393,21 @@ void mouse(int button, int state, int x, int y)
       if(i>-1){
         switch(rgb_flg){
           case 0:
-            cats[i].r += color_pm*0.2;
+            cats[i].r += rgb_pm*0.2;
             if(cats[i].r>1.0)
               cats[i].r=1.0;
             if(cats[i].r<0.0)
               cats[i].r=0.0;
             break;
           case 1:
-            cats[i].g += color_pm*0.2;
+            cats[i].g += rgb_pm*0.2;
             if(cats[i].g>1.0)
               cats[i].g=1.0;
             if(cats[i].g<0.0)
               cats[i].g=0.0;
             break;
           case 2:
-            cats[i].b += color_pm*0.2;
+            cats[i].b += rgb_pm*0.2;
             if(cats[i].b>1.0)
               cats[i].b=1.0;
             if(cats[i].b<0.0)
@@ -455,8 +428,9 @@ void mouse(int button, int state, int x, int y)
 // マウス移動のコールバック関数
 // -----------------------------------------------------------------------------------
 void motion(int x, int y){
-  px = (640 - x-40)/191.0;
-  py = (770 - y-40)/191.0;
+  //マウス位置をポインタ位置に変換
+  pointer_x = (640 - x-40)/191.0;
+  pointer_y = (770 - y-40)/191.0;
 
   glutPostRedisplay();
 }

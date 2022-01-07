@@ -5,11 +5,6 @@
 extern "C" {
 #endif
 
-typedef struct{
-  double x, y, z;
-}Vector;
-extern Vector line_vector[];
-extern int line_vec_num;
 extern GLUquadricObj *bucket, *paint;
 
 

@@ -6,6 +6,7 @@
 #include "tex.h"
 #include "matrix_function.h"
 #include "draw_function.h"
+#include "line.h"
 
 #define PI 3.141592653589793
 
@@ -26,9 +27,6 @@ typedef struct {
 } Cloud;
 
 static Cloud clouds[30];
-
-Vector line_vector[30];
-int line_vec_num;
 
 GLUquadricObj *bucket, *paint;
 //-----------------------------------------------------------------------------------
@@ -53,7 +51,7 @@ void init3d(void){
 }
 
 //直方体
-void drowCuboid(double a, double b, double c){
+void Cuboid(double a, double b, double c){
   GLdouble vertex[][3] = {
       { -a/2.0, -b/2.0, -c/2.0 },
       {  a/2.0, -b/2.0, -c/2.0 },
@@ -113,6 +111,27 @@ void SquareFill2D(float x1,float y1,float x2, float y2){
   glEnd();
 }
 
+void Circle3DFill(double radius,double x, double y, double z)
+{
+ for (double th1 = 0.0;  th1 <= 360.0;  th1 = th1 + 1.0)
+ {             
+  double th2 = th1 + 10.0;
+  double th1_rad = th1 / 180.0 * PI; 
+  double th2_rad = th2 / 180.0 * PI;
+
+  double x1 = radius * cos(th1_rad);
+  double y1 = radius * sin(th1_rad);
+  double x2 = radius * cos(th2_rad);
+  double y2 = radius * sin(th2_rad);
+
+  glBegin(GL_TRIANGLES); 
+   glVertex3d( x, y, z );
+   glVertex3d( x1+x, y, y1+z );     
+   glVertex3d( x2+x, y, y2+z );
+  glEnd();
+ } 
+}
+
 //雲
 void makeCloud(void){
   for(int s=0; s<30; s++){;
@@ -142,16 +161,16 @@ void drawCloud(void){
       glTranslated(clouds[s].x, clouds[s].y, clouds[s].z);
     
       int h = 4;
-      drowCuboid(clouds[s].ax, h, clouds[s].az);
+      Cuboid(clouds[s].ax, h, clouds[s].az);
 
       glPushMatrix();{
         glTranslated(0,-h/2,0);
-        drowCuboid(clouds[s].bx, h, clouds[s].bz);
+        Cuboid(clouds[s].bx, h, clouds[s].bz);
       }glPopMatrix();
 
       glPushMatrix();{
         glTranslated(0,h/2,0);
-        drowCuboid(clouds[s].cx, h, clouds[s].cz);
+        Cuboid(clouds[s].cx, h, clouds[s].cz);
       }glPopMatrix();
     }
     glPopMatrix();
@@ -172,7 +191,7 @@ void drawCat(int i)
 
     glMultMatrixf( cats[i].matrix );
 
-    drowCuboid(2.0*size, 1.0*size, 3.0*size); //胴体
+    Cuboid(2.0*size, 1.0*size, 3.0*size); //胴体
     
     glPushMatrix();
       glTranslated(0*size, 1.3*size, 1.4*size); //頭
@@ -181,7 +200,7 @@ void drawCat(int i)
       //テクスチャマッピング
       facedisplay(cats[i].face, 1.0*size, 0.8*size,0.7*size);
 
-      drowCuboid(2.0*size,  1.6*size,1.4*size);
+      Cuboid(2.0*size,  1.6*size,1.4*size);
 
       glPushMatrix();
         glTranslated(-0.7*size, 0.8*size, 0.0); //左耳
@@ -203,6 +222,7 @@ void drawCat(int i)
   glFlush();
 }
 
+//地図
 void drawMap(double x, double z, double range){
   
   //サーチライト
@@ -244,7 +264,7 @@ void drawMap(double x, double z, double range){
   SquareFill2D(x-range/70-0.21, z-range/70, x-range/70-0.05, z-range/70+inv[13]/70*2.18);
 }
 
-
+//ポインタ
 void drawPointer(double cx, double cy){
 
   glColor3d(1.0, 1.0, 1.0);
@@ -285,6 +305,7 @@ void drawColorPointer(double cx, double cy, int color, int pm){
   }
 }
 
+//床
 void drawFloor(int r){
   glPushMatrix();
   {
@@ -298,25 +319,13 @@ void drawFloor(int r){
   glPopMatrix();
 }
 
-void Circle3DFill(double radius,double x, double y, double z)
-{
- for (double th1 = 0.0;  th1 <= 360.0;  th1 = th1 + 1.0)
- {             
-  double th2 = th1 + 10.0;
-  double th1_rad = th1 / 180.0 * PI; 
-  double th2_rad = th2 / 180.0 * PI;
 
-  double x1 = radius * cos(th1_rad);
-  double y1 = radius * sin(th1_rad);
-  double x2 = radius * cos(th2_rad);
-  double y2 = radius * sin(th2_rad);
-
-  glBegin(GL_TRIANGLES); 
-   glVertex3d( x, y, z );
-   glVertex3d( x1+x, y, y1+z );     
-   glVertex3d( x2+x, y, y2+z );
-  glEnd();
- } 
+//バケツ
+void makeBucket(){
+  bucket = gluNewQuadric();
+  gluQuadricDrawStyle(bucket, GLU_LINE);
+  paint = gluNewQuadric();
+  gluQuadricDrawStyle(paint, GLU_FILL);
 }
 
 void drawBucket(double r){
@@ -337,15 +346,9 @@ void drawBucket(double r){
       Circle3DFill(1.1-0.3*r, 0, 2.0*(1-r), 0);
     
   }glPopMatrix();
-
 }
 
-void makeBucket(){
-  bucket = gluNewQuadric();
-  gluQuadricDrawStyle(bucket, GLU_LINE);
-  paint = gluNewQuadric();
-  gluQuadricDrawStyle(paint, GLU_FILL);
-}
+
 
 
 
