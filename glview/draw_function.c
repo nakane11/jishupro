@@ -192,7 +192,7 @@ void drawCat(int i)
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color);
 
     glMultMatrixf( cats[i].matrix );
-
+    glTranslated(0, -(1-size)*0.5, 0);
     Cuboid(2.0*size, 1.0*size, 3.0*size); //胴体
     
     glPushMatrix();
