@@ -89,20 +89,42 @@ void line_culc(){
     printf("fu->%d\n", fusion_num);
 }
 
+void fusionCat(int num){
+    cats[n].x = line_cx;
+    cats[n].y = 0.0;
+    cats[n].z = line_cz;
+    cats[n].scale = num;
+    cats[n].r = 0.0;
+    cats[n].g =0.0;
+    cats[n].b =  0.0;
+    cats[n].neck_angle = 0.0;
+    cats[n].task = 2;
+    cats[n].duration = 0;
+    cats[n].flg = 0;
+    
+    unitMat(cats[n].matrix);
+    MatArray array = y_rtMat(rand()%360-180.0);
+    dotMat(array.matrix, tlMat(cats[n].x, cats[n].y, cats[n].z).matrix);
+    dotMat( cats[n].matrix, array.matrix);
+    n+=1;
+}
+
 int fusion_Circle(){
     static int count = 1;
     int d = 720 / (fusion_num + 1);
+ 
     if(count > 60*7 && count <= 60*7+720){
         Circle3D(line_r, (count-60*7)/2.0, line_cx, -0.5, line_cz);
         if((count-60*7) % d == 0){
             cats[fusion_list[(count-60*7)/d -1]].r = 0.0;
             cats[fusion_list[(count-60*7)/d -1]].g = 0.0;
             cats[fusion_list[(count-60*7)/d -1]].b = 0.0;
-            printf("%d\n", (count-60*7)/d -1);
+            
         }
-    }else if(count < 60*7+720 + 60*3){
+    }else if(count < 60*7+720 + 60*5){
         Circle3D(line_r, 360, line_cx, -0.5, line_cz);
-    }else{
+    }else if(count == 60*7+720 + 60*5){ 
+        fusionCat(fusion_num);
         count = 0;
         return 1;
     }
