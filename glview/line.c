@@ -42,12 +42,13 @@ double line_distance(int i, int j){
 }
 
 double line_radius(double cx, double cz){
-  double sum;
-  for (int i; i<line_vec_num-1; i++){
+  double sum = 0.0;
+  for (int i=0; i<line_vec_num-1; i++){
     sum += (line_vector[i].x-cx)*(line_vector[i].x-cx) 
         +(line_vector[i].z-cz)*(line_vector[i].z-cz);
   }
-  sum /= line_vec_num;
+  
+  sum /= (double)line_vec_num;
   return sqrt(sum);
 }
 
@@ -56,7 +57,6 @@ void line_init(){
         line_vector[i] = (Vector){0, 0, 0};
     }
     line_vec_num=0;
-    fusion_num = 0;
 }
 
 
@@ -75,10 +75,10 @@ void line_calc(){
         line_cx += line_vector[k].x;
         line_cz += line_vector[k].z;
     }
-    line_cx /= (double)line_vec_num;  line_cz /= (double)line_vec_num;
+    line_cx /= line_vec_num;  line_cz /= line_vec_num;
     //半径を計算
     line_r = line_radius(line_cx, line_cz);
-
+    
     fusion_num = 0;
    
     for(int i=0; i<n; i++){
