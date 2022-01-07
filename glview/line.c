@@ -54,15 +54,9 @@ double line_radius(double cx, double cz){
 
 void line_init(){
     for (size_t i = 0; i < line_vec_num; ++i) {
-<<<<<<< HEAD
         line_vector[i] = (Vector){0, 0, 0};
     }
     line_vec_num=0;
-=======
-            line_vector[i] = (Vector){0, 0, 0};
-        }
-        line_vec_num=0;
->>>>>>> 83a07b5af7649f1682994351a5e3e2fbc31fc778
 }
 
 
