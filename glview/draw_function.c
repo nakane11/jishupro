@@ -298,39 +298,44 @@ void drawFloor(int r){
   glPopMatrix();
 }
 
-void Circle2DFill(float radius,int x,int y)
+void Circle3DFill(double radius,double x, double y, double z)
 {
- for (float th1 = 0.0;  th1 <= 360.0;  th1 = th1 + 1.0)
+ for (double th1 = 0.0;  th1 <= 360.0;  th1 = th1 + 1.0)
  {             
-  float th2 = th1 + 10.0;
-  float th1_rad = th1 / 180.0 * PI; 
-  float th2_rad = th2 / 180.0 * PI;
+  double th2 = th1 + 10.0;
+  double th1_rad = th1 / 180.0 * PI; 
+  double th2_rad = th2 / 180.0 * PI;
 
-  float x1 = radius * cos(th1_rad);
-  float y1 = radius * sin(th1_rad);
-  float x2 = radius * cos(th2_rad);
-  float y2 = radius * sin(th2_rad);
+  double x1 = radius * cos(th1_rad);
+  double y1 = radius * sin(th1_rad);
+  double x2 = radius * cos(th2_rad);
+  double y2 = radius * sin(th2_rad);
 
   glBegin(GL_TRIANGLES); 
-   glVertex2f( x, y );
-   glVertex2f( x1+x, y1+y );     
-   glVertex2f( x2+x, y2+y );
+   glVertex3d( x, y, z );
+   glVertex3d( x1+x, y, y1+z );     
+   glVertex3d( x2+x, y, y2+z );
   glEnd();
  } 
 }
 
 void drawBucket(double r){
   glPushMatrix();{
+    glPushMatrix();{
       glRotated(-90, 1.0, 0.0, 0.0);
-      glLineWidth(0.5f);
-    
-      glColor3d(190.0/255, 193.0/255, 195.0/255);
-      gluCylinder(bucket,0.8, 1.1, 2.0, 40, 1);
+      glLineWidth(4.2f);
+
+      GLfloat color1[] = {60.0/255, 63.0/255, 65.0/255, 0.0};
+      glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color1);
+      gluCylinder(bucket,0.8, 1.1, 2.0, 80, 40);
       
-      glColor3d(1.0, 1.0, 1.0);
+      GLfloat color2[] = {1, 1, 1, 1.0};
+      glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color2);
       gluCylinder(paint, 0.8, 1.1-0.3*r, 2.0*(1-r), 20, 1);
-      if (r<1.0)
-        Circle2DFill(0.8,0,0);
+    }glPopMatrix();
+
+      Circle3DFill(1.1-0.3*r, 0, 2.0*(1-r), 0);
+    
   }glPopMatrix();
 
 }

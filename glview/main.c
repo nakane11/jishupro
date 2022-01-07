@@ -136,22 +136,19 @@ int liner_search (double x, double z) {
 void display(void)
 {
   //shaking();
-  // フレームバッファのクリア
   glClearColor (0.0, 0.0, 1.0, 0.0);
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glDisable( GL_LIGHTING ); //光源処理無効
-  
   gluLookAt(0, 5, -10, 0, 1-600*tan(ry), 2, 0, 1, 0);
-
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  if(mode == LINE){
-    drawBucket(line_vec_num/30.0);
-  }
-  
+
+ 
+  glDisable( GL_LIGHTING ); //光源処理無効
   glPushMatrix();{
     glRotated(atan2(4,12)*360.0/(2*PI), 1.0, 0.0, 0.0);
+
     drawMap(-5, 5.2, 60);
+
     if(mode == BREED||mode == CARRY){
       glTranslated(0,0.0,-5);
       drawPointer(px, py);
@@ -163,6 +160,8 @@ void display(void)
   glPopMatrix();
 
   init3d();
+  if(mode == LINE)
+    drawBucket(line_vec_num/30.0);
   
   // 視点を移動
   glMultMatrixf(camera);
