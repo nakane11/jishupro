@@ -69,11 +69,11 @@ void updateFunc(void){
             // }
             if (cats[i].duration == 0){
                 cats[i].duration = 40*(rand()%20+4); //進む距離決める
-                cats[i].p_speed = rand()%10+5;
+                cats[i].p_speed = rand()%14+5;
                 cats[i].face = NORMAL;
             }else if (cats[i].duration == 1){
                 
-                if(rand()%100<40){
+                if(rand()%100<45){
                     cats[i].task = TURN;
                 }else{
                     cats[i].task = STAY; //次のtask
@@ -93,11 +93,15 @@ void updateFunc(void){
             //     }
             // }
             if (cats[i].duration == 0){
-                cats[i].duration = 60*(rand()%4/3+2); //回転角決める
+                cats[i].duration = 60*(rand()%4/2+2); //回転角決める
                 cats[i].p_speed = (rand()%2*2-1)*(rand()%10+5);
                 cats[i].face = ANGRY;
             }else if (cats[i].duration == 1){
-                cats[i].task = WALK; //次のtask
+                if(rand()%100<65){
+                    cats[i].task = WALK;
+                }else{
+                    cats[i].task = TURN;
+                }
             }
             //曲がりながら進む
             MatArray tlarray, rtarray;
@@ -139,6 +143,7 @@ void updateFunc(void){
                 for(j=i;j<n;j++){
                     cats[j]=cats[j+1];
                 }
+                if(pick_obj>-1){pick_obj-=1;}
                 i--; n--; 
                 //printf("%d\n",n);
             }else{
