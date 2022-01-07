@@ -9,7 +9,7 @@ extern int line_vec_num;
 
 void line_init();
 int line_isstar(int d);
-void line_culc();
+void line_calc();
 int fusion_Circle();
 
 #endif

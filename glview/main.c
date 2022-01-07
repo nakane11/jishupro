@@ -269,7 +269,7 @@ void keyboard (unsigned char key, int x, int y)
       if(line_flg == 1){
         line_flg = 0;
         if(line_vec_num == 6 && line_isstar(20)){
-          line_culc();
+          line_calc();
           mode = FUSION;
         }
 

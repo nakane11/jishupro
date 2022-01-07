@@ -56,6 +56,7 @@ void line_init(){
         line_vector[i] = (Vector){0, 0, 0};
     }
     line_vec_num=0;
+    fusion_num = 0;
 }
 
 
@@ -68,13 +69,13 @@ int line_isstar(int d){
     }
 }
 
-void line_culc(){
+void line_calc(){
     //重心を計算
     for(int k = 0; k < line_vec_num; k++){
-    line_cx += line_vector[k].x;
-    line_cz += line_vector[k].z;
+        line_cx += line_vector[k].x;
+        line_cz += line_vector[k].z;
     }
-    line_cx /= line_vec_num;  line_cz /= line_vec_num;
+    line_cx /= (double)line_vec_num;  line_cz /= (double)line_vec_num;
     //半径を計算
     line_r = line_radius(line_cx, line_cz);
 
@@ -142,7 +143,7 @@ int fusion_Circle(){
         return 1;
     }
     if(count <= 60*7+720){
-        for(int i=0; i<fmin((count-60*7)/d, fusion_num); i++){
+        for(int i=0; i<fmin((count-60*7)/d, fusion_num+1); i++){
             cats[fusion_list[i]].y += 0.3;
             dotMat( cats[fusion_list[i]].matrix, tlMat(0, 0.3, 0.0).matrix);
         }
