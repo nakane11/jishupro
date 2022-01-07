@@ -122,9 +122,8 @@ int fusion_Circle(){
             cats[fusion_list[(count-60*7)/d -1]].b = 0.0;
             
         }
-    }else if(count < 60*7+720 + 60*3){
+    }else if(count == 60*7+720+1){ 
         Circle3D(line_r, 360, line_cx, -0.5, line_cz);
-    }else if(count == 60*7+720 + 60*3){ 
         for(int i=0; i<fusion_num; i++){
             for(int j=fusion_list[i]-i;j<n;j++){
                     cats[j]=cats[j+1];
@@ -134,17 +133,18 @@ int fusion_Circle(){
         fusionCat(fusion_num);
         cats[n-1].y -= 1.6*cats[n-1].scale;
         dotMat( cats[n-1].matrix, tlMat(0, - 1.6*cats[n-1].scale, 0.0).matrix);
-    }else if(count <=60*7+720 + 60*3+60*2){
+    }else if(count <=60*7+720+1 + 60*2){
+        Circle3D(line_r, 360, line_cx, -0.5, line_cz);
         cats[n-1].y += 1.6*cats[n-1].scale/120;
         dotMat( cats[n-1].matrix, tlMat(0, 1.6*cats[n-1].scale/120, 0.0).matrix);
     }else{
         count = 0;
         return 1;
     }
-    if(count < 60*7+720 + 60*3){
+    if(count <= 60*7+720){
         for(int i=0; i<fmin((count-60*7)/d, fusion_num); i++){
-            cats[fusion_list[i]].y += 0.2;
-            dotMat( cats[fusion_list[i]].matrix, tlMat(0, 0.2, 0.0).matrix);
+            cats[fusion_list[i]].y += 0.3;
+            dotMat( cats[fusion_list[i]].matrix, tlMat(0, 0.3, 0.0).matrix);
         }
     }
     count ++;

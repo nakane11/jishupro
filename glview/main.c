@@ -63,7 +63,7 @@ void init(void)
 void shaking(){ //地震
   static int count = 0;
   MatArray array1;
-  double y = 0.05;
+  double y = 0.07;
   if(count<6)
     y *= -1;
   array1 = tlMat( y, 0, 0);
