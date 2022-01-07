@@ -1,10 +1,40 @@
 #include <math.h>
+#include <GL/glut.h>
+#include <stdio.h>
 
+#include "matrix_function.h"
 #include "line.h"
+
+#define PI 3.141592653589793
 
 Vector line_vector[30];
 int line_vec_num;
 
+int fusion_list[50];
+int fusion_num;
+
+static double line_cx, line_cz; //図形重心
+static double line_r; //半径
+
+void Circle3D(double radius, double theta, double x, double y, double z)
+{
+ for (double th1 = 0.0;  th1 <= theta;  th1 = th1 + 1.0)
+ {             
+  double th2 = th1 + 10.0;
+  double th1_rad = th1 / 180.0 * PI; 
+  double th2_rad = th2 / 180.0 * PI;
+
+  double x1 = radius * cos(th1_rad);
+  double y1 = radius * sin(th1_rad);
+  double x2 = radius * cos(th2_rad);
+  double y2 = radius * sin(th2_rad);
+
+  glBegin(GL_LINES);   
+   glVertex3d( x1+x, y, y1+z );     
+   glVertex3d( x2+x, y, y2+z );
+  glEnd();
+ }
+}
 
 double line_distance(int i, int j){
   return (line_vector[i].x-line_vector[j].x)*(line_vector[i].x-line_vector[j].x) 
@@ -21,8 +51,17 @@ double line_radius(double cx, double cz){
   return sqrt(sum);
 }
 
+void line_init(){
+    for (size_t i = 0; i < line_vec_num; ++i) {
+        line_vector[i] = (Vector){0, 0, 0};
+    }
+    line_vec_num=0;
+}
+
+
 int line_isstar(int d){
-    if(line_distance(0,5)<d && line_distance(5,10)<d && line_distance(3,6)<d && line_distance(1,7)<d && line_distance(4,8)<d && line_distance(2,9)<d){
+    // if(line_distance(0,5)<d && line_distance(5,10)<d && line_distance(3,6)<d && line_distance(1,7)<d && line_distance(4,8)<d && line_distance(2,9)<d){
+    if(line_distance(0,5)<d){
         return 1;
     }else{
         return 0;
@@ -30,9 +69,6 @@ int line_isstar(int d){
 }
 
 void line_culc(){
-    double line_cx, line_cz; //図形重心
-    double line_r; //半径
-
     //重心を計算
     for(int k = 0; k < line_vec_num; k++){
     line_cx += line_vector[k].x;
@@ -41,5 +77,43 @@ void line_culc(){
     line_cx /= line_vec_num;  line_cz /= line_vec_num;
     //半径を計算
     line_r = line_radius(line_cx, line_cz);
+
+    fusion_num = 0;
+   
+    for(int i=0; i<n; i++){
+        if((cats[i].x - line_cx)*(cats[i].x - line_cx) + (cats[i].z - line_cz)*(cats[i].z - line_cz) <line_r*line_r){
+            fusion_list[fusion_num] = i;
+            fusion_num ++;
+        }
+    }
+    printf("fu->%d\n", fusion_num);
+}
+
+int fusion_Circle(){
+    static int count = 1;
+    int d = 720 / (fusion_num + 1);
+    if(count > 60*7 && count <= 60*7+720){
+        Circle3D(line_r, (count-60*7)/2.0, line_cx, -0.5, line_cz);
+        if((count-60*7) % d == 0){
+            cats[fusion_list[(count-60*7)/d -1]].r = 0.0;
+            cats[fusion_list[(count-60*7)/d -1]].g = 0.0;
+            cats[fusion_list[(count-60*7)/d -1]].b = 0.0;
+            printf("%d\n", (count-60*7)/d -1);
+        }
+    }else if(count < 60*7+720 + 60*3){
+        Circle3D(line_r, 360, line_cx, -0.5, line_cz);
+    }else{
+        count = 0;
+        return 1;
+    }
+
+    for(int i=0; i<fmin((count-60*7)/d, fusion_num); i++){
+        cats[fusion_list[i]].y += 0.2;
+        dotMat( cats[fusion_list[i]].matrix, tlMat(0, 0.1, 0.0).matrix);
+    }
+    count ++;
+    
+    return 0;
     
 }
+

@@ -132,6 +132,8 @@ void Circle3DFill(double radius,double x, double y, double z)
  } 
 }
 
+
+
 //雲
 void makeCloud(void){
   for(int s=0; s<30; s++){;

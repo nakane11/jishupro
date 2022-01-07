@@ -32,7 +32,8 @@ typedef enum{
   BREED,
   CARRY,
   COLOR,
-  LINE
+  LINE,
+  FUSION
 } Mode; 
 const char* mode_name[] = {"WATCH", "BREED", "CARRY", "COLOR", "LINE"}; 
 Mode mode = WATCH;
@@ -111,7 +112,8 @@ int liner_search (double x, double z) {
 
 void display(void)
 {
-  //shaking();
+  if(mode == FUSION)
+    shaking();
   glClearColor (0.0, 0.0, 1.0, 0.0);
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   gluLookAt(0, 5, -10, 0, 1-600*tan(cam_angle), 2, 0, 1, 0);
@@ -145,7 +147,9 @@ void display(void)
   drawFloor(60); //地面  
   drawCloud(); //雲
   
-  updateFunc(); 
+  if(mode != FUSION)
+    updateFunc(); 
+
   for(int i=0;i<n;i++){
     drawCat(i);
   }
@@ -159,6 +163,13 @@ void display(void)
       glVertex3f( line_vector[k].x, line_vector[k].y, line_vector[k].z);
       glVertex3f( line_vector[k+1].x, line_vector[k+1].y, line_vector[k+1].z);
       glEnd();
+    }
+    if(mode == FUSION){
+      if(fusion_Circle()){
+        mode = LINE;
+        line_init();
+        line_flg = 0;
+      }
     }
 
   }glPopMatrix();
@@ -247,18 +258,23 @@ void keyboard (unsigned char key, int x, int y)
       break;
 
     case 'n':
+    if(line_flg == 0 && line_vec_num>0){
+      for (size_t i = 0; i < line_vec_num; ++i) {
+          line_vector[i] = (Vector){0, 0, 0};
+      }
+      line_vec_num=0;
+      break;
+    }
     if(mode == LINE){
       if(line_flg == 1){
         line_flg = 0;
-        for(int i=0;i<line_vec_num; i++){
-          printf("(%lf, %lf)\n",line_vector[i].x, line_vector[i].z);
+        if(line_vec_num == 6 && line_isstar(20)){
+          line_culc();
+          mode = FUSION;
         }
 
-        
-      }else{
-        for (size_t i = 0; i < line_vec_num; ++i) {
-          line_vector[i] = (Vector){0, 0, 0};
-        }
+      }else if(line_vec_num == 0){
+        line_init();
         line_vector[0].x = inv[12];
         line_vector[0].y = -0.5;
         line_vector[0].z = inv[14];
@@ -267,17 +283,6 @@ void keyboard (unsigned char key, int x, int y)
       }
       break;
     }
-
-    case 13: //Enter
-      if(line_vec_num == 11){
-        //五芒星判定
-        if(line_isstar(20)){
-          line_culc();
-          
-          //円を描画, 錬成
-        }
-      }
-      break;
 
     //モード切替
     case 32: 
@@ -296,6 +301,10 @@ void keyboard (unsigned char key, int x, int y)
     case 27:
       exit(0);
       break;
+  }
+  if(mode == LINE){
+    dx*=3.0;
+    dz*=3.0;
   }
 
   //カメラの行列を更新

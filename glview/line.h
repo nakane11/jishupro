@@ -7,8 +7,9 @@ typedef struct{
 extern Vector line_vector[];
 extern int line_vec_num;
 
-
+void line_init();
 int line_isstar(int d);
 void line_culc();
+int fusion_Circle();
 
 #endif
