@@ -113,20 +113,21 @@ int liner_search (double x, double z) {
 void display(void)
 {
   if(mode == FUSION)
-    shaking();
+    shaking(); //地面が揺れる
+
   glClearColor (0.0, 0.0, 1.0, 0.0);
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   gluLookAt(0, 5, -10, 0, 1-600*tan(cam_angle), 2, 0, 1, 0);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
- 
+ //視点と一緒に移動するもの
   glDisable( GL_LIGHTING ); //光源処理無効
-  glPushMatrix();{
+  glPushMatrix();{ 
     glRotated(atan2(4,12)*360.0/(2*PI), 1.0, 0.0, 0.0);
 
     drawMap(-5, 5.2, 60);
-
+    //ポインタ描画
     if(mode == BREED||mode == CARRY){
       glTranslated(0,0.0,-5);
       drawPointer(pointer_x, pointer_y);
@@ -141,38 +142,41 @@ void display(void)
   if(mode == LINE)
     drawBucket(line_vec_num/30.0);
   
-  // 視点を移動
+  // ここから視点と逆に動くもの
   glMultMatrixf(camera);
 
   drawFloor(60); //地面  
   drawCloud(); //雲
   
   if(mode != FUSION)
-    updateFunc(); 
+    updateFunc(); //ねこ更新
 
   for(int i=0;i<n;i++){
     drawCat(i);
   }
 
-  glPushMatrix();{
-    glDisable( GL_LIGHTING ); 
-    glColor3d(1.0, 1.0, 1.0);
-    glLineWidth(5.0f);
-    for(int k = 0; k<(line_vec_num-1); k++){
-      glBegin( GL_LINES );
-      glVertex3f( line_vector[k].x, line_vector[k].y, line_vector[k].z);
-      glVertex3f( line_vector[k+1].x, line_vector[k+1].y, line_vector[k+1].z);
-      glEnd();
-    }
-    if(mode == FUSION){
-      if(fusion_Circle()){
-        mode = LINE;
-        line_init();
-        line_flg = 0;
+  if(line_vec_num>1){ //mode = LINEで線を描画
+    glPushMatrix();{
+      glDisable( GL_LIGHTING ); 
+      glColor3d(1.0, 1.0, 1.0);
+      glLineWidth(5.0f);
+      for(int k = 0; k<(line_vec_num-1); k++){
+        glBegin( GL_LINES );
+        glVertex3f( line_vector[k].x, line_vector[k].y, line_vector[k].z);
+        glVertex3f( line_vector[k+1].x, line_vector[k+1].y, line_vector[k+1].z);
+        glEnd();
       }
-    }
 
-  }glPopMatrix();
+      if(mode == FUSION){ //fusion_Circleで描画, 1を返すと終了処理
+        if(fusion_Circle()){
+          mode = LINE;
+          line_init();
+          line_flg = 0;
+        }
+      }
+
+    }glPopMatrix();
+  }
 
   glutSwapBuffers();
 }
@@ -196,6 +200,7 @@ void reshape (int w, int h)
   gluPerspective(45.0, (GLfloat) w/(GLfloat) h, 1.0*6, 20.0*10);
 }
 
+
 //-----------------------------------------------------------------------------------
 // キーボード入力のコールバック関数
 //-----------------------------------------------------------------------------------
@@ -207,7 +212,7 @@ void keyboard (unsigned char key, int x, int y)
   int rdx;
 
   switch (key) {
-    //視点高さ
+    //視点高さ変更
     case 'z':
       if(cam_angle<1.57){
         cam_angle = cam_angle+0.4/20;
@@ -243,7 +248,7 @@ void keyboard (unsigned char key, int x, int y)
       rdx =  2;
       break;
 
-    //色変更
+    //mode=COLOR 色変更
     case 'r':
       rgb_flg = 0;
       rgb_pm *= -1;
@@ -258,56 +263,66 @@ void keyboard (unsigned char key, int x, int y)
       break;
 
     case 'n':
-    if(line_flg == 0 && line_vec_num>0){
-      for (size_t i = 0; i < line_vec_num; ++i) {
-          line_vector[i] = (Vector){0, 0, 0};
-      }
-      line_vec_num=0;
-      break;
-    }
-    if(mode == LINE){
-      if(line_flg == 1){
-        line_flg = 0;
-        if(line_vec_num == 6 && line_isstar(20)){
-          line_calc();
-          mode = FUSION;
+      //描画終了後, 保存した頂点を破棄する(modeに依らない)
+      if(line_flg == 0 && line_vec_num>0){ 
+        for (size_t i = 0; i < line_vec_num; ++i) {
+            line_vector[i] = (Vector){0, 0, 0};
         }
-
-      }else if(line_vec_num == 0){
-        line_init();
-        line_vector[0].x = inv[12];
-        line_vector[0].y = -0.5;
-        line_vector[0].z = inv[14];
-        line_vec_num = 1;
-        line_flg = 1; //記録開始
+        line_vec_num=0;
+        //line_init();
+        break;
+      }
+    
+      if(mode == LINE){
+        //描画中 描画を終了する
+        if(line_flg == 1){
+          line_flg = 0;
+          if(line_vec_num == 6 && line_isstar(20)){
+            line_calc(); //錬成開始
+            mode = FUSION;
+          }
+        //描画開始
+        }else if(line_vec_num == 0){
+          line_init();
+          line_vector[0].x = inv[12];
+          line_vector[0].y = -0.5;
+          line_vector[0].z = inv[14];
+          line_vec_num = 1;
+          line_flg = 1; 
+        }
       }
       break;
-    }
 
-    //モード切替
     case 32: 
-      mode = (mode+1)%5;
-      if(pick_obj>=0){
+      mode = (mode+1)%5; //モード切替
+
+      if(pick_obj>=0){ //mode = CARRYのときねこを持っていたら解放
         cats[pick_obj].matrix[13] = 0.0;
         cats[pick_obj].task = STAY;
         pick_obj = -1;
       }
-      if(line_flg == 1)
+
+      if(line_flg == 1) //mode = LINEのとき描画終了
         line_flg = 0;
-      glutSetWindowTitle(mode_name[mode]);
+
+      glutSetWindowTitle(mode_name[mode]); //ウィンドウ名変更
       break;
 
-
+    // case 13:
+    //   printf("%d\n",pre_key);
+    //   break;
     case 27:
       exit(0);
       break;
   }
-  if(mode == LINE){
+
+  if(mode == LINE){ //mode = LINEのとき移動速度増加
     dx*=3.0;
     dz*=3.0;
   }
+  printf("%lf\n",dz);
 
-  //カメラの行列を更新
+  //キー入力した差分に応じてカメラの行列を更新
   MatArray array1, array2;
   array1 = tlMat( -dx, dy, -dz);
   array2 = y_rtMat(rdx);
@@ -316,6 +331,7 @@ void keyboard (unsigned char key, int x, int y)
   copyMat(camera, array2.matrix);
   gluInvertMatrix(camera, inv);
 
+  //mode = CARRY カメラの動きを運んでいるねこに反映
   if(pick_obj>=0){
     GLfloat t[16];
     copyMat(t, inv);
@@ -323,6 +339,7 @@ void keyboard (unsigned char key, int x, int y)
     copyMat(cats[pick_obj].matrix, t);
   }
 
+  //mode = LINE 描画する頂点の更新
   if(line_flg && (key == 'w' || key == 's')){
     if(pre_key == 'w' || pre_key == 's'){
       line_vector[line_vec_num-1].x = inv[12];
