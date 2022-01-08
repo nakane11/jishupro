@@ -110,20 +110,45 @@ void fusionCat(int num){
     n+=1;
 }
 
-int fusion_Circle(){
-    static int count = 1;
-    int d = 720 / (fusion_num + 3);
- 
-    if(count <= 60*7){}
-    else if(count <= 60*7+720){
-        Circle3D(line_r, (count-60*7)/2.0, line_cx, -0.5, line_cz);
-        if((count-60*7) % d == 0){
-            cats[fusion_list[(count-60*7)/d -1]].r = 0.0;
-            cats[fusion_list[(count-60*7)/d -1]].g = 0.0;
-            cats[fusion_list[(count-60*7)/d -1]].b = 0.0;
-            
+int fusion_counter(int update){
+    static int count = 0;
+    if(update == 1){
+        count++;
+    }
+    if(count>60*7+60*10 + 60*2 + 60*2){
+        count = 0;
+    }
+    return count;
+}
+
+void fusion_clearColor(){
+    int count = fusion_counter(0);
+    if(count < 60*7){
+        glClearColor (36.0/255*count/60/7, 37.0/255*count/60/7, 1-(1-80.0/255)*count/60/7, 0.0);
+    }else if(count < 60*7 + 60*10 + 60*2){
+        glClearColor (36.0/255, 37.0/255, 80.0/255, 0.0);
+    }else if(count < 60*7 + 60*10 + 60*2 + 60*2){
+        double t = (double)(count-(60*7+60*10 + 60*2))/(60*2);
+        glClearColor (36.0/255*(1-t), 37.0/255*(1-t), 1.0-(1-t)*(1-80.0/255), 0.0);
+    }
+}
+
+int fusion_update(){
+    int count = fusion_counter(1);
+    if(count == 0)
+        return 1;
+
+    int d = 600 / (fusion_num + 3);
+    if(count < 60*7){
+    }
+    else if(count < 60*7+600){
+        Circle3D(line_r, (double)(count-60*7)*360/600, line_cx, -0.5, line_cz);
+        if((count-60*7 + 1) % d == 0){ //ねこを黒くする
+            cats[fusion_list[(count-60*7+1)/d -1]].r = 0.0;
+            cats[fusion_list[(count-60*7+1)/d -1]].g = 0.0;
+            cats[fusion_list[(count-60*7+1)/d -1]].b = 0.0;
         }
-    }else if(count == 60*7+720+1){ 
+    }else if(count == 60*7+600){ 
         Circle3D(line_r, 360, line_cx, -0.5, line_cz);
         for(int i=0; i<fusion_num; i++){
             for(int j=fusion_list[i]-i;j<n;j++){
@@ -134,22 +159,18 @@ int fusion_Circle(){
         fusionCat(fusion_num);
         cats[n-1].y -= 1.6*cats[n-1].scale;
         dotMat( cats[n-1].matrix, tlMat(0, - 1.6*cats[n-1].scale, 0.0).matrix);
-    }else if(count <=60*7+720+1 + 60*2){
+    }else if(count <=60*7+600 + 60*2){
         Circle3D(line_r, 360, line_cx, -0.5, line_cz);
-        cats[n-1].y += 1.6*cats[n-1].scale/120;
+        cats[n-1].y += 1.6*cats[n-1].scale/120; //ねこがせりあがる
         dotMat( cats[n-1].matrix, tlMat(0, 1.6*cats[n-1].scale/120, 0.0).matrix);
-    }else{
-        count = 0;
-        return 1;
     }
-    if(count <= 60*7+720){
+
+    if(count < 60*7+600){ //ねこを上昇させる
         for(int i=0; i<fmin((count-60*7)/d, fusion_num+1); i++){
             cats[fusion_list[i]].y += 0.3;
             dotMat( cats[fusion_list[i]].matrix, tlMat(0, 0.3, 0.0).matrix);
         }
     }
-    count ++;
-    
     return 0;
     
 }

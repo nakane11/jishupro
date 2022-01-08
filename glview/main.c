@@ -112,10 +112,13 @@ int liner_search (double x, double z) {
 
 void display(void)
 {
-  if(mode == FUSION)
+  if(mode == FUSION){
     shaking(); //地面が揺れる
+    fusion_clearColor();
+  }else{
+    glClearColor (0.0, 0.0, 1.0, 0.0);
+  }
 
-  glClearColor (0.0, 0.0, 1.0, 0.0);
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   gluLookAt(0, 5, -10, 0, 1-600*tan(cam_angle), 2, 0, 1, 0);
   glMatrixMode(GL_MODELVIEW);
@@ -167,8 +170,8 @@ void display(void)
         glEnd();
       }
 
-      if(mode == FUSION){ //fusion_Circleで描画, 1を返すと終了処理
-        if(fusion_Circle()){
+      if(mode == FUSION){ //fusion_updateで描画, 1を返すと終了処理
+        if(fusion_update()){
           mode = LINE;
           line_init();
           line_flg = 0;
