@@ -88,6 +88,7 @@ void line_calc(){
         }
     }
     printf("fu->%d\n", fusion_num);
+    
 }
 
 void fusionCat(int num){
@@ -114,6 +115,9 @@ int fusion_counter(int update){
     static int count = 0;
     if(update == 1){
         count++;
+    }
+    if(count==60*7 && fusion_num == 0){
+        count = 60*7+600 + 60*2 + 1;
     }
     if(count>60*7+60*10 + 60*2 + 60*2){
         count = 0;
@@ -165,7 +169,7 @@ int fusion_update(){
         dotMat( cats[n-1].matrix, tlMat(0, 1.6*cats[n-1].scale/120, 0.0).matrix);
     }
 
-    if(count < 60*7+600){ //ねこを上昇させる
+    if(count < 60*7+600 && fusion_num>0){ //ねこを上昇させる
         for(int i=0; i<fmin((count-60*7)/d, fusion_num+1); i++){
             cats[fusion_list[i]].y += 0.3;
             dotMat( cats[fusion_list[i]].matrix, tlMat(0, 0.3, 0.0).matrix);
