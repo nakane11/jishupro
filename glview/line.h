@@ -12,5 +12,6 @@ int line_isstar(int d);
 void line_calc();
 void fusion_clearColor();
 int fusion_update();
+void fusion_cloud();
 
 #endif

@@ -154,8 +154,8 @@ void makeCloud(void){
 }
 
 void drawCloud(void){
-  GLfloat color[] = {1.0, 1.0, 1.0, 1.0};
-  glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color);
+  // GLfloat color[] = {1.0, 1.0, 1.0, 1.0};
+  // glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color);
  
   for(int s=0;s<30;s++){
     glPushMatrix();{

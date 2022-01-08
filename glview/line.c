@@ -179,3 +179,27 @@ int fusion_update(){
     
 }
 
+void fusion_cloud(){
+    int count = fusion_counter(0);
+    GLfloat color[4];
+    if(count < 60*7){
+        color[0] = 1.0-(1.0-115.0/255)*count/60/7;
+        color[1] = 1.0-(1.0-116.0/255)*count/60/7;
+        color[2] = 1.0-(1.0-130.0/255)*count/60/7;
+    }else if(count < 60*7 + 60*10 + 60*2){
+        color[0] = 115.0/255;
+        color[1] = 116.0/255;
+        color[2] = 130.0/255;
+    }else if(count < 60*7 + 60*10 + 60*2 + 60*2){
+        double t = (double)(count-(60*7+60*10 + 60*2))/(60*2);
+        color[0] = 174.0/255+(1-115.0/255)*t;
+        color[1] = 175.0/255+(1-116.0/255)*t;
+        color[2] = 198.0/255+(1-130.0/255)*t;
+    }else{
+        color[0] = 1.0;
+        color[1] = 1.0;
+        color[2] = 1.0;
+    }
+    color[3] = 0.0;
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color);
+}
