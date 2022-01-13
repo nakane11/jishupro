@@ -1,4 +1,5 @@
 #include "Keyboard.h"
+#include "Mouse.h"
 
 //=================================================
 //digital
@@ -19,9 +20,18 @@
 #define StickRY A3 
 
 //=================================================
+signed char get_mouse_amount(int val)
+{
+    signed char amount[16] = { -8, -4, -2, -2, -2, -1, -1,  0,
+                                0,  1,  1,  2,  2,  2,  4,  8 };
+    unsigned int range = ((unsigned int)val&0x03ff) / 64;
+    return amount[range];
+}
 
 void setup() {
+  Serial.begin(9600);
   Keyboard.begin();
+  Mouse.begin();
   
   //pinMode(ButtonJL, INPUT_PULLUP);
   pinMode(ButtonJR, INPUT_PULLUP);
@@ -36,15 +46,56 @@ void setup() {
   pinMode(StickLX, INPUT); 
   pinMode(StickLY, INPUT); 
   pinMode(StickRX, INPUT); 
-  pinMode(StickRX, INPUT); 
+  pinMode(StickRY, INPUT); 
 }
 
 void loop() {
+  //右ジョイスティック
+    int rx_reading = 0;        /* analogRead()の戻り値を格納する */
+    int ry_reading = 0;        /* analogRead()の戻り値を格納する */
+    signed char x_amount = 0; /* Mouse.move()の xの値を格納する */
+    signed char y_amount = 0; /* Mouse.move()の yの値を格納する */
+
+    rx_reading = - (analogRead(StickRX)+12);
+    ry_reading = - analogRead(StickRY);
+    x_amount = 5*get_mouse_amount(rx_reading);
+    y_amount = 5*get_mouse_amount(ry_reading);
+//    Serial.println(ry_reading);
+    if( x_amount || y_amount )
+    {
+        Mouse.move(x_amount, y_amount, 0);
+        delay(10);
+    }
+
+   //左ジョイスティック
+   int lx_reading = 0;        /* analogRead()の戻り値を格納する */
+   int ly_reading = 0; 
+   lx_reading = analogRead(StickLX);
+   ly_reading = analogRead(StickLY);
+   
+   if((ly_reading-521)>200){
+    Keyboard.print("s");
+    delay(50);
+   }else if((ly_reading-521)<-200){
+    Keyboard.print("w");
+    delay(50);
+   }
+
+   if((lx_reading-507)>200){
+    Keyboard.print("d");
+    delay(50);
+   }else if((lx_reading-507)<-200){
+    Keyboard.print("a");
+    delay(50);
+   }
+   
+   
+  
   if(digitalRead(ButtonJR) == LOW){
     //マウスクリック
-//     Keyboard.print(32);
+    Mouse.click(MOUSE_LEFT);
     delay(100);
-    while(digitalRead(ButtonS) == LOW);
+    while(digitalRead(ButtonJR) == LOW);
   }
   
   if(digitalRead(ButtonCR) == LOW){
@@ -72,7 +123,7 @@ void loop() {
   }
   
   if(digitalRead(ButtonS) == LOW){
-    Keyboard.print(32);
+    Keyboard.print("s");
     delay(100);
     while(digitalRead(ButtonS) == LOW);
   }
@@ -87,5 +138,5 @@ void loop() {
     delay(100);
   }
 
-  delay(100);
+  delay(10);
 }
