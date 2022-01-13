@@ -40,14 +40,51 @@ void setup() {
 }
 
 void loop() {
-  if(digitalRead(ButtonJL) == LOW){
-    Keyboard.print("Arduino operating time ");
-    Keyboard.write(','); //
-    Keyboard.print(millis());
-    Keyboard.write('\n');
+  if(digitalRead(ButtonJR) == LOW){
+    //マウスクリック
+//     Keyboard.print(32);
     delay(100);
-
-    while(digitalRead(ButtonJL) == LOW);
+    while(digitalRead(ButtonS) == LOW);
+  }
+  
+  if(digitalRead(ButtonCR) == LOW){
+    Keyboard.print("r");
+    delay(100);
+    while(digitalRead(ButtonCR) == LOW);
+  }
+    
+  if(digitalRead(ButtonCG) == LOW){
+    Keyboard.print("g");
+    delay(100);
+    while(digitalRead(ButtonCG) == LOW);
+  }
+  
+  if(digitalRead(ButtonCB) == LOW){
+    Keyboard.print("b");
+    delay(100);
+    while(digitalRead(ButtonCB) == LOW);
+  }
+  
+  if(digitalRead(ButtonN) == LOW){
+    Keyboard.print("n");
+    delay(100);
+    while(digitalRead(ButtonN) == LOW);
+  }
+  
+  if(digitalRead(ButtonS) == LOW){
+    Keyboard.print(32);
+    delay(100);
+    while(digitalRead(ButtonS) == LOW);
+  }
+  
+  if(digitalRead(ButtonZ) == LOW){
+    Keyboard.print("z");
+    delay(100);
+  }
+  
+  if(digitalRead(ButtonX) == LOW){
+    Keyboard.print("x");
+    delay(100);
   }
 
   delay(100);
