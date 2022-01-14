@@ -303,18 +303,20 @@ void keyboard (unsigned char key, int x, int y)
       break;
 
     case 'p': 
-      mode = (mode+1)%5; //モード切替
+      if(mode != FUSION){
+        mode = (mode+1)%5; //モード切替
 
-      if(pick_obj>=0){ //mode = CARRYのときねこを持っていたら解放
-        cats[pick_obj].matrix[13] = 0.0;
-        cats[pick_obj].task = STAY;
-        pick_obj = -1;
+        if(pick_obj>=0){ //mode = CARRYのときねこを持っていたら解放
+          cats[pick_obj].matrix[13] = 0.0;
+          cats[pick_obj].task = STAY;
+          pick_obj = -1;
+        }
+
+        if(line_flg == 1) //mode = LINEのとき描画終了
+          line_flg = 0;
+
+        glutSetWindowTitle(mode_name[mode]); //ウィンドウ名変更
       }
-
-      if(line_flg == 1) //mode = LINEのとき描画終了
-        line_flg = 0;
-
-      glutSetWindowTitle(mode_name[mode]); //ウィンドウ名変更
       break;
 
     case 27:
