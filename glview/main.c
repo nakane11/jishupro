@@ -285,7 +285,8 @@ void keyboard (unsigned char key, int x, int y)
         //描画中 描画を終了する
         if(line_flg == 1){
           line_flg = 0;
-          if(line_vec_num == 6 && line_isstar(20)){
+          //if(line_vec_num == 6 && line_isstar(20)){
+            if(line_isstar(20)){
             line_calc(); //錬成開始
             mode = FUSION;
           }
@@ -301,7 +302,7 @@ void keyboard (unsigned char key, int x, int y)
       }
       break;
 
-    case 32: 
+    case 'p': 
       mode = (mode+1)%5; //モード切替
 
       if(pick_obj>=0){ //mode = CARRYのときねこを持っていたら解放

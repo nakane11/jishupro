@@ -7,7 +7,7 @@
 
 #define PI 3.141592653589793
 
-Vector line_vector[30];
+Vector line_vector[150];
 int line_vec_num;
 
 int fusion_list[50];
@@ -62,7 +62,7 @@ void line_init(){
 
 int line_isstar(int d){
     // if(line_distance(0,5)<d && line_distance(5,10)<d && line_distance(3,6)<d && line_distance(1,7)<d && line_distance(4,8)<d && line_distance(2,9)<d){
-    if(line_distance(0,5)<d){
+    if(line_distance(0,line_vec_num-1)<d){
         return 1;
     }else{
         return 0;
