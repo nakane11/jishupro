@@ -3,13 +3,12 @@
 
 //=================================================
 //digital
-//#define ButtonJL 2
-#define ButtonJR 3
+#define ButtonJL 3
 #define ButtonCG 4
-#define ButtonCR 5
-#define ButtonCB 6
-#define ButtonN 7
-#define ButtonX 8
+#define ButtonCB 5
+#define ButtonCR 6
+#define ButtonX 7
+#define ButtonN 8
 #define ButtonZ 9
 #define ButtonP 10
 
@@ -22,8 +21,8 @@
 //=================================================
 signed char get_mouse_amount(int val)
 {
-    signed char amount[16] = { -8, -4, -2, -2, -1, -1, -1,  0,
-                                0,  1,  1,  1,  2,  2,  4,  8 };
+    signed char amount[16] = { -6, -4, -2, -2, -2, -1, -1,  0,
+                                0,  1,  1,  2,  2,  2,  4,  6 };
     unsigned int range = ((unsigned int)val&0x03ff) / 64;
     return amount[range];
 }
@@ -33,15 +32,14 @@ void setup() {
   Keyboard.begin();
   Mouse.begin();
   
-  //pinMode(ButtonJL, INPUT_PULLUP);
-  pinMode(ButtonJR, INPUT_PULLUP);
-  pinMode(ButtonCR, INPUT_PULLUP);
+  pinMode(ButtonJL, INPUT_PULLUP);
   pinMode(ButtonCG, INPUT_PULLUP);
   pinMode(ButtonCB, INPUT_PULLUP);
-  pinMode(ButtonN, INPUT_PULLUP);
+  pinMode(ButtonCR, INPUT_PULLUP);
   pinMode(ButtonX, INPUT_PULLUP);
+  pinMode(ButtonN, INPUT_PULLUP);
   pinMode(ButtonZ, INPUT_PULLUP);
-  pinMode(ButtonS, INPUT_PULLUP);
+  pinMode(ButtonP, INPUT_PULLUP);
   
   pinMode(StickLX, INPUT); 
   pinMode(StickLY, INPUT); 
@@ -93,28 +91,28 @@ void loop() {
    
    
   
-  if(digitalRead(ButtonJR) == LOW){
+  if(digitalRead(ButtonJL) == LOW){
     //マウスクリック
     Mouse.click(MOUSE_LEFT);
     delay(100);
-    while(digitalRead(ButtonJR) == LOW);
+    while(digitalRead(ButtonJL) == LOW);
   }
   
   if(digitalRead(ButtonCR) == LOW){
     Keyboard.print("r");
-    delay(100);
+    delay(80);
     while(digitalRead(ButtonCR) == LOW);
   }
     
   if(digitalRead(ButtonCG) == LOW){
     Keyboard.print("g");
-    delay(100);
+    delay(80);
     while(digitalRead(ButtonCG) == LOW);
   }
   
   if(digitalRead(ButtonCB) == LOW){
     Keyboard.print("b");
-    delay(100);
+    delay(80);
     while(digitalRead(ButtonCB) == LOW);
   }
   
