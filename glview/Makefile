@@ -26,5 +26,5 @@ tex.o: tex.c
 matrix_function.o: matrix_function.c tex.h matrix_function.h action.h
 action.o: action.c tex.h matrix_function.h action.h
 line.o: line.c line.h
-ball.o: ball.c ball.h matrix_function.h
+ball.o: ball.c ball.h matrix_function.h action.h
 

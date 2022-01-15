@@ -145,7 +145,7 @@ void updateFunc(void){
                 }
                 if(pick_obj > i){pick_obj-=1;}
                 i--; n--; 
-                printf("pick_obj=%d\n",pick_obj);
+                
             }else{
                 dotMat( cats[i].matrix, tlMat(0, -0.6, 0).matrix);
                 cats[i].duration --;

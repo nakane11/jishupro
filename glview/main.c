@@ -48,6 +48,8 @@ extern int pick_obj;
 int line_flg;
 
 int ball_flg = 0;
+
+
 //-----------------------------------------------------------------------------------
 // 初期化
 //-----------------------------------------------------------------------------------
@@ -114,8 +116,10 @@ int liner_search (double x, double z) {
 
 void display(void)
 {
-  if(ball_phase == 1)
+  if(ball_phase == 1){
     ball_change_speed();
+    relative_pos();
+  }
   if(mode == FUSION){
     shaking(); //地面が揺れる
     fusion_clearColor();
@@ -391,8 +395,10 @@ void keyboard (unsigned char key, int x, int y)
 void mouse(int button, int state, int x, int y)
 {
   if(mode == BALL){
-    if(state == GLUT_DOWN)
+    if(state == GLUT_DOWN){
       ball_phase = 1;
+      ball_update_chase();
+    }
     else if(ball_phase == 1){
       ball_calc();
       ball_phase = 2;
@@ -435,7 +441,6 @@ void mouse(int button, int state, int x, int y)
         }else{
           if(i>-1){
             pick_obj = i;
-            printf("pick ->%d\n", pick_obj);
             cats[pick_obj].task = PICKED;
             //カメラ位置に拘束
             GLfloat t[16];
