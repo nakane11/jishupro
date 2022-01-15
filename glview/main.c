@@ -11,6 +11,7 @@
 #include "matrix_function.h"
 #include "action.h"
 #include "line.h"
+#include "ball.h"
 
 #define PI 3.141592653589793
 
@@ -32,10 +33,11 @@ typedef enum{
   BREED,
   CARRY,
   COLOR,
+  BALL,
   LINE,
   FUSION
 } Mode; 
-const char* mode_name[] = {"WATCH", "BREED", "CARRY", "COLOR", "LINE"}; 
+const char* mode_name[] = {"WATCH", "BREED", "CARRY", "COLOR", "BALL", "LINE"}; 
 Mode mode = WATCH;
 
 int rgb_flg = 0; //r=0, g=1, b=2
@@ -142,6 +144,9 @@ void display(void)
   glPopMatrix();
 
   init3d();
+  if(mode == BALL)
+    drawBall();
+
   if(mode == LINE)
     drawBucket(line_vec_num/30.0);
   
@@ -304,7 +309,7 @@ void keyboard (unsigned char key, int x, int y)
 
     case 'p': 
       if(mode != FUSION){
-        mode = (mode+1)%5; //モード切替
+        mode = (mode+1)%6; //モード切替
 
         if(pick_obj>=0){ //mode = CARRYのときねこを持っていたら解放
           cats[pick_obj].matrix[13] = 0.0;
