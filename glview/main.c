@@ -47,7 +47,7 @@ extern int pick_obj;
 
 int line_flg;
 
-
+int ball_flg = 0;
 //-----------------------------------------------------------------------------------
 // 初期化
 //-----------------------------------------------------------------------------------
@@ -114,6 +114,8 @@ int liner_search (double x, double z) {
 
 void display(void)
 {
+  if(mode == BALL && ball_flg)
+    ball_change_speed();
   if(mode == FUSION){
     shaking(); //地面が揺れる
     fusion_clearColor();
@@ -380,84 +382,91 @@ void keyboard (unsigned char key, int x, int y)
 // -----------------------------------------------------------------------------------
 void mouse(int button, int state, int x, int y)
 {
-  int i=-1;
+  if(mode == BALL){
+    if(state == GLUT_DOWN)
+      ball_flg = 1;
+    else
+      ball_flg = 0;
+  }else{
 
-  if(state == GLUT_UP) 
-    return;
-  else{
-    getWorldCood(x+6, y+30);
-    i = liner_search(objX, objZ);
-  }
+    int i=-1;
 
-  switch(mode){
-    case BREED:
-      if(i>-1){
+    if(state == GLUT_UP) 
+      return;
+    else{
+      getWorldCood(x+6, y+30);
+      i = liner_search(objX, objZ);
+    }
 
-        if(cats[i].scale==0.6){
-          cats[i].scale = 0.8;
-          break;
-        }else if(cats[i].scale==0.8){
-          cats[i].scale = 1.0;
-          break;
-        }
-
-        if(cats[i].task!=JUMP){
-          cats[i].task = JUMP;
-          cats[i].duration = 0;
-        }
-      }
-      break;
-    
-    case CARRY:
-      if(pick_obj>=0){ //離す
-        cats[pick_obj].matrix[13] = 0.0;
-        cats[pick_obj].task = STAY;
-        pick_obj = -1;
-      }else{
+    switch(mode){
+      case BREED:
         if(i>-1){
-          pick_obj = i;
-          cats[pick_obj].task = PICKED;
-          //カメラ位置に拘束
-          GLfloat t[16];
-          copyMat(t, inv);
-          dotMat(t, tlMat( 0, 4, 20).matrix);
-          copyMat(cats[pick_obj].matrix, t);
-        }
-      }
-      break;
 
-    case COLOR:
-      if(i>-1){
-        switch(rgb_flg){
-          case 0:
-            cats[i].r += rgb_pm*0.2;
-            if(cats[i].r>1.0)
-              cats[i].r=1.0;
-            if(cats[i].r<0.0)
-              cats[i].r=0.0;
+          if(cats[i].scale==0.6){
+            cats[i].scale = 0.8;
             break;
-          case 1:
-            cats[i].g += rgb_pm*0.2;
-            if(cats[i].g>1.0)
-              cats[i].g=1.0;
-            if(cats[i].g<0.0)
-              cats[i].g=0.0;
+          }else if(cats[i].scale==0.8){
+            cats[i].scale = 1.0;
             break;
-          case 2:
-            cats[i].b += rgb_pm*0.2;
-            if(cats[i].b>1.0)
-              cats[i].b=1.0;
-            if(cats[i].b<0.0)
-              cats[i].b=0.0;
-            break;
-        }
-      }
-      break;
+          }
 
-    default:
-      break;
+          if(cats[i].task!=JUMP){
+            cats[i].task = JUMP;
+            cats[i].duration = 0;
+          }
+        }
+        break;
+      
+      case CARRY:
+        if(pick_obj>=0){ //離す
+          cats[pick_obj].matrix[13] = 0.0;
+          cats[pick_obj].task = STAY;
+          pick_obj = -1;
+        }else{
+          if(i>-1){
+            pick_obj = i;
+            cats[pick_obj].task = PICKED;
+            //カメラ位置に拘束
+            GLfloat t[16];
+            copyMat(t, inv);
+            dotMat(t, tlMat( 0, 4, 20).matrix);
+            copyMat(cats[pick_obj].matrix, t);
+          }
+        }
+        break;
+
+      case COLOR:
+        if(i>-1){
+          switch(rgb_flg){
+            case 0:
+              cats[i].r += rgb_pm*0.2;
+              if(cats[i].r>1.0)
+                cats[i].r=1.0;
+              if(cats[i].r<0.0)
+                cats[i].r=0.0;
+              break;
+            case 1:
+              cats[i].g += rgb_pm*0.2;
+              if(cats[i].g>1.0)
+                cats[i].g=1.0;
+              if(cats[i].g<0.0)
+                cats[i].g=0.0;
+              break;
+            case 2:
+              cats[i].b += rgb_pm*0.2;
+              if(cats[i].b>1.0)
+                cats[i].b=1.0;
+              if(cats[i].b<0.0)
+                cats[i].b=0.0;
+              break;
+          }
+        }
+        break;
+
+      default:
+        break;
+    }
   }
-
   glutPostRedisplay();
 }
 
