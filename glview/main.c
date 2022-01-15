@@ -48,6 +48,8 @@ extern int pick_obj;
 int line_flg;
 
 int ball_flg = 0;
+
+
 //-----------------------------------------------------------------------------------
 // 初期化
 //-----------------------------------------------------------------------------------
@@ -114,8 +116,10 @@ int liner_search (double x, double z) {
 
 void display(void)
 {
-  if(ball_phase == 1)
+  if(ball_phase == 1){
     ball_change_speed();
+    relative_pos();
+  }
   if(mode == FUSION){
     shaking(); //地面が揺れる
     fusion_clearColor();
@@ -251,9 +255,10 @@ void keyboard (unsigned char key, int x, int y)
 
     //前後方向
     case 's':
-      if(ball_phase == 1)
+      if(ball_phase == 1){
         ball_phase = 0;
-      else{
+        ball_reset_chase();
+      }else{
         dz = - 0.4;
       }
       break;
@@ -328,6 +333,10 @@ void keyboard (unsigned char key, int x, int y)
         if(line_flg == 1) //mode = LINEのとき描画終了
           line_flg = 0;
 
+        if(ball_phase != 0){
+          ball_phase = 0;
+          ball_reset_chase();
+        }
         glutSetWindowTitle(mode_name[mode]); //ウィンドウ名変更
       }
       break;
@@ -389,8 +398,10 @@ void keyboard (unsigned char key, int x, int y)
 void mouse(int button, int state, int x, int y)
 {
   if(mode == BALL){
-    if(state == GLUT_DOWN)
+    if(state == GLUT_DOWN){
       ball_phase = 1;
+      ball_update_chase();
+    }
     else if(ball_phase == 1){
       ball_calc();
       ball_phase = 2;
