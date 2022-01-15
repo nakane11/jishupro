@@ -114,7 +114,7 @@ int liner_search (double x, double z) {
 
 void display(void)
 {
-  if(mode == BALL && ball_flg)
+  if(ball_phase == 1)
     ball_change_speed();
   if(mode == FUSION){
     shaking(); //地面が揺れる
@@ -146,14 +146,16 @@ void display(void)
   glPopMatrix();
 
   init3d();
-  if(mode == BALL)
-    drawBall();
+  
 
   if(mode == LINE)
     drawBucket(line_vec_num/30.0);
   
   // ここから視点と逆に動くもの
   glMultMatrixf(camera);
+
+  if(mode == BALL)
+    drawBall();
 
   drawFloor(60); //地面  
   if(mode == FUSION){
@@ -249,7 +251,11 @@ void keyboard (unsigned char key, int x, int y)
 
     //前後方向
     case 's':
-      dz = - 0.4;
+      if(ball_phase == 1)
+        ball_phase = 0;
+      else{
+        dz = - 0.4;
+      }
       break;
     case 'w':
       dz =  0.4;
@@ -384,9 +390,11 @@ void mouse(int button, int state, int x, int y)
 {
   if(mode == BALL){
     if(state == GLUT_DOWN)
-      ball_flg = 1;
-    else
-      ball_flg = 0;
+      ball_phase = 1;
+    else if(ball_phase == 1){
+      ball_calc();
+      ball_phase = 2;
+    }
   }else{
 
     int i=-1;
