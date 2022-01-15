@@ -435,6 +435,7 @@ void mouse(int button, int state, int x, int y)
         }else{
           if(i>-1){
             pick_obj = i;
+            printf("pick ->%d\n", pick_obj);
             cats[pick_obj].task = PICKED;
             //カメラ位置に拘束
             GLfloat t[16];

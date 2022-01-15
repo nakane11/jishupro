@@ -143,9 +143,9 @@ void updateFunc(void){
                 for(j=i;j<n;j++){
                     cats[j]=cats[j+1];
                 }
-                if(pick_obj>-1){pick_obj-=1;}
+                if(pick_obj > i){pick_obj-=1;}
                 i--; n--; 
-                //printf("%d\n",n);
+                printf("pick_obj=%d\n",pick_obj);
             }else{
                 dotMat( cats[i].matrix, tlMat(0, -0.6, 0).matrix);
                 cats[i].duration --;
