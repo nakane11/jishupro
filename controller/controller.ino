@@ -28,7 +28,7 @@ signed char get_mouse_amount(int val)
 }
 
 void setup() {
-  Serial.begin(9600);
+//  Serial.begin(9600);
   Keyboard.begin();
   Mouse.begin();
   
@@ -56,8 +56,8 @@ void loop() {
 
     rx_reading = analogRead(StickRX);
     ry_reading = analogRead(StickRY);
-    x_amount =- 5*get_mouse_amount(rx_reading);
-    y_amount = -5*get_mouse_amount(ry_reading);
+    x_amount =- 3*get_mouse_amount(rx_reading);
+    y_amount = -3*get_mouse_amount(ry_reading);
     if( x_amount || y_amount )
     {
         Mouse.move(x_amount, y_amount, 0);
@@ -75,18 +75,18 @@ void loop() {
 //   
    if((ly_reading-524)>200){
     Keyboard.print("s");
-    delay(50);
+    delay(10);
    }else if((ly_reading-524)<-200){
     Keyboard.print("w");
-    delay(50);
+    delay(10);
    }
 
    if((lx_reading-501)>200){
     Keyboard.print("d");
-    delay(50);
+    delay(10);
    }else if((lx_reading-501)<-200){
     Keyboard.print("a");
-    delay(50);
+    delay(10);
    }
    
    
@@ -94,7 +94,7 @@ void loop() {
   if(digitalRead(ButtonJL) == LOW){
     //マウスクリック
     Mouse.click(MOUSE_LEFT);
-    delay(100);
+    delay(80);
     while(digitalRead(ButtonJL) == LOW);
   }
   
@@ -118,24 +118,24 @@ void loop() {
   
   if(digitalRead(ButtonN) == LOW){
     Keyboard.print("n");
-    delay(100);
+    delay(80);
     while(digitalRead(ButtonN) == LOW);
   }
   
   if(digitalRead(ButtonP) == LOW){
     Keyboard.print("p");
-    delay(100);
+    delay(50);
     while(digitalRead(ButtonP) == LOW);
   }
   
   if(digitalRead(ButtonZ) == LOW){
     Keyboard.print("z");
-    delay(160);
+    delay(30);
   }
   
   if(digitalRead(ButtonX) == LOW){
     Keyboard.print("x");
-    delay(160);
+    delay(20);
   }
 
   delay(10);
