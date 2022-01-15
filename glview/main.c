@@ -328,6 +328,8 @@ void keyboard (unsigned char key, int x, int y)
         if(line_flg == 1) //mode = LINEのとき描画終了
           line_flg = 0;
 
+        if(ball_phase != 0)
+          ball_phase = 0;
         glutSetWindowTitle(mode_name[mode]); //ウィンドウ名変更
       }
       break;
