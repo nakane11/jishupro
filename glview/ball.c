@@ -120,3 +120,8 @@ void ball_update_chase(){
     cats[chase_num].task = CHASE;
     cats[chase_num].neck_angle = -30.0;
 }
+
+void ball_reset_chase(){
+    if(cats[chase_num].task == CHASE)
+        cats[chase_num].task = STAY;
+}
