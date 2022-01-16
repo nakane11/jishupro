@@ -38,15 +38,7 @@ void updateFunc(void){
     
     for (i = 0; i<n; i++){
         if(cats[i].task == CHASE){
-            if(ball_phase == 1){
-                relative_pos();
-            }else if(ball_phase == 2){
-                //追いかける
-            }else if(ball_phase == 3){
-                //持って帰る
-            }else{
-                ball_reset_chase();
-            }
+            ball_update_cat();
             continue;
         }
         if(rand()%4000<2){cats[i].neck_angle = rand()%60-30;}
