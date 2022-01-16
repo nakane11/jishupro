@@ -19,8 +19,6 @@ static const GLfloat light_ambient[] = {1.0, 1.0, 1.0, 1.0};
 static const GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};
 static const GLfloat light_specular[]={1.0,1.0,1.0,1.0};
 
-char str0[] = "MODE =  ";
-char strs[3][6] = { "WATCH" , "BREED" , "CARRY" };
 
 typedef struct {
     int r, x, y, z,
