@@ -157,9 +157,9 @@ void display(void)
   // ここから視点と逆に動くもの
   glMultMatrixf(camera);
 
-  if(mode == BALL)
+  if(mode == BALL){
     drawBall();
-
+  }
   drawFloor(60); //地面  
   if(mode == FUSION){
     fusion_cloud();

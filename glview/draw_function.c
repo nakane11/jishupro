@@ -8,6 +8,7 @@
 #include "draw_function.h"
 #include "line.h"
 
+
 #define PI 3.141592653589793
 
 
@@ -187,6 +188,7 @@ void drawCat(int i)
 
   glPushMatrix();
   {
+    
     //色の設定
     GLfloat color[] = {cats[i].r, cats[i].g, cats[i].b, 1.0};
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color);

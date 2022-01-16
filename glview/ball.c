@@ -15,6 +15,7 @@ double Y0, v0, t, t1;
 GLfloat start_position_matrix[16];
 int chase_num = 0;
 
+
 void ball_change_speed(){
     static int s = 1;
     ball_speed += s*0.1/12;
@@ -58,6 +59,10 @@ void ball_pos_update(){
             ball_phase =5;
         }
   
+    }else if(ball_phase == 6){
+        ball_pos[0] = cats[chase_num].x;
+        ball_pos[1] = cats[chase_num].y;
+        ball_pos[2] = cats[chase_num].z;
     }
 }
 
@@ -77,7 +82,7 @@ void drawBall(){
 void ball_calc(){
     t = 0.0;
     Y0 = 0.5; 
-    v0 = 9+50.0/5*(ball_speed-0.1);
+    v0 = 12+50.0/5*(ball_speed-0.1);
     double X1 = (v0*v0/g + sqrt((v0*v0/g)*(v0*v0/g)+4*v0*v0*Y0/g))/2.0;
     t1 = sqrt(2)*X1/v0;
     copyMat(start_position_matrix, inv);
@@ -87,25 +92,102 @@ void ball_calc(){
     ball_endpos[2] = X1*inv[10] + inv[14];
 }
 
-void relative_pos(){
+void ball_reset_chase(){
+    if(cats[chase_num].task == CHASE)
+        cats[chase_num].task = STAY;
+}
+
+double my_min(double x, double y){
+    if(abs(x)>=abs(y))
+        return y;
+    else
+        return x;
+}
+void  ball_update_cat(){
     int i = chase_num;
-    double x = inv[12]-cats[i].x;
-    double z = inv[14]-cats[i].z;
     GLfloat m[16];
     gluInvertMatrix(cats[i].matrix, m);
-    double rel_x = m[0]*x+m[8]*z+m[12];
-    printf("%f\n",rel_x);
-    MatArray rtarray;
-    if(rel_x>0.1){
-        //右回転
-        rtarray = y_rtMat(0.7);
-        dotMat( cats[i].matrix, rtarray.matrix);
-    }else if(rel_x<-0.1){
-        //左回転
-        rtarray = y_rtMat(-0.7);
-        dotMat( cats[i].matrix, rtarray.matrix);
+    
+
+    if(ball_phase == 1){
+        //体をボールの方へ向ける
+        double x = 0*inv[8]+inv[12]-cats[i].x;
+        double z = 0*inv[10]+inv[14]-cats[i].z;
+        double camerarel_x = m[0]*x+m[8]*z+m[12];
+        //printf("%f\n",rel_x);
+        MatArray rtarray;
+        if(camerarel_x>0.1){
+            //右回転
+            rtarray = y_rtMat(0.7);
+            dotMat( cats[i].matrix, rtarray.matrix);
+        }else if(camerarel_x<-0.1){
+            //左回転
+            rtarray = y_rtMat(-0.7);
+            dotMat( cats[i].matrix, rtarray.matrix);
+        }
+    }else if(ball_phase == 2 || ball_phase == 3){
+        //ボールを取りに行く
+        double x = ball_pos[0]-cats[i].x; //世界座標
+        double z = ball_pos[2]-cats[i].z;
+        double ballrel_x = m[0]*x+m[8]*z+m[12];
+        double ballrel_z = m[2]*x+m[10]*z+m[14]; //ねこ座標
+        
+        MatArray tlarray, rtarray;
+        double d = (ball_pos[0]-cats[i].x)*(ball_pos[0]-cats[i].x)+(ball_pos[2]-cats[i].z)*(ball_pos[2]-cats[i].z);
+        if(ballrel_x>0.1){
+            //右回転
+            rtarray = y_rtMat(my_min((ballrel_x-0.1)*10, 0.4));
+            dotMat( cats[i].matrix, rtarray.matrix);
+        }else if(ballrel_x<-0.1){
+            //左回転
+            rtarray = y_rtMat(my_min((-0.1-ballrel_x)*10,-0.4));
+            dotMat( cats[i].matrix, rtarray.matrix);
+        }else if(ballrel_z<-0.06){
+            rtarray = y_rtMat(6.0);
+            dotMat( cats[i].matrix, rtarray.matrix);
+        }else if(ballrel_z>0){
+            tlarray = tlMat(0, 0, 0.08);
+            dotMat( cats[i].matrix, tlarray.matrix);
+            
+        }else{
+            // tlarray = tlMat(0, 0, 5.0);
+            // dotMat( cats[i].matrix, tlarray.matrix);
+            ball_phase = 6;
+        }
+        //printf("(%f, %f),(%f, %f)\n", ball_pos[0],ball_pos[2], ball_endpos[0], ball_endpos[2]);
+        //printf("%d, %f\n",ball_phase, ballrel_x);
+    }else if(ball_phase == 6){
+        double x = inv[12]-cats[i].x; //世界座標
+        double z = inv[14]-cats[i].z;
+        double camerarel_x = m[0]*x+m[8]*z+m[12];
+        double camerarel_z = m[2]*x+m[10]*z+m[14]; //ねこ座標
+
+        MatArray tlarray, rtarray;
+        if(camerarel_x>0.1){
+            //右回転
+            rtarray = y_rtMat(0.6);
+            dotMat( cats[i].matrix, rtarray.matrix);
+        }else if(camerarel_x<-0.1){
+            //左回転
+            rtarray = y_rtMat(-0.6);
+            dotMat( cats[i].matrix, rtarray.matrix);
+        }else if(camerarel_z<-0.1){
+            rtarray = y_rtMat(6.0);
+            dotMat( cats[i].matrix, rtarray.matrix);
+        }else if(camerarel_z>0.5){
+            tlarray = tlMat(0, 0, 0.08);
+            dotMat( cats[i].matrix, tlarray.matrix);
+        }else{
+            // tlarray = tlMat(0, 0, 5.0);
+            // dotMat( cats[i].matrix, tlarray.matrix);
+            
+            ball_reset_chase();
+            ball_phase = 0;
+        }
     }
-   
+    
+    
+    
 }
 
 void ball_update_chase(){
@@ -121,7 +203,5 @@ void ball_update_chase(){
     cats[chase_num].neck_angle = -30.0;
 }
 
-void ball_reset_chase(){
-    if(cats[chase_num].task == CHASE)
-        cats[chase_num].task = STAY;
-}
+
+
