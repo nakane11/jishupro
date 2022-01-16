@@ -89,12 +89,12 @@ void ball_calc(){
 
 void relative_pos(){
     int i = chase_num;
-    double x = inv[12]-cats[i].x;
-    double z = inv[14]-cats[i].z;
+    double x = 5*inv[8]+inv[12]-cats[i].x;
+    double z = 5*inv[10]+inv[14]-cats[i].z;
     GLfloat m[16];
     gluInvertMatrix(cats[i].matrix, m);
     double rel_x = m[0]*x+m[8]*z+m[12];
-    printf("%f\n",rel_x);
+    //printf("%f\n",rel_x);
     MatArray rtarray;
     if(rel_x>0.1){
         //右回転
@@ -124,4 +124,11 @@ void ball_update_chase(){
 void ball_reset_chase(){
     if(cats[chase_num].task == CHASE)
         cats[chase_num].task = STAY;
+}
+
+void ball_cat_update(){
+    //ネコを目標方向へ移動させる
+    //ボールとの距離が小さくなったらボールの座標をネコに拘束
+    //ネコがカメラの方へ戻ってくる
+    //カメラとの距離が小さくなればphase0に戻る
 }
