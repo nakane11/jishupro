@@ -2,6 +2,7 @@
 #define __BALL_H__
 
 extern int ball_phase;
+extern int chase_num;
 void ball_change_speed();
 void drawBall();
 void ball_calc();

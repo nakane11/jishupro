@@ -94,13 +94,13 @@ void relative_pos(){
     GLfloat m[16];
     gluInvertMatrix(cats[i].matrix, m);
     double rel_x = m[0]*x+m[8]*z+m[12];
-
+    printf("%f\n",rel_x);
     MatArray rtarray;
-    if(rel_x>0){
+    if(rel_x>0.1){
         //右回転
         rtarray = y_rtMat(0.7);
         dotMat( cats[i].matrix, rtarray.matrix);
-    }else{
+    }else if(rel_x<-0.1){
         //左回転
         rtarray = y_rtMat(-0.7);
         dotMat( cats[i].matrix, rtarray.matrix);
