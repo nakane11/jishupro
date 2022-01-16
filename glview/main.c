@@ -253,12 +253,8 @@ void keyboard (unsigned char key, int x, int y)
       break;
 
     //前後方向
-    case 's':
-      if(ball_phase == 1){
-        ball_phase = 0;
-      }else{
-        dz = - 0.4;
-      }
+    case 's':  
+      dz = - 0.4;
       break;
     case 'w':
       dz =  0.4;
@@ -287,6 +283,9 @@ void keyboard (unsigned char key, int x, int y)
       break;
 
     case 'n':
+      if(ball_phase == 1){
+          ball_phase = 0;
+      }
       //描画終了後, 保存した頂点を破棄する(modeに依らない)
       if(line_flg == 0 && line_vec_num>0 && mode != FUSION){ 
         // for (size_t i = 0; i < line_vec_num; ++i) {
