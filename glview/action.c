@@ -157,6 +157,7 @@ void updateFunc(void){
                     cats[j]=cats[j+1];
                 }
                 if(pick_obj > i){pick_obj-=1;}
+                if(chase_num > i){chase_num-=1;}
                 i--; n--; 
                 
             }else{
