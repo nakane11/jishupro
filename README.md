@@ -1,5 +1,5 @@
 # jishupro
-
+___
 ## Description
 This program draws cats in a CG space using OpenGL.
 
@@ -8,8 +8,7 @@ This program draws cats in a CG space using OpenGL.
 https://user-images.githubusercontent.com/63297509/149689346-8c6b01dd-c8e7-4f54-9d53-e165e571972a.mp4
 
 ## Dependencies
-(編集中)
-- OpenGL
+- OpenGL 3.0
 - GLUT
 
 ## Setup and Run
@@ -20,7 +19,7 @@ https://user-images.githubusercontent.com/63297509/149689346-8c6b01dd-c8e7-4f54-
 $ make
 $ ./main
 ```
-
+___
 ## Usage
 ### Display
 A map and  an altimeter are displayed at the upper right of a window.
@@ -35,14 +34,20 @@ Input keys below by keyboard or buttons of the controller equivalent to each key
 - X - Move Downward
 - P - Change modes
 ### 7 modes
-(編集中)
-- Watch
-- Breed
-- Carry
-- Color
-- Ball
-- Line
-- Fusion
+- _Watch
+Just watching. No interaction.
+- Breed  
+Click two cats to generate new cats.
+- Carry  
+Lift up a cat by clicking. Another click lets it down.
+- Color  
+Click a cat to add or subtract RGB value. Press 'R', 'G', 'B' keys to change the color and plus/minus of the cursor.  
+- Ball  
+Keep clicking to decide initial velocity of the ball. To release throws it.
+- Line  
+Key 'N' starts drawing on the floor. Press 'N' one more to end.
+- Fusion  
+Draw a closed shape and press 'N'. If the shape is drawn correctly, mode FUSION begins.
 
 ## Controller
 パソコンへのキー入力、マウス入力をコントローラから行える。
