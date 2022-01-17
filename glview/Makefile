@@ -13,6 +13,7 @@ sanitizer=-g -fsanitize=address
 
 .c.o:
 	${CC} ${sanitizer} -c ${CFLAGS} $<
+	${CC} ${sanitizer} -S -c ${CFLAGS} $<
 
 TARGET: ${OBJS}
 	${CC} ${sanitizer} -o ${TARGET} ${OBJS} ${LDFLAGS}

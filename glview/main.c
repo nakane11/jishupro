@@ -214,156 +214,158 @@ void reshape (int w, int h)
 //-----------------------------------------------------------------------------------
 void keyboard (unsigned char key, int x, int y)
 {
-  static unsigned char pre_key;
+  /* static unsigned char pre_key; */
   // 視点移動変位
-  double dx = 0.0, dy = 0.0, dz = 0.0;
-  int rdx = 0;
-  //printf("1->%d\n",rdx);
-  switch (key) {
-    //視点高さ変更
-    case 'z':
-      if(cam_angle<1.57){
-        cam_angle = cam_angle+0.4/20;
-      }
-      if(cam_height<60){
-        dy = - 0.4;
-        cam_height += 0.4;
-      }
-      break;
-    case 'x':
-      if(cam_height>5){
-        dy =  0.4;
-        cam_height -= 0.4;
-        if(cam_height<60){
-          cam_angle = cam_angle-0.4/20;
-        }
-      }
-      break;
+  /* double dx = 0.0, dy = 0.0, dz = 0.0; */
+  /* int rdx = 0; */
+  int rdx;
+  printf("1->%d\n",rdx);
+  size_t i = 0;
+  /* switch (key) { */
+  /*   //視点高さ変更 */
+  /*   case 'z': */
+  /*     if(cam_angle<1.57){ */
+  /*       cam_angle = cam_angle+0.4/20; */
+  /*     } */
+  /*     if(cam_height<60){ */
+  /*       dy = - 0.4; */
+  /*       cam_height += 0.4; */
+  /*     } */
+  /*     break; */
+  /*   case 'x': */
+  /*     if(cam_height>5){ */
+  /*       dy =  0.4; */
+  /*       cam_height -= 0.4; */
+  /*       if(cam_height<60){ */
+  /*         cam_angle = cam_angle-0.4/20; */
+  /*       } */
+  /*     } */
+  /*     break; */
 
-    //前後方向
-    case 's':
-      dz = - 0.4;
-      break;
-    case 'w':
-      dz =  0.4;
-      break;
+  /*   //前後方向 */
+  /*   case 's': */
+  /*     dz = - 0.4; */
+  /*     break; */
+  /*   case 'w': */
+  /*     dz =  0.4; */
+  /*     break; */
 
-    //左右回転
-    case 'a':
-      rdx = - 2;
-      break;
-    case 'd':
-      rdx =  2;
-      break;
+  /*   //左右回転 */
+  /*   case 'a': */
+  /*     rdx = - 2; */
+  /*     break; */
+  /*   case 'd': */
+  /*     rdx =  2; */
+  /*     break; */
 
-    //mode=COLOR 色変更
-    case 'r':
-      rgb_flg = 0;
-      rgb_pm *= -1;
-      break;
-    case 'g':
-      rgb_flg = 1;
-      rgb_pm *= -1;
-      break;
-    case 'b':
-      rgb_flg = 2;
-      rgb_pm *= -1;
-      break;
+  /*   //mode=COLOR 色変更 */
+  /*   case 'r': */
+  /*     rgb_flg = 0; */
+  /*     rgb_pm *= -1; */
+  /*     break; */
+  /*   case 'g': */
+  /*     rgb_flg = 1; */
+  /*     rgb_pm *= -1; */
+  /*     break; */
+  /*   case 'b': */
+  /*     rgb_flg = 2; */
+  /*     rgb_pm *= -1; */
+  /*     break; */
 
-    case 'n':
-      //描画終了後, 保存した頂点を破棄する(modeに依らない)
-      if(line_flg == 0 && line_vec_num>0 && mode != FUSION){ 
-        // for (size_t i = 0; i < line_vec_num; ++i) {
-        //     line_vector[i] = (Vector){0, 0, 0};
-        // }
-        // line_vec_num=0;
-        line_init();
-        break;
-      }
+  /*   case 'n': */
+  /*     //描画終了後, 保存した頂点を破棄する(modeに依らない) */
+  /*     if(line_flg == 0 && line_vec_num>0 && mode != FUSION){  */
+  /*       /\* for (size_t i = 0; i < line_vec_num; ++i) { *\/ */
+  /*       /\*     line_vector[i] = (Vector){0, 0, 0}; *\/ */
+  /*       /\* } *\/ */
+  /*       /\* line_vec_num=0; *\/ */
+  /*       line_init(); */
+  /*       break; */
+  /*     } */
     
-      if(mode == LINE){
-        //描画中 描画を終了する
-        if(line_flg == 1){
-          line_flg = 0;
-          if(line_vec_num == 6 && line_isstar(20)){
-            line_calc(); //錬成開始
-            mode = FUSION;
-          }
-        //描画開始
-        }else if(line_vec_num == 0){
-          line_init();
-          line_vector[0].x = inv[12];
-          line_vector[0].y = -0.5;
-          line_vector[0].z = inv[14];
-          line_vec_num = 1;
-          line_flg = 1; 
-        }
-      }
-      break;
+  /*     if(mode == LINE){ */
+  /*       //描画中 描画を終了する */
+  /*       if(line_flg == 1){ */
+  /*         line_flg = 0; */
+  /*         if(line_vec_num == 6 && line_isstar(20)){ */
+  /*           line_calc(); //錬成開始 */
+  /*           mode = FUSION; */
+  /*         } */
+  /*       //描画開始 */
+  /*       }else if(line_vec_num == 0){ */
+  /*         line_init(); */
+  /*         line_vector[0].x = inv[12]; */
+  /*         line_vector[0].y = -0.5; */
+  /*         line_vector[0].z = inv[14]; */
+  /*         line_vec_num = 1; */
+  /*         line_flg = 1;  */
+  /*       } */
+  /*     } */
+  /*     break; */
 
-    case 32: 
-      mode = (mode+1)%5; //モード切替
+  /*   case 32:  */
+  /*     mode = (mode+1)%5; //モード切替 */
 
-      if(pick_obj>=0){ //mode = CARRYのときねこを持っていたら解放
-        cats[pick_obj].matrix[13] = 0.0;
-        cats[pick_obj].task = STAY;
-        pick_obj = -1;
-      }
+  /*     if(pick_obj>=0){ //mode = CARRYのときねこを持っていたら解放 */
+  /*       cats[pick_obj].matrix[13] = 0.0; */
+  /*       cats[pick_obj].task = STAY; */
+  /*       pick_obj = -1; */
+  /*     } */
 
-      if(line_flg == 1) //mode = LINEのとき描画終了
-        line_flg = 0;
+  /*     if(line_flg == 1) //mode = LINEのとき描画終了 */
+  /*       line_flg = 0; */
 
-      glutSetWindowTitle(mode_name[mode]); //ウィンドウ名変更
-      break;
+  /*     glutSetWindowTitle(mode_name[mode]); //ウィンドウ名変更 */
+  /*     break; */
 
-    case 27:
-      exit(0);
-      break;
-  }
-  if(mode == LINE){ //mode = LINEのとき移動速度増加
-    dx*=3.0;
-    dz*=3.0;
-  }
+  /*   case 27: */
+  /*     exit(0); */
+  /*     break; */
+  /* } */
+  /* if(mode == LINE){ //mode = LINEのとき移動速度増加 */
+  /*   dx*=3.0; */
+  /*   dz*=3.0; */
+  /* } */
 
-  //キー入力した差分に応じてカメラの行列を更新
-  MatArray array1, array2;
-  array1 = tlMat( -dx, dy, -dz);
-  array2 = y_rtMat(rdx);
-  dotMat(array1.matrix, camera);
-  dotMat(array2.matrix, array1.matrix);
-  copyMat(camera, array2.matrix);
-  gluInvertMatrix(camera, inv);
+  /* //キー入力した差分に応じてカメラの行列を更新 */
+  /* MatArray array1, array2; */
+  /* array1 = tlMat( -dx, dy, -dz); */
+  /* array2 = y_rtMat(rdx); */
+  /* dotMat(array1.matrix, camera); */
+  /* dotMat(array2.matrix, array1.matrix); */
+  /* copyMat(camera, array2.matrix); */
+  /* gluInvertMatrix(camera, inv); */
 
-  //mode = CARRY カメラの動きを運んでいるねこに反映
-  if(pick_obj>=0){
-    GLfloat t[16];
-    copyMat(t, inv);
-    dotMat(t, tlMat( 0, 4, 20).matrix);
-    copyMat(cats[pick_obj].matrix, t);
-  }
+  /* //mode = CARRY カメラの動きを運んでいるねこに反映 */
+  /* if(pick_obj>=0){ */
+  /*   GLfloat t[16]; */
+  /*   copyMat(t, inv); */
+  /*   dotMat(t, tlMat( 0, 4, 20).matrix); */
+  /*   copyMat(cats[pick_obj].matrix, t); */
+  /* } */
 
-  //mode = LINE 描画する頂点の更新
-  if(line_flg && (key == 'w' || key == 's')){
-    if(pre_key == 'w' || pre_key == 's'){
-      line_vector[line_vec_num-1].x = inv[12];
-      line_vector[line_vec_num-1].y = -0.5;
-      line_vector[line_vec_num-1].z = inv[14];
-    }else if(line_vec_num == 1){
-      line_vector[line_vec_num].x = inv[12];
-      line_vector[line_vec_num].y = -0.5;
-      line_vector[line_vec_num].z = inv[14];
-      line_vec_num ++;
-    }
-  }
-  if(line_flg && (key == 'a' || key == 'd') && line_vec_num<30){
-    if(pre_key == 'w' || pre_key == 's'){
-      line_vector[line_vec_num].x = inv[12];
-      line_vector[line_vec_num].y = -0.5;
-      line_vector[line_vec_num].z = inv[14];
-      line_vec_num ++;
-    }
-  }
-  pre_key = key;
+  /* //mode = LINE 描画する頂点の更新 */
+  /* if(line_flg && (key == 'w' || key == 's')){ */
+  /*   if(pre_key == 'w' || pre_key == 's'){ */
+  /*     line_vector[line_vec_num-1].x = inv[12]; */
+  /*     line_vector[line_vec_num-1].y = -0.5; */
+  /*     line_vector[line_vec_num-1].z = inv[14]; */
+  /*   }else if(line_vec_num == 1){ */
+  /*     line_vector[line_vec_num].x = inv[12]; */
+  /*     line_vector[line_vec_num].y = -0.5; */
+  /*     line_vector[line_vec_num].z = inv[14]; */
+  /*     line_vec_num ++; */
+  /*   } */
+  /* } */
+  /* if(line_flg && (key == 'a' || key == 'd') && line_vec_num<30){ */
+  /*   if(pre_key == 'w' || pre_key == 's'){ */
+  /*     line_vector[line_vec_num].x = inv[12]; */
+  /*     line_vector[line_vec_num].y = -0.5; */
+  /*     line_vector[line_vec_num].z = inv[14]; */
+  /*     line_vec_num ++; */
+  /*   } */
+  /* } */
+  /* pre_key = key; */
 
 }
 
