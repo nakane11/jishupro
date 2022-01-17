@@ -36,6 +36,13 @@ Input keys below by keyboard or buttons of the controller equivalent to each key
 - P - Change modes
 ### 7 modes
 (編集中)
+- Watch
+- Breed
+- Carry
+- Color
+- Ball
+- Line
+- Fusion
 
 ## Controller
 パソコンへのキー入力、マウス入力をコントローラから行える。
