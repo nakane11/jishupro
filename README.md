@@ -46,7 +46,7 @@ Input keys below by keyboard or buttons of the controller equivalent to each key
 
 ## Controller
 パソコンへのキー入力、マウス入力をコントローラから行える。
-ケースの設計図は`controller` 、配線は`controller/controller.ino`を参照。
+ケースの設計図は`controller_case` 、配線は`controller/controller.ino`を参照。
 #### 使用機材
 - Arduino Leonardo
 - 2軸ジョイスティック（センタープッシュ有）× 2
