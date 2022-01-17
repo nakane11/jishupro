@@ -34,7 +34,7 @@ Input keys below by keyboard or buttons of the controller equivalent to each key
 - X - Move Downward
 - P - Change modes
 ### 7 modes
-- _Watch
+- Watch  
 Just watching. No interaction.
 - Breed  
 Click two cats to generate new cats.
