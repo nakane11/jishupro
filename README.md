@@ -64,3 +64,4 @@ Draw a closed shape and press 'N'. If the shape is drawn correctly, mode FUSION 
 - Arduino Leonardo
 - 2軸ジョイスティック（センタープッシュ有）× 2
 - 押しボタンスイッチ（モーメンタリ）× 7
+<img src="https://user-images.githubusercontent.com/63297509/177025343-21112c0f-f2be-4c1d-a428-98ec057ac6a5.jpg" width="300">
