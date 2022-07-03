@@ -3,9 +3,17 @@ ___
 ## Description
 This program draws cats in a CG space using OpenGL.
 
-***DEMO:***
+## Explanation:
 
 https://user-images.githubusercontent.com/63297509/149689346-8c6b01dd-c8e7-4f54-9d53-e165e571972a.mp4
+
+## Fusion demo:
+
+
+https://user-images.githubusercontent.com/63297509/177021218-89160c8d-79b1-4032-a3e9-de956636bd5f.mp4
+
+
+
 
 ## Dependencies
 - OpenGL 3.0
